@@ -3,14 +3,21 @@
       <div>
         This is Home Component
       </div>
-        
+      <button @click="login()">Login</button>
     </div>
 </template>
 
 <script lang="ts">
-import {Vue} from 'vue-class-component'
+import { Vue } from 'vue-class-component'
 
-export default class Home extends Vue{}
+export default class Home extends Vue{
+
+  private login  () {
+    alert("this is login button")
+  }
+}
+
+
 </script>
 
 <style>
