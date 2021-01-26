@@ -3,6 +3,7 @@ import VueRouter, { createRouter, createWebHistory, RouteRecordRaw} from 'vue-ro
 import Home from '../Views/Home.vue'
 import User from '../Views/User.vue'
 
+
 const routes: Array<RouteRecordRaw> = [
     {
         path:'/',
@@ -18,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
-    routes
+    routes,
 })
 
 export default router

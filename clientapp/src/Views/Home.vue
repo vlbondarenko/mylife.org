@@ -1,27 +1,28 @@
 <template>
     <div id="home">
-      <div>
+      <div class="home">
         This is Home Component
       </div>
-      <button @click="login()">Login</button>
+      <login />
     </div>
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component'
+import Login from '../components/Login/Login.vue'
 
-export default class Home extends Vue{
 
-  private login  () {
-    alert("this is login button")
+@Options({
+  components:{
+    Login
   }
-}
-
+})
+export default class Home extends Vue{}
 
 </script>
 
 <style>
-#home{
+.home{
   background: url("../assets/bg.jpg");
   background-position: 50% 50%;
   background-repeat: no-repeat;
@@ -30,7 +31,7 @@ export default class Home extends Vue{
   -o-background-size: cover;
   background-size: cover;
   height: 99%;
-  width: 99%;
+  width: 50%;
   z-index: -1;
   position: absolute;
 }

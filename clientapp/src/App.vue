@@ -1,16 +1,20 @@
 <template>
-  <home/>
+  <router-view/>
 </template>
 
 <script lang="ts">
-import Home from './Views/Home.vue';
+import { store } from './store';
+import router from './router';
 
 export default{
   
   name: "App",
-
-  components: {
-    Home
+  mounted(){
+    if(store.state.loggedIn){
+      router.push('/user')
+    } else{
+      router.push('/')
+    }
   }
 }
 
