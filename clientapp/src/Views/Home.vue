@@ -4,19 +4,29 @@
         This is Home Component
       </div>
       <login />
+      <button @click="goTo">Go to user</button>
     </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import router from '@/router'
+import { defineComponent } from 'vue'
 import Login from '../components/Auth/Login.vue'
 
-
-@Options({
+export default defineComponent({
   components:{
-    Login
+    Login,
+  },
+
+  setup(){
+    const goTo = () =>{
+      router.push('/user')
+    }
+
+    return {
+      goTo
+    }
   }
 })
-export default class Home extends Vue{}
 
 </script>
