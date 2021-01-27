@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueRouter, { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Home from '../Views/Home.vue'
 import User from '../Views/User.vue'
 
