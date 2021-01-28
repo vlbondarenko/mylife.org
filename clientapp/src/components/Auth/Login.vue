@@ -51,7 +51,7 @@ export default defineComponent({
             //const result = true; //здесь должна содержаться логика для проверки аутентификации пользователя
             store.dispatch('user/Login',form)
             
-                router.push('/user')
+            router.push('/user')
            
         }
 

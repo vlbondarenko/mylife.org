@@ -1,31 +1,43 @@
 import {Module} from 'vuex'
+import authService from '@/services/authService'
 
-const ACCES_TOKEN='Acces_Token'
-
-const storage = localStorage
+const storedUser = localStorage.getItem('user')
 
 const state = {
-    token: storage.getItem(ACCES_TOKEN),
+    loggedIn: storedUser?true:false,
+    user:storedUser
 }
 
 type UserStateType = typeof state
 
-const user:Module<UserStateType,any> = {
+const userModule: Module <UserStateType,any> = {
     namespaced:true,
     state,
     mutations:{
-        SET_TOKEN: (state,token) => {
-            state.token=token
+        SET_LOGGEDIN:(state, loggedIn) => {
+            state.loggedIn=loggedIn
+        },
+        SET_USER: (state, user) =>{
+            state.user=user
         }
     },
+
     actions:{
-        Login({commit}, loginForm){
-          
-                storage.setItem(ACCES_TOKEN,loginForm.email)
-                commit('SET_TOKEN',loginForm.email)
-            
+        Login({commit},authData){
+            return authService.login(authData)
+            .then( user => {
+                commit('SET_LOGGEDIN',true)
+                commit('SET_USER',user)
+                return Promise.resolve(user)
+            },error=>{
+                commit('SET_LOGGEDIN',false)
+                const message = (error.response&&error.response.data&&error.response.data.message)||
+                error.message||
+                error.toString()
+                return Promise.reject(message);
+            })
         }
     }
 }
 
-export default user
+
