@@ -1,20 +1,12 @@
 <template>
     <div>
-        <button @click="logout()">Logout</button>
+       This is User component
     </div>   
 </template>
 
 <script lang="ts">
-import { store } from '@/store'
-import router from '@/router'
+import { defineComponent } from 'vue'
 
-export default {
-    methods:{
-        logout(){
-            store.dispatch('setLoggedIn', false)
-            router.push('/')
-        }
-    }
-}
+export default defineComponent({})
 
 </script>

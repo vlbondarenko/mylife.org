@@ -32,12 +32,14 @@
 <script lang="ts">
 import router from "@/router";
 import { defineComponent, reactive, ref } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
     name: 'Login',
 
     setup(){
         const formRef = ref<HTMLFormElement|null>(null)
+        const store = useStore()
         const form = reactive({
             email:'',
             password:'',
@@ -46,10 +48,11 @@ export default defineComponent({
         const login = () => {
             if (!formRef.value?.checkValidity()) return
 
-            const result = true; //здесь должна содержаться логика для проверки аутентификации пользователя
-            if(result){
+            //const result = true; //здесь должна содержаться логика для проверки аутентификации пользователя
+            store.dispatch('user/Login',form)
+            
                 router.push('/user')
-            } else return
+           
         }
 
         return {

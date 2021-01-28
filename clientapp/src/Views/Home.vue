@@ -4,28 +4,30 @@
         This is Home Component
       </div>
       <login />
-      <button @click="goTo">Go to user</button>
     </div>
 </template>
 
 <script lang="ts">
-import router from '@/router'
-import { defineComponent } from 'vue'
+
+import { defineComponent, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import Login from '../components/Auth/Login.vue'
 
 export default defineComponent({
+  name:'HomePage',
   components:{
     Login,
   },
-
   setup(){
-    const goTo = () =>{
-      router.push('/user')
-    }
+    const store=useStore()
+    const router= useRouter()
 
-    return {
-      goTo
-    }
+    onMounted(()=>{
+      if(store.state.token){
+        router.push('/user')
+      } else return
+    })
   }
 })
 
