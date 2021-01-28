@@ -1,5 +1,6 @@
 import {Module} from 'vuex'
 import authService from '@/services/authService'
+import { registerRuntimeCompiler } from 'vue'
 
 const storedUser = localStorage.getItem('user')
 
@@ -23,7 +24,7 @@ const userModule: Module <UserStateType,any> = {
     },
 
     actions:{
-        Login({commit},authData){
+        Login({commit},authData): Promise<any> {
             // return authService.login(authData)
             // .then( user => {
             //     commit('SET_LOGGEDIN',true)
@@ -42,6 +43,32 @@ const userModule: Module <UserStateType,any> = {
             commit('SET_LOGGEDIN',true)
             commit('SET_USER',userAsSting)
             return Promise.resolve(userAsSting)
+        },
+
+        Register ({commit},userData: any): Promise<any>{
+            // return authService.register(userData).
+            // then(response=>{
+            //     commit('SET_LOGGEDIN',true)
+            //     commit('SET_USER',response.data)
+            //     return Promise.resolve(response.data)
+            // },
+            // error=>{
+            //     commit('SET_LOGGEDIN',false)
+            //     const message = (error.response&&error.response.data&&error.response.data.message)||
+            //     error.message||
+            //     error.toString()
+            //     return Promise.reject(message);
+            // })
+            let userAsSting = JSON.stringify(userData)
+            localStorage.setItem('user',userAsSting)
+            commit('SET_LOGGEDIN',true)
+            commit('SET_USER',userAsSting)
+            return Promise.resolve(userAsSting)
+        },
+
+        LogOut({commit}):void{
+            authService.logout()
+            commit('SET_LOGGEDIN',false)
         }
     }
 }

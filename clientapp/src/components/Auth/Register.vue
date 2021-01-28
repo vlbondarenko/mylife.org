@@ -1,34 +1,34 @@
 <template>
   <div>
-    <form
-        @submit.prevent="registerUser"
+    <form ref="formRef"
+        @submit.prevent="handleSubmit"
         >
         <input
             type="text"
             id="firstName"
             placeholder="firstName"
-            v-model="register.firstName"
+            v-model="form.firstName"
             required
         />
         <input
             type="text"
             id="lastName"
             placeholder="lastName"
-            v-model="register.lastName"
+            v-model="form.lastName"
             required
         />
         <input
             type="email"
             id="email"
             placeholder="Email"
-            v-model="register.email"
+            v-model="form.email"
             required
         />
         <input
             type="password"
             id="password"
             placeholder="Password"
-            v-model="register.password"
+            v-model="form.password"
         />
        
         <button
@@ -36,29 +36,59 @@
             type="submit"
             >
             Sign up
-        </button>
-           
-           
+        </button>         
         </form>
+        <div
+            v-if="message"
+            class="alert"
+            :class="successful ? 'alert-success' : 'alert-danger'"
+        >
+            {{ message }}
+        </div>
     </div>
 </template>
-<script>
-import { defineComponent } from "vue";
+<script lang="ts">
+import authService from "@/services/authService";
+import { defineComponent, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default defineComponent({
+    name:'Register',
     setup(){
-        const register = {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: ""
+        const formRef = ref<HTMLFormElement|null>(null)
+        const form = reactive({
+            firstName:'',
+            lastName:'',
+            email:'',
+            password:''
+        })
+        const store = useStore()
+        const router = useRouter()
+        const message = ref('')
+        const successful = ref(false)
+        
+        const handleSubmit = () => {
+            if(!formRef.value?.checkValidity()) return
+
+            store.dispatch('userModule/Register',form).
+            then((data)=>{
+               if(data){
+                   router.push('user')
+               }
+            },
+            error => {
+                message.value = error.message
+                successful.value = false
+            })
         }
 
-       const registerUser = () => {}
-
        return {
-           register,
-           registerUser
+           formRef,
+           form,
+           message,
+           successful,
+           handleSubmit
        }
     }
 })

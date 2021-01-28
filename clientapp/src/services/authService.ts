@@ -7,6 +7,11 @@ interface AuthData{
     password: string
 }
 
+interface UserData extends AuthData{
+    firstName: string,
+    lastName: string
+}
+
 class AuthService {
     login(authData: AuthData){
         return axios
@@ -18,6 +23,14 @@ class AuthService {
 
             return responce.data
         })
+    }
+
+    register(userData:UserData){
+        return axios.post(API_URL + 'signup',userData)
+    }
+
+    logout(){
+        localStorage.removeItem('user')
     }
 }
 
