@@ -2,7 +2,7 @@
     <div>
         <form
             ref="formRef"
-            @submit.prevent="login"
+            @submit.prevent="handleSubmit"
             >
               <input
                 v-model="form.email"
@@ -25,7 +25,11 @@
             >
               Sign in
             </button>
+           
         </form>
+         <div v-if="message" class="alert alert-danger" role="alert">
+                {{ message }}
+        </div>
           </div>  
 </template>
 
@@ -44,21 +48,28 @@ export default defineComponent({
             email:'',
             password:'',
         })
+        const message = ref('')
 
-        const login = () => {
+        const handleSubmit = () => {
             if (!formRef.value?.checkValidity()) return
 
-            //const result = true; //здесь должна содержаться логика для проверки аутентификации пользователя
-            store.dispatch('user/Login',form)
-            
-            router.push('/user')
+            store.dispatch('userModule/Login',form).then(
+                (data)=>{
+                    if(data)
+                        router.push('/user')
+                },
+                error=>{
+                    message.value = error
+                }
+            )
            
         }
 
         return {
             formRef,
             form,
-            login
+            message,
+            handleSubmit
         }
     }
 }) 

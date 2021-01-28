@@ -9,7 +9,7 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import Login from '../components/Auth/Login.vue'
@@ -23,11 +23,9 @@ export default defineComponent({
     const store=useStore()
     const router= useRouter()
 
-    onMounted(()=>{
-      if(store.state.token){
-        router.push('/user')
-      } else return
-    })
+   if (store.state.loggedIn){
+     router.push('/user')
+   } 
   }
 })
 
