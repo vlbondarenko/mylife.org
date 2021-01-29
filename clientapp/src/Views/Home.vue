@@ -9,7 +9,7 @@
     
     <login style="position:fixed" v-show="showLoginWindow" >
         <template v-slot:header>
-          <div class="title">Login</div> <button class="close" @click="closeLoginWindow"></button>
+          <div class="title">Login</div> <button class="close" @click="closeLoginWindow"><i class="fa fa-close"></i></button>
         </template>
     </login>
     
