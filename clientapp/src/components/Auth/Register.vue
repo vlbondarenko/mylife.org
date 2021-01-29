@@ -1,5 +1,6 @@
 <template>
   <div>
+      <slot name="header"></slot>
     <form ref="formRef"
         @submit.prevent="handleSubmit"
         >
@@ -48,7 +49,6 @@
     </div>
 </template>
 <script lang="ts">
-import authService from "@/services/authService";
 import { defineComponent, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";

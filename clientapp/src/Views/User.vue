@@ -16,6 +16,10 @@ export default defineComponent({
         const store = useStore()
         const router = useRouter()
 
+        if (!store.state.loggedIn){
+            router.push('/')
+        }
+
         const logout = () => {
             store.dispatch('userModule/Register')
             router.push('/')
