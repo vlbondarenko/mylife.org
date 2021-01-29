@@ -1,10 +1,9 @@
-import { createStore } from 'vuex'
+import  Vuex  from 'vuex'
 import userModule from './modules/user'
 
-const store = createStore({
+export default new Vuex.Store({
   modules:{
-    userModule
+    userModule:userModule
   }
 })
 
-export default store

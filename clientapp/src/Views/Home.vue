@@ -42,7 +42,7 @@ export default defineComponent({
     const showLoginWindow = ref(false)
     const showRegisterWindow = ref(false)
 
-   if (store.state.loggedIn){
+   if (store.state.userModule.loggedIn){
      router.push('/user')
    } 
 

@@ -9,9 +9,8 @@ const state = {
     user:storedUser
 }
 
-type UserStateType = typeof state
 
-const userModule: Module <UserStateType,any> = {
+const userModule: Module <typeof state,any> = {
     namespaced:true,
     state,
     mutations:{
@@ -66,7 +65,7 @@ const userModule: Module <UserStateType,any> = {
             return Promise.resolve(userAsSting)
         },
 
-        LogOut({commit}):void{
+        Logout({commit}):void{
             authService.logout()
             commit('SET_LOGGEDIN',false)
         }

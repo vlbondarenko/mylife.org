@@ -16,12 +16,12 @@ export default defineComponent({
         const store = useStore()
         const router = useRouter()
 
-        if (!store.state.loggedIn){
+        if (!store.state.userModule.loggedIn){
             router.push('/')
         }
 
         const logout = () => {
-            store.dispatch('userModule/Register')
+            store.dispatch('userModule/Logout')
             router.push('/')
         }
         return{
