@@ -48,8 +48,8 @@ export default defineComponent({
         password: "",
     });
     const message = ref("");
-    const show = inject('showLogin')
-    const close = inject('closeLogin')
+    const show = inject('showLoginModal')
+    const close = inject('closeLoginModal')
 
     const handleSubmit = () => {
         if (!formRef.value?.checkValidity()) return;

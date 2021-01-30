@@ -1,20 +1,13 @@
 <template>
     <div id="home">
       
-        This is Home Component
-        <button @click="openLoginWindow">Login</button>
-
-        <button @click="openRegisterWindow">Register</button>
+      This is Home Component
+      <button @click="openLoginModal">Login</button>
+      <button @click="openRegisterModal">Register</button>
+          
+      <login/>
+      <register/>
       
-    
-    <login/>
-    
-      
-      <register v-show="showRegisterWindow">
-        <template v-slot:header>
-          Title <button @click="closeRegisterWindow"></button>
-        </template>
-      </register>
     </div>
 </template>
 
@@ -35,41 +28,50 @@ export default defineComponent({
   setup(){
     const store=useStore()
     const router= useRouter()
-    const showLoginWindow = ref(false)
-    const showRegisterWindow = ref(false)
 
-   if (store.state.userModule.loggedIn){
-     router.push('/user')
-   } 
+    if (store.state.userModule.loggedIn){
+      router.push('/user')
+    } 
 
-   const openLoginWindow = () => {
-    showLoginWindow.value= true  
-    console.log(showLoginWindow.value)
-   }
+    //Logic for opening and closing a modal login window
+    //showLoginModal - this is the variable that determines the state of the modal window: open or closed
+    //The value of this variable and the function to change its value are passed to the child component by provide() functions
+    const showLoginModal = ref(false)
 
-  const openRegisterWindow = () => {
-    showRegisterWindow.value= true  
-   }
+    const openLoginModal = () => {
+      showLoginModal.value= true  
+    }
 
-   const closeLoginWindow = () => {
-    showLoginWindow.value= false  
-    console.log(showLoginWindow.value)
-   }
+    const closeLoginModal = () => {
+      showLoginModal.value= false  
+    }
 
-  const closeRegisterWindow = () => {
-    showRegisterWindow.value= false  
-   }
+    provide('showLoginModal',showLoginModal)
+    provide('closeLoginModal',closeLoginModal)
+    
 
-  provide('showLogin',showLoginWindow)
-  provide('closeLogin',closeLoginWindow)
+    //Logic for opening and closing a modal register window
+    const showRegisterModal = ref(false)
+
+    const openRegisterModal = () => {
+      showRegisterModal.value= true  
+    }
+
+    const closeRegisterModal = () => {
+      showRegisterModal.value= false  
+    }
+
+    provide('showRegisterModal',showRegisterModal)
+    provide('closeRegisterModal',closeRegisterModal)
+
 
   return{
-    showLoginWindow,
-    showRegisterWindow,
-    openLoginWindow,
-    openRegisterWindow,
-    closeLoginWindow,
-    closeRegisterWindow
+    showLoginModal,
+    showRegisterModal,
+    openLoginModal,
+    openRegisterModal,
+    closeLoginModal,
+    closeRegisterModal
   }
 }
 })

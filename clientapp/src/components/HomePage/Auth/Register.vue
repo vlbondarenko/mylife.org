@@ -1,95 +1,98 @@
 <template>
-  <div>
-      <slot name="header"></slot>
-    <form ref="formRef"
-        @submit.prevent="handleSubmit"
-        >
+  <div v-show="showModal" class="modal-wrapper">
+    <div class="modal-body">
+      Title <button class="close" @click="closeModal"><i class="fa fa-close"/></button>
+      <form ref="formRef" @submit.prevent="handleSubmit">
         <input
-            type="text"
-            id="firstName"
-            placeholder="firstName"
-            v-model="form.firstName"
-            required
+          type="text"
+          id="firstName"
+          placeholder="firstName"
+          v-model="form.firstName"
+          required
         />
         <input
-            type="text"
-            id="lastName"
-            placeholder="lastName"
-            v-model="form.lastName"
-            required
+          type="text"
+          id="lastName"
+          placeholder="lastName"
+          v-model="form.lastName"
+          required
         />
         <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            v-model="form.email"
-            required
+          type="email"
+          id="email"
+          placeholder="Email"
+          v-model="form.email"
+          required
         />
         <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            v-model="form.password"
+          type="password"
+          id="password"
+          placeholder="Password"
+          v-model="form.password"
         />
-       
-        <button
-            class="btn btn-primary btn-block w-75 my-4"
-            type="submit"
-            >
-            Sign up
-        </button>         
-        </form>
-        <div
-            v-if="message"
-            class="alert"
-            :class="successful ? 'alert-success' : 'alert-danger'"
-        >
-            {{ message }}
-        </div>
+
+        <button class="btn btn-primary btn-block w-75 my-4" type="submit">
+          Sign up
+        </button>
+      </form>
+      <div
+        v-if="message"
+        class="alert"
+        :class="successful ? 'alert-success' : 'alert-danger'"
+      >
+        {{ message }}
+      </div>
     </div>
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, inject, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default defineComponent({
-    name:'Register',
-    setup(){
-        const formRef = ref<HTMLFormElement|null>(null)
-        const form = reactive({
-            firstName:'',
-            lastName:'',
-            email:'',
-            password:''
-        })
-        const store = useStore()
-        const router = useRouter()
-        const message = ref('')
-        const successful = ref(false)
-        
-        const handleSubmit = () => {
-            if(!formRef.value?.checkValidity()) return
+  name: "Register",
+  setup() {
+    const formRef = ref<HTMLFormElement | null>(null);
+    const form = reactive({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    });
+    const store = useStore();
+    const router = useRouter();
+    const message = ref("");
+    const successful = ref(false);
 
-            store.dispatch('userModule/Register',form).
-            then((data)=>{
-               if(data){
-                   router.push('user')
-               }
-            },
-            error => {
-                message.value = error.message
-                successful.value = false
-            })
+    const showModal = inject('showRegisterModal')
+    const closeModal = inject('closeRegisterModal')
+
+    const handleSubmit = () => {
+      if (!formRef.value?.checkValidity()) return;
+
+      store.dispatch("userModule/Register", form).then(
+        (data) => {
+          if (data) {
+            router.push("user");
+          }
+        },
+        (error) => {
+          message.value = error.message;
+          successful.value = false;
         }
+      );
+    };
 
-       return {
-           formRef,
-           form,
-           message,
-           successful,
-           handleSubmit
-       }
-    }
-})
+    return {
+      formRef,
+      form,
+      message,
+      successful,
+      handleSubmit,
+      showModal,
+      closeModal
+    };
+  },
+});
 </script>
