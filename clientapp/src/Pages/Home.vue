@@ -7,11 +7,7 @@
         <button @click="openRegisterWindow">Register</button>
       
     
-    <login style="position:fixed" v-show="showLoginWindow" >
-        <template v-slot:header>
-          <div class="title">Login</div> <button class="close" @click="closeLoginWindow"><i class="fa fa-close"></i></button>
-        </template>
-    </login>
+    <login/>
     
       
       <register v-show="showRegisterWindow">
@@ -24,11 +20,11 @@
 
 <script lang="ts">
 
-import { defineComponent,ref } from 'vue'
+import { defineComponent,provide,ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import Login from '../components/Auth/Login.vue'
-import Register from '../components/Auth/Register.vue'
+import Login from '../components/HomePage/Auth/Login.vue'
+import Register from '../components/HomePage/Auth/Register.vue'
 
 export default defineComponent({
   name:'HomePage',
@@ -48,6 +44,7 @@ export default defineComponent({
 
    const openLoginWindow = () => {
     showLoginWindow.value= true  
+    console.log(showLoginWindow.value)
    }
 
   const openRegisterWindow = () => {
@@ -56,11 +53,15 @@ export default defineComponent({
 
    const closeLoginWindow = () => {
     showLoginWindow.value= false  
+    console.log(showLoginWindow.value)
    }
 
   const closeRegisterWindow = () => {
     showRegisterWindow.value= false  
    }
+
+  provide('showLogin',showLoginWindow)
+  provide('closeLogin',closeLoginWindow)
 
   return{
     showLoginWindow,
