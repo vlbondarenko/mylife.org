@@ -8,7 +8,7 @@ using serverapp.Models;
 
 namespace serverapp.Infrastructure
 {
-    public class UserDbContext:IdentityDbContext<User>
+    public class UserDbContext:IdentityDbContext<AppUser>
     {
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
     }

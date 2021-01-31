@@ -2,8 +2,8 @@
 
 namespace serverapp.Models
 {
-    public class User:IdentityUser
+    public class AppUser:IdentityUser
     {
-
+        public string Nickname { get; set; }
     }
 }

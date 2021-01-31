@@ -13,6 +13,12 @@ using serverapp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using serverapp.Models;
+using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 
 namespace serverapp
@@ -36,11 +42,27 @@ namespace serverapp
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddIdentityCore<User>()
+            services.AddIdentityCore<AppUser>()
                 .AddEntityFrameworkStores<UserDbContext>()
-                .AddUserManager<SignInManager<User>>()
-                .AddDefaultTokenProviders();
+                .AddUserManager<UserManager<AppUser>>()
+                .AddSignInManager<SignInManager<AppUser>>();
 
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret"));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = key,
+                        ValidateAudience = false,
+                        ValidateIssuer = false
+
+                    };
+                });
+
+            services.AddScoped<IJWTGenerator, JWTGenerator>();
 
         }
 
@@ -55,6 +77,8 @@ namespace serverapp
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
