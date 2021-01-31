@@ -65,9 +65,6 @@ export default defineComponent({
     const message = ref("");
     const successful = ref(false);
 
-    const showModal = inject('showRegisterModal')
-    const closeModal = inject('closeRegisterModal')
-
     const handleSubmit = () => {
       if (!formRef.value?.checkValidity()) return;
 
@@ -83,6 +80,9 @@ export default defineComponent({
         }
       );
     };
+
+    const showModal = inject('showRegisterModal')
+    const closeModal = inject('closeRegisterModal')
 
     return {
       formRef,

@@ -1,7 +1,7 @@
 <template>
-  <div v-show="show" class="modal-wrapper">
+  <div v-show="showModal" class="modal-wrapper">
     <div class="modal-body">
-      <div class="title">Login</div> <button class="close" @click="close"><i class="fa fa-close"></i></button>
+      <div class="title">Login</div> <button class="close" @click="closeModal"><i class="fa fa-close"></i></button>
       <form ref="formRef" @submit.prevent="handleSubmit">
         <input
           v-model="form.email"
@@ -48,9 +48,7 @@ export default defineComponent({
         password: "",
     });
     const message = ref("");
-    const show = inject('showLoginModal')
-    const close = inject('closeLoginModal')
-
+    
     const handleSubmit = () => {
         if (!formRef.value?.checkValidity()) return;
 
@@ -62,19 +60,21 @@ export default defineComponent({
                 message.value = error;
             }
         );
-    };
-
-  
+    }; 
     
-
+    //The value of the showModal variable is determined by the parent component by both of provide() and inject() functions
+    //We also accept a function for changing the value of a variable in the parent component
+    //The reactivity supported
+    const showModal = inject('showLoginModal')
+    const closeModal = inject('closeLoginModal')
 
     return {
         formRef,
         form,
         message,
-        show,
         handleSubmit,
-        close
+        showModal,
+        closeModal
     };
   },
 });
