@@ -8,7 +8,7 @@ using serverapp.Infrastructure;
 
 namespace serverapp.Migrations
 {
-    [DbContext(typeof(UserDbContext))]
+    [DbContext(typeof(AppIdentityDbContext))]
     partial class UserDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

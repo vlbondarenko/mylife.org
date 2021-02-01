@@ -9,7 +9,7 @@ using serverapp.Infrastructure;
 
 namespace serverapp.Migrations
 {
-    [DbContext(typeof(UserDbContext))]
+    [DbContext(typeof(AppIdentityDbContext))]
     [Migration("20210131114132_Initial")]
     partial class Initial
     {

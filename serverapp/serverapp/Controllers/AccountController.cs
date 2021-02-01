@@ -22,10 +22,16 @@ namespace serverapp.Controllers
         }
 
         // POST api/<AccountController>
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<UserData> Register([FromBody] RegisterData registerData)
         {
             return await _userService.Register(registerData);
+        }
+
+        [HttpPost("login")]
+        public async Task<UserData> Login([FromBody] LoginData loginData)
+        {
+            return await _userService.Login(loginData);
         }
 
     }

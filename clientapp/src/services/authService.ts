@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL ='http://localhost:8080/api/auth/';
+const API_URL ='http://localhost:5000/api/';
 
 interface AuthData{
     email: string,
@@ -26,7 +26,7 @@ class AuthService {
     }
 
     register(userData:UserData){
-        return axios.post(API_URL + 'signup',userData)
+        return axios.post(API_URL + 'account/register',userData)
     }
 
     logout(){

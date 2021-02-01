@@ -39,20 +39,15 @@ namespace serverapp.Services
         public string Password { get; set; }
     }
 
-    public interface IUserService
-    {
-        Task<UserData> Login(LoginData loginData);
-        Task<UserData> Register(RegisterData registerData);
-    }
-
+    
     public class UserService:IUserService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IJWTGenerator _jWTGenerator;
-        private readonly UserDbContext _userDbContext;
+        private readonly AppIdentityDbContext _userDbContext;
 
-        public UserService(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,IJWTGenerator jWTGenerator, UserDbContext userDbContext)
+        public UserService(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -95,7 +90,8 @@ namespace serverapp.Services
             var user = new AppUser()
             {
                 Email = registerData.Email,
-                Nickname = registerData.Nickname
+                Nickname = registerData.Nickname,
+                UserName = registerData.Nickname
             };
 
             var registerResult = await _userManager.CreateAsync(user, registerData.Password);

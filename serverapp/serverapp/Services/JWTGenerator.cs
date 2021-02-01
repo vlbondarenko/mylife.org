@@ -9,7 +9,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace serverapp.Infrastructure
+namespace serverapp.Services
 {
 
     public interface IJWTGenerator
@@ -23,12 +23,12 @@ namespace serverapp.Infrastructure
 
         public JWTGenerator ()
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret"));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret12345this is my custom Secret key for authnetication"));
         }
 
         public string CreateToken (AppUser user)
         {
-            var claims = new List<Claim> { new Claim(JwtRegisteredClaimNames.NameId, user.UserName) };
+            var claims = new List<Claim> { new Claim("userid", user.Id) };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

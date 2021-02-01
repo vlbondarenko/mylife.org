@@ -19,6 +19,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using serverapp.Services;
 
 
 namespace serverapp
@@ -37,17 +38,17 @@ namespace serverapp
         {
             services.AddControllers();
 
-            services.AddDbContext<UserDbContext>(options =>
+            services.AddDbContext<AppIdentityDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddIdentityCore<AppUser>()
-                .AddEntityFrameworkStores<UserDbContext>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddUserManager<UserManager<AppUser>>()
                 .AddSignInManager<SignInManager<AppUser>>();
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret12345this is my custom Secret key for authnetication"));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -63,6 +64,7 @@ namespace serverapp
                 });
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
+            services.AddScoped<IUserService, UserService>();
 
         }
 
@@ -72,7 +74,13 @@ namespace serverapp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+              
             }
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseHttpsRedirection();
 

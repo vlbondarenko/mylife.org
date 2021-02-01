@@ -3,20 +3,7 @@
     <div class="modal-body">
       Title <button class="close" @click="closeModal"><i class="fa fa-close"/></button>
       <form ref="formRef" @submit.prevent="handleSubmit">
-        <input
-          type="text"
-          id="firstName"
-          placeholder="firstName"
-          v-model="form.firstName"
-          required
-        />
-        <input
-          type="text"
-          id="lastName"
-          placeholder="lastName"
-          v-model="form.lastName"
-          required
-        />
+        
         <input
           type="email"
           id="email"
@@ -24,6 +11,13 @@
           v-model="form.email"
           required
         />
+        <input
+          type="text"
+          id="nickname"
+          placeholder="nickname"
+          v-model="form.nickname"
+          required
+        />    
         <input
           type="password"
           id="password"
@@ -54,10 +48,9 @@ export default defineComponent({
   name: "Register",
   setup() {
     const formRef = ref<HTMLFormElement | null>(null);
-    const form = reactive({
-      firstName: "",
-      lastName: "",
+    const form = reactive({ 
       email: "",
+      nickname: "",
       password: "",
     });
     const store = useStore();

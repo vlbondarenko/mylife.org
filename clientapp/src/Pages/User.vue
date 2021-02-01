@@ -2,11 +2,14 @@
     <div>
        This is User component
        <button class="btn" @click="logout">Logout</button>
+       <div>
+           {{user}}
+       </div>
     </div>   
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -15,6 +18,7 @@ export default defineComponent({
     setup(){
         const store = useStore()
         const router = useRouter()
+        const user = ref (localStorage.getItem('user'))
 
         if (!store.state.userModule.loggedIn){
             router.push('/')
@@ -25,7 +29,8 @@ export default defineComponent({
             router.push('/')
         }
         return{
-            logout
+            logout,
+            user
         }
     }
 })

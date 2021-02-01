@@ -8,8 +8,8 @@ using serverapp.Models;
 
 namespace serverapp.Infrastructure
 {
-    public class UserDbContext:IdentityDbContext<AppUser>
+    public class AppIdentityDbContext:IdentityDbContext<AppUser>
     {
-        public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
+        public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options) { }
     }
 }
