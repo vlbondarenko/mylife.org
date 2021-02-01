@@ -1,6 +1,6 @@
 ﻿using serverapp.Models;
 
-namespace serverapp.Services.Interfaces
+namespace serverapp.Services
 {
     public interface IJWTGenerator
     {

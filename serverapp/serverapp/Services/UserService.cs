@@ -7,39 +7,10 @@ using serverapp.Models;
 using serverapp.Infrastructure;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace serverapp.Services
-{
-    public class UserData
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Message { get; set; }
-        public string Token { get; set; }
-
-        public UserData()
-        {
-            Name = "";
-            Email = "";
-            Message = "";
-            Token = "";
-        }
-    }
-
-    public class LoginData
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class RegisterData
-    {
-        public string Email { get; set; }
-        public string Nickname { get; set; }
-        public string Password { get; set; }
-    }
-
-    
+{ 
     public class UserService:IUserService
     {
         private readonly UserManager<AppUser> _userManager;
@@ -53,9 +24,10 @@ namespace serverapp.Services
             _signInManager = signInManager;
             _jWTGenerator = jWTGenerator;
             _userDbContext = userDbContext;
+      
         }
 
-        public async Task<UserData> Login(LoginData loginData)
+        public async Task<UserModel> Login(LoginModel loginData)
         {
             var user = await _userManager.FindByEmailAsync(loginData.Email);
 
@@ -67,7 +39,7 @@ namespace serverapp.Services
             var loginResult = await _signInManager.CheckPasswordSignInAsync(user, loginData.Password, false);
 
             if (loginResult.Succeeded)
-                return new UserData() 
+                return new UserModel() 
                 { 
                     Email = user.Email, 
                     Message = "", 
@@ -79,7 +51,7 @@ namespace serverapp.Services
             throw new RestExcteption(HttpStatusCode.Unauthorized);
         }
 
-        public async Task<UserData> Register(RegisterData registerData)
+        public async Task<UserModel> Register(RegisterModel registerData)
         {
             if (await _userDbContext.Users.Where(x => x.Email == registerData.Email).AnyAsync())
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Email = "Email is already exist" });
@@ -97,7 +69,7 @@ namespace serverapp.Services
             var registerResult = await _userManager.CreateAsync(user, registerData.Password);
 
             if (registerResult.Succeeded)
-                return new UserData
+                return new UserModel
                 {
                     Email = user.Email,
                     Name = user.UserName,

@@ -8,22 +8,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace serverapp.Services
 {
-
-    public interface IJWTGenerator
-    {
-        string CreateToken(AppUser user);
-    }
 
     public class JWTGenerator:IJWTGenerator
     {
         private readonly SymmetricSecurityKey _key;
 
-        public JWTGenerator ()
+        public JWTGenerator (IConfiguration configuration)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret12345this is my custom Secret key for authnetication"));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
         }
 
         public string CreateToken (AppUser user)

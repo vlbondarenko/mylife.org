@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
+using serverapp.Models;
 
 namespace serverapp.Services
 {
    
    public interface IUserService
    {
-        Task<UserData> Login(LoginData loginData);
-        Task<UserData> Register(RegisterData registerData);
+        Task<UserModel> Login(LoginModel loginData);
+        Task<UserModel> Register(RegisterModel registerData);
    }
 
   
