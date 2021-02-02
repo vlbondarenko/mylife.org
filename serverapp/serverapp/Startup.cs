@@ -14,6 +14,7 @@ using serverapp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using serverapp.Middleware;
+using Newtonsoft.Json;
 
 
 namespace serverapp
@@ -29,7 +30,11 @@ namespace serverapp
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => 
+            { 
+                options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull; 
+            });
+                
 
             services.AddDbContext<AppIdentityDbContext>(options =>
             {
@@ -54,6 +59,7 @@ namespace serverapp
                         ValidateIssuer = false    
                     };
                 });
+
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<IUserService, UserService>();

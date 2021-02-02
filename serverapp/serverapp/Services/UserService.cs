@@ -29,23 +29,22 @@ namespace serverapp.Services
       
         }
 
-        public async Task<UserModel> Login(LoginModel loginData)
+        public async Task<UserModel> Login(LoginModel loginModel)
         {
-            var user = await _userManager.FindByEmailAsync(loginData.Email);
+            var user = await _userManager.FindByEmailAsync(loginModel.Email);
 
             if (user == null)
             {
                 throw new RestExcteption(HttpStatusCode.Unauthorized);
             }
 
-            var loginResult = await _signInManager.CheckPasswordSignInAsync(user, loginData.Password, false);
+            var loginResult = await _signInManager.CheckPasswordSignInAsync(user, loginModel.Password, false);
 
             if (loginResult.Succeeded)
                 return new UserModel() 
                 { 
-                    Email = user.Email, 
-                    Errors = null, 
-                    Name = user.UserName, 
+                    DisplayName = user.Email,
+                    Id = user.Id,
                     Token = _jWTGenerator.CreateToken(user) 
                 };
                    
@@ -53,33 +52,29 @@ namespace serverapp.Services
             throw new RestExcteption(HttpStatusCode.Unauthorized);
         }
 
-        public async Task<UserModel> Register(RegisterModel registerData)
+        public async Task<UserModel> Register(RegisterModel registerModel)
         {
-            if (await _userDbContext.Users.Where(x => x.Email == registerData.Email).AnyAsync())
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Email = "Email is already exist" });
-
-            if (await _userDbContext.Users.Where(x => x.Nickname == registerData.Nickname).AnyAsync())
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Nickname = "Nickname is already exist" });
+       
+            if (await _userDbContext.Users.Where(x => x.Email == registerModel.Email).AnyAsync())
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Error = "Email is already exist" });
 
             var user = new AppUser()
             {
-                Email = registerData.Email,
-                Nickname = registerData.Nickname,
-                UserName = registerData.Nickname
+                Email = registerModel.Email,
+                UserName = registerModel.FirstName + registerModel.LastName
             };
 
-            var registerResult = await _userManager.CreateAsync(user, registerData.Password);
+            var registerResult = await _userManager.CreateAsync(user, registerModel.Password);
 
             if (registerResult.Succeeded)
                 return new UserModel
                 {
-                    Email = user.Email,
-                    Name = user.UserName,
-                    Errors = user.Id,
+                    DisplayName = user.UserName,
+                    Id = user.Id,
                     Token = _jWTGenerator.CreateToken(user)
                 };
 
-            throw new RestExcteption(HttpStatusCode.BadRequest,new { Message = "Client create failure"});
+            throw new RestExcteption(HttpStatusCode.BadRequest,new { Error = "Client create failure"});
         }
 
        public async Task<UserModel> GetById(string id)
@@ -93,10 +88,8 @@ namespace serverapp.Services
 
             return new UserModel
             {
-                Name = user.Nickname,
-                Email = user.Email,
-                Errors = null,
-                Token = "Fack you"
+                DisplayName=user.UserName,
+                Id = user.Id
             };
         }
     }

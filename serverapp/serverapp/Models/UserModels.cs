@@ -7,11 +7,9 @@ namespace serverapp.Models
 {
     public class UserModel
     {
-        public string Name { get; set; }
-        public string Email { get; set; }       
+        public string DisplayName { get; set; }
+        public string Id { get; set; }       
         public string Token { get; set; }
-        public string Errors { get; set; }
-
     }
 
     public class LoginModel
@@ -22,8 +20,9 @@ namespace serverapp.Models
 
     public class RegisterModel
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string Email { get; set; }
-        public string Nickname { get; set; }
         public string Password { get; set; }
     }
 }
