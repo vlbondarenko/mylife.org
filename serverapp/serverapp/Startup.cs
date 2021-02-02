@@ -11,10 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using serverapp.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using serverapp.Middleware;
-using Newtonsoft.Json;
 
 
 namespace serverapp
@@ -60,7 +57,6 @@ namespace serverapp
                     };
                 });
 
-
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<IUserService, UserService>();
 
@@ -71,11 +67,10 @@ namespace serverapp
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-               
-              
+                app.UseDeveloperExceptionPage();             
             }
 
+            //Allow cross-domain request
             app.UseCors(x => x
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
