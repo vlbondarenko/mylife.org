@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using serverapp.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace serverapp.Services
 {
@@ -8,6 +9,7 @@ namespace serverapp.Services
    {
         Task<UserModel> Login(LoginModel loginData);
         Task<UserModel> Register(RegisterModel registerData);
+        Task<UserModel> GetById(string id);
    }
 
   

@@ -8,6 +8,8 @@ using serverapp.Infrastructure;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace serverapp.Services
 { 
@@ -42,12 +44,12 @@ namespace serverapp.Services
                 return new UserModel() 
                 { 
                     Email = user.Email, 
-                    Message = "", 
+                    Errors = null, 
                     Name = user.UserName, 
                     Token = _jWTGenerator.CreateToken(user) 
                 };
                    
-
+    
             throw new RestExcteption(HttpStatusCode.Unauthorized);
         }
 
@@ -73,11 +75,29 @@ namespace serverapp.Services
                 {
                     Email = user.Email,
                     Name = user.UserName,
-                    Message = "",
+                    Errors = user.Id,
                     Token = _jWTGenerator.CreateToken(user)
                 };
 
             throw new RestExcteption(HttpStatusCode.BadRequest,new { Message = "Client create failure"});
+        }
+
+       public async Task<UserModel> GetById(string id)
+        {
+            var user = await _userManager.FindByEmailAsync(id);
+
+            if (user == null)
+            {
+                throw new RestExcteption(HttpStatusCode.NotFound, new { Error = "User not found" });
+            }
+
+            return new UserModel
+            {
+                Name = user.Nickname,
+                Email = user.Email,
+                Errors = null,
+                Token = "Fack you"
+            };
         }
     }
 }

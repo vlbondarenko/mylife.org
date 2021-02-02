@@ -11,6 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using serverapp.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using serverapp.Middleware;
 
 
 namespace serverapp
@@ -23,7 +26,6 @@ namespace serverapp
         }
 
         public IConfiguration Configuration { get; }
-
         
         public void ConfigureServices(IServiceCollection services)
         {
@@ -49,8 +51,7 @@ namespace serverapp
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ValidateAudience = false,
-                        ValidateIssuer = false
-
+                        ValidateIssuer = false    
                     };
                 });
 
@@ -65,6 +66,7 @@ namespace serverapp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+               
               
             }
 
@@ -72,6 +74,8 @@ namespace serverapp
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
+
+            app.UseMiddleware<ExceptionsHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
