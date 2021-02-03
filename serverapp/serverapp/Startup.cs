@@ -12,6 +12,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using serverapp.Services;
 using serverapp.Middleware;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 
 namespace serverapp
@@ -38,11 +40,20 @@ namespace serverapp
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddIdentityCore<AppUser>()
+
+
+            services.AddIdentityCore<AppUser>(config =>
+                 {
+                     config.SignIn.RequireConfirmedEmail = true;
+                     config.Tokens.ProviderMap.Add("CustomEmailConfirmation", new TokenProviderDescriptor(typeof(CustomEmailConfirmationTokenProvider<IdentityUser>)));
+                     config.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
+                 })
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddUserManager<UserManager<AppUser>>()
-                .AddSignInManager<SignInManager<AppUser>>();
+                .AddSignInManager<SignInManager<AppUser>>()
+                .AddTokenProvider<CustomEmailConfirmationTokenProvider<AppUser>>("CustomEmailConfirmation");
 
+           
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
 
             services.AddAuthentication(options =>
@@ -64,7 +75,7 @@ namespace serverapp
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<IUserService, UserService>();
-
+           
         }
 
 

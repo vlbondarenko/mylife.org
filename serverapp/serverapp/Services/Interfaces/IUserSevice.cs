@@ -10,6 +10,8 @@ namespace serverapp.Services
         Task<UserModel> Login(LoginModel loginData);
         Task<UserModel> Register(RegisterModel registerData);
         Task<UserModel> GetById(string id);
+        Task<dynamic> SendConfirmEmailMessage(AppUser user, string origin);
+        Task ConfirmEmail(string id, string token);
    }
 
   
