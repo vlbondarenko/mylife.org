@@ -30,7 +30,7 @@ namespace serverapp.Services
 
             if (user == null)
             {
-                throw new RestExcteption(HttpStatusCode.Unauthorized);
+                throw new RestExcteption(HttpStatusCode.Unauthorized, new {  Error = "Invalid email address or password" });
             }
 
             var loginResult = await _signInManager.CheckPasswordSignInAsync(user, loginModel.Password, false);
@@ -38,13 +38,13 @@ namespace serverapp.Services
             if (loginResult.Succeeded)
                 return new UserModel() 
                 { 
-                    DisplayName = user.Email,
+                    DisplayName = user.UserName,
                     Id = user.Id,
                     Token = _jWTGenerator.CreateToken(user) 
                 };
                    
     
-            throw new RestExcteption(HttpStatusCode.Unauthorized);
+            throw new RestExcteption(HttpStatusCode.Unauthorized, new { Error = "Invalid email address or password" });
         }
 
         public async Task<UserModel> Register(RegisterModel registerModel)
@@ -56,7 +56,7 @@ namespace serverapp.Services
             var user = new AppUser()
             {
                 Email = registerModel.Email,
-                UserName = registerModel.FirstName + registerModel.LastName
+                UserName = registerModel.FirstName + " " + registerModel.LastName
             };
 
             var registerResult = await _userManager.CreateAsync(user, registerModel.Password);
