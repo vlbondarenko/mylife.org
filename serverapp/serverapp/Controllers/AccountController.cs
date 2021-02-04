@@ -3,10 +3,6 @@ using System.Threading.Tasks;
 using serverapp.Services;
 using serverapp.Models;
 using Microsoft.AspNetCore.Authorization;
-using System.Net;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 
 
 namespace serverapp.Controllers
@@ -17,13 +13,10 @@ namespace serverapp.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
-        private readonly UserManager<AppUser> _userManager;
 
-
-        public AccountController(IAccountService accountService,UserManager<AppUser> userManager)
+        public AccountController(IAccountService accountService)
         {
             _accountService = accountService;
-            _userManager = userManager;
         }
 
      
@@ -55,7 +48,7 @@ namespace serverapp.Controllers
             //I don't know why, but in some strange way, from the token passed through the parameter in the original query string, the '+' character is replaced with a space, 
             //which prevents the successful confirmation of the email. Therefore, we first return the replaced characters to their place
             token = token.Replace(" ","+");
-            await _accountService.ConfirmEmailAsync(id, token, HttpContext);
+            await _accountService.ConfirmEmailAdressAsync(id, token, HttpContext);
         }
 
 
@@ -64,8 +57,7 @@ namespace serverapp.Controllers
         {
             var originUrl = Request.Headers["origin"];
 
-            return await _accountService.SendEmailConfirmationMessageAsync(id,originUrl);
-
+            return await _accountService.SendEmailAdressConfirmationMessageAsync(id,originUrl);
         }
 
     }

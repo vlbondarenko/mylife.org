@@ -5,10 +5,7 @@ using serverapp.Models;
 using serverapp.Infrastructure;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using serverapp.Controllers;
 using Microsoft.AspNetCore.Http;
-using System.Text.Encodings.Web;
 
 namespace serverapp.Services
 {
@@ -18,14 +15,16 @@ namespace serverapp.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IJWTGenerator _jWTGenerator;
         private readonly AppIdentityDbContext _userDbContext;
+        private readonly IEmailSendingService _emailSendingService;
 
 
-        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext)
+        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext, IEmailSendingService emailSendingService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jWTGenerator = jWTGenerator;
             _userDbContext = userDbContext;
+            _emailSendingService = emailSendingService;
         }
 
 
@@ -72,22 +71,24 @@ namespace serverapp.Services
         }
 
 
-        public async Task<dynamic> SendEmailConfirmationMessageAsync(string userId, string originUrl)
+        public async Task<dynamic> SendEmailAdressConfirmationMessageAsync(string userId, string originUrl)
         {
-            var user =await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
             }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmEmailLink = $"{originUrl}/account/send-confirm-email?id={user.Id}?token={token}";
+            var emailConfirmationLink = $"{originUrl}/account/send-confirm-email?id={user.Id}?token={token}";
 
-            return new { Confirmlink = confirmEmailLink };
+            _emailSendingService.SendEmail(user.Email ,emailConfirmationLink, EmailContext.ConfirmationEmailAdress);
+
+            return new { Confirmlink = emailConfirmationLink };
         }
 
 
-        public async Task ConfirmEmailAsync(string id, string token,HttpContext context)
+        public async Task ConfirmEmailAdressAsync(string id, string token,HttpContext context)
         {
             var user = await _userManager.FindByIdAsync(id);
 

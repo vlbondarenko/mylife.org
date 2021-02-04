@@ -65,6 +65,9 @@ namespace serverapp
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IEmailSendingService, EmailSendingService>();
+
+            services.Configure<EmailOptions>(Configuration.GetSection("EmailOptions"));
            
         }
 
