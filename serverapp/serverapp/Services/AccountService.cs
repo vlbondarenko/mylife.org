@@ -12,14 +12,14 @@ using System.Text.Encodings.Web;
 
 namespace serverapp.Services
 { 
-    public class UserService:IUserService
+    public class AccountService:IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IJWTGenerator _jWTGenerator;
         private readonly AppIdentityDbContext _userDbContext;
 
-        public UserService(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext)
+        public AccountService(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;

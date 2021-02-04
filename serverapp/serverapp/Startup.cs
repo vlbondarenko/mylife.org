@@ -40,12 +40,11 @@ namespace serverapp
             services.AddIdentityCore<AppUser>(config =>
                  {
                      config.SignIn.RequireConfirmedEmail = true;
-                     config.Tokens.EmailConfirmationTokenProvider = "CustomEmailConfirmation";
                  })
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddUserManager<UserManager<AppUser>>()
                 .AddSignInManager<SignInManager<AppUser>>()
-                .AddTokenProvider<CustomEmailConfirmationTokenProvider<AppUser>>("CustomEmailConfirmation");          
+                .AddDefaultTokenProviders();       
 
             services.AddAuthentication(options =>
                 {
@@ -65,7 +64,7 @@ namespace serverapp
                 });
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAccountService, AccountService>();
            
         }
 

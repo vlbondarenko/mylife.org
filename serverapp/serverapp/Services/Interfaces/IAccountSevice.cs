@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace serverapp.Services
 {
    
-   public interface IUserService
+   public interface IAccountService
    {
         Task<UserModel> Login(LoginModel loginData);
         Task<UserModel> Register(RegisterModel registerData);
