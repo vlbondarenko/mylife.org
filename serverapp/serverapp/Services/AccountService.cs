@@ -28,6 +28,7 @@ namespace serverapp.Services
             _emailSendingService = emailSendingService;
         }
 
+        #region SignIn functionality
 
         public async Task<UserData> SignInAsync(SignInData signInData)
         {
@@ -47,8 +48,12 @@ namespace serverapp.Services
             throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Invalid email address or password" });
         }
 
+        #endregion
 
-        public async Task SignUpAsync(SignUpData signUpData, HttpContext context)
+
+        #region SignUp functionality
+
+        public async Task SignUpAsync(SignUpData signUpData, HttpContext httpContext)
         {
             if (await _userDbContext.Users.Where(x => x.Email == signUpData.Email).AnyAsync())
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email is already exist" });
@@ -63,42 +68,31 @@ namespace serverapp.Services
             var signUpResult = await _userManager.CreateAsync(newUser, signUpData.Password);
             if (signUpResult.Succeeded)
             {
-                var emailConfirmationApiPath = $"{context.Request.Scheme}://{context.Request.Host}/api/account/confirm-email";
-                await SendEmailConfirmationMessageAsync(newUser, emailConfirmationApiPath, EmailContext.ConfirmationEmailAdress);
-
-                return;
+                await SendEmailAdressConfirmationMessageAsync(newUser.Email, httpContext.Request);
+                return; //Ничего не возвращаем, передаем управление вызывающей стороне. Код состояния запроса - 200
             }
                               
             throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Client create failure" });
         }
 
 
-        public async Task RestorePassword(string email, HttpContext context)
+        public async Task SendEmailAdressConfirmationMessageAsync(string email, HttpRequest request)
         {
             var user =await _userManager.FindByEmailAsync(email);
-            if (user == null)
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
 
-            var origiuUrl = context.Request.Headers["origin"];
-            await SendEmailConfirmationMessageAsync(user, origiuUrl, EmailContext.PasswordRecowery);
-        }
-
-
-        public async Task SendEmailConfirmationMessageAsync(AppUser user, string emailConfirmationApiPath, EmailContext context)
-        {
             if (user == null)
             {
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
             }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var emailConfirmationLink = $"{emailConfirmationApiPath}?id={user.Id}&token={token}";
+            var emailConfirmationLink = $"{request.Scheme}://{request.Host}/api/account/confirm-email?id={user.Id}&token={token}";
 
-            _emailSendingService.SendEmail(user.Email ,emailConfirmationLink, context);
+            _emailSendingService.SendEmail(user.Email, emailConfirmationLink, EmailContext.ConfirmationEmailAdress);
         }
 
 
-        public async Task ConfirmEmailAdressAsync(string id, string token, HttpContext context)
+        public async Task ConfirmEmailAdressAsync(string id, string token, HttpResponse response)
         {
             var user = await _userManager.FindByIdAsync(id);
 
@@ -109,13 +103,71 @@ namespace serverapp.Services
 
             if (resultOfConfirm.Succeeded)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.Moved;
-                context.Response.Headers["location"] ="http://localhost:8080/confirmemail";
+                RedirectClientToLocation(response,"http://localhost:8080/confirm-email");
                 return;
             }
-               
+
             throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
         }
+
+
+        private void RedirectClientToLocation(HttpResponse response, string location)
+        {
+            response.StatusCode = (int)HttpStatusCode.Moved;
+            response.Headers["location"] = location;
+        }
+
+        #endregion
+
+
+        #region Reset Password functionality
+
+        public async Task ResetPasswordAsync(string email, HttpContext context)
+        {
+            var user =await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
+
+            await SendResetPasswordMessageAsync(user.Email, context.Request);
+            return;
+        }
+
+
+        public async Task SendResetPasswordMessageAsync(string email, HttpRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var emailConfirmationLink = $"{request.Scheme}://{request.Host}/api/account/confirm-email?id={user.Id}&token={token}";
+
+            _emailSendingService.SendEmail(user.Email, emailConfirmationLink, EmailContext.ConfirmationEmailAdress);
+        }
+
+        public async Task ConfirmResetPasswordAsync(string id, string token, string newPassword, HttpResponse response)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
+
+            var resultOfConfirm = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            if (resultOfConfirm.Succeeded)
+            {
+                RedirectClientToLocation(response, "http://localhost:8080/reset-password-succes");
+                return;
+            }
+
+            throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
+        }
+
+        #endregion
+
 
         public async Task<UserData> GetById(string id)
         {

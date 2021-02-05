@@ -14,7 +14,7 @@ namespace serverapp.Services
     public enum EmailContext
     {
         ConfirmationEmailAdress,
-        PasswordRecowery
+        ResetPsaaword
     }
 
     public class EmailSendingService:IEmailSendingService
@@ -40,7 +40,7 @@ namespace serverapp.Services
                         Send(to, subject, html, _emailOptions.EmailFrom);
                         break;
                     }
-                case EmailContext.PasswordRecowery:
+                case EmailContext.ResetPsaaword:
                     {
                         subject = "Password Recovery";
                         html = $@"<p>Please click the below link to verify your email address and recowery password:</p>
