@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using serverapp.Models;
@@ -47,7 +48,7 @@ namespace serverapp.Services
         }
 
 
-        public async Task<UserData> SignUpAsync(SignUpData signUpData)
+        public async Task SignUpAsync(SignUpData signUpData, HttpContext context)
         {
             if (await _userDbContext.Users.Where(x => x.Email == signUpData.Email).AnyAsync())
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email is already exist" });
@@ -55,40 +56,49 @@ namespace serverapp.Services
             var newUser = new AppUser()
             {
                 Email = signUpData.Email,
-                UserName = signUpData.FirstName + " " + signUpData.LastName
+                UserName = signUpData.FirstName,
+                LastName = signUpData.LastName
             };
 
-            var registerResult = await _userManager.CreateAsync(newUser, signUpData.Password);
-            if (registerResult.Succeeded)
-                return new UserData
-                {
-                    DisplayName = newUser.UserName,
-                    Id = newUser.Id,
-                    Token = _jWTGenerator.CreateToken(newUser)
-                };
-               
+            var signUpResult = await _userManager.CreateAsync(newUser, signUpData.Password);
+            if (signUpResult.Succeeded)
+            {
+                var emailConfirmationApiPath = $"{context.Request.Scheme}://{context.Request.Host}/api/account/confirm-email";
+                await SendEmailConfirmationMessageAsync(newUser, emailConfirmationApiPath, EmailContext.ConfirmationEmailAdress);
+
+                return;
+            }
+                              
             throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Client create failure" });
         }
 
 
-        public async Task<dynamic> SendEmailAdressConfirmationMessageAsync(string userId, string originUrl)
+        public async Task RestorePassword(string email, HttpContext context)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user =await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
+
+            var origiuUrl = context.Request.Headers["origin"];
+            await SendEmailConfirmationMessageAsync(user, origiuUrl, EmailContext.PasswordRecowery);
+        }
+
+
+        public async Task SendEmailConfirmationMessageAsync(AppUser user, string emailConfirmationApiPath, EmailContext context)
+        {
             if (user == null)
             {
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
             }
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var emailConfirmationLink = $"{originUrl}/account/send-confirm-email?id={user.Id}?token={token}";
+            var emailConfirmationLink = $"{emailConfirmationApiPath}?id={user.Id}&token={token}";
 
-            _emailSendingService.SendEmail(user.Email ,emailConfirmationLink, EmailContext.ConfirmationEmailAdress);
-
-            return new { Confirmlink = emailConfirmationLink };
+            _emailSendingService.SendEmail(user.Email ,emailConfirmationLink, context);
         }
 
 
-        public async Task ConfirmEmailAdressAsync(string id, string token,HttpContext context)
+        public async Task ConfirmEmailAdressAsync(string id, string token, HttpContext context)
         {
             var user = await _userManager.FindByIdAsync(id);
 
@@ -99,7 +109,8 @@ namespace serverapp.Services
 
             if (resultOfConfirm.Succeeded)
             {
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                context.Response.StatusCode = (int)HttpStatusCode.Moved;
+                context.Response.Headers["location"] ="http://localhost:8080/confirmemail";
                 return;
             }
                

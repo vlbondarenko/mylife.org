@@ -21,9 +21,9 @@ namespace serverapp.Controllers
 
      
         [HttpPost("register")]
-        public async Task<ActionResult<UserData>> SignUp([FromBody] SignUpData signUpData)
+        public async Task SignUp([FromBody] SignUpData signUpData)
         {
-            return await _accountService.SignUpAsync(signUpData);
+             await _accountService.SignUpAsync(signUpData, HttpContext);
         }
 
 
@@ -51,14 +51,20 @@ namespace serverapp.Controllers
             await _accountService.ConfirmEmailAdressAsync(id, token, HttpContext);
         }
 
+        [HttpGet("restore-password")]
+        public async Task RestorePassword (string email)
+        {
+            await _accountService.RestorePassword(email, HttpContext);
+        }
 
-        [HttpGet("send-confirm-email")]
-        public async Task<dynamic> SendEmailConfirmationMessage(string id)
+
+       /* [HttpGet("send-confirm-email")]
+        public async Task SendEmailConfirmationMessage(string id)
         {
             var originUrl = Request.Headers["origin"];
 
-            return await _accountService.SendEmailAdressConfirmationMessageAsync(id,originUrl);
-        }
+            await _accountService.SendEmailAdressConfirmationMessageAsync(id,originUrl,EmailContext.ConfirmationEmailAdress);
+        }*/
 
     }
 }

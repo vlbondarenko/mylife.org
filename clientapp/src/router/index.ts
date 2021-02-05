@@ -13,6 +13,12 @@ const routes: Array<RouteRecordRaw> = [
         name:'User',
         //lazy load
         component: () => import(/* webpackChunkName: "user" */'../Pages/User.vue')
+    },
+    {
+        path:'/confirm-email',
+        name:'Slider',
+        //lazy load
+        component: () => import(/* webpackChunkName: "user" */'../components/HomePage/Slider.vue')
     }
 ]
 

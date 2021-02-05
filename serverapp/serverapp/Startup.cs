@@ -3,15 +3,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using serverapp.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using serverapp.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 using serverapp.Services;
 using serverapp.Middleware;
+using serverapp.Models;
+using serverapp.Infrastructure;
 
 
 namespace serverapp
@@ -63,12 +64,21 @@ namespace serverapp
                     };
                 });
 
-            services.AddScoped<IJWTGenerator, JWTGenerator>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IEmailSendingService, EmailSendingService>();
+           /* services.AddCors(options =>
+            {
+                options.AddPolicy("MyCorsPolicy", 
+                    builder => builder.SetIsOriginAllowedToAllowWildcardSubdomains()
+                                      .WithOrigins("http://localhost:8080")
+                                      .AllowAnyMethod()
+                                      .AllowCredentials()
+                                      .AllowAnyHeader());
+            });*/
 
             services.Configure<EmailOptions>(Configuration.GetSection("EmailOptions"));
-           
+
+            services.AddScoped<IJWTGenerator, JWTGenerator>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IEmailSendingService, EmailSendingService>();    
         }
 
 
@@ -79,17 +89,15 @@ namespace serverapp
                 app.UseDeveloperExceptionPage();             
             }
 
-            //Allow cross-domain request
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
-
+           
             app.UseMiddleware<ExceptionsHandlingMiddleware>();
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
 
             app.UseAuthentication();
 

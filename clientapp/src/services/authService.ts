@@ -12,13 +12,20 @@ interface UserData extends AuthData{
     lastName: string
 }
 
+interface ResponseData {
+    email:string,
+    message:string,
+    name:string,
+    token:string
+}
+
 class AuthService {
     login(authData: AuthData){
         return axios
-        .post(API_URL + 'signup',authData)
+        .post<ResponseData>(API_URL + 'account/login',authData)
         .then(responce=>{
-            if(responce.data.accesToken){
-                localStorage.setItem('user',responce.data)
+            if(responce.data){
+                localStorage.setItem('user',responce.data.token)
             }
 
             return responce.data
@@ -26,7 +33,7 @@ class AuthService {
     }
 
     register(userData:UserData){
-        return axios.post(API_URL + 'account/register',userData)
+        return axios.post<ResponseData>(API_URL + 'account/register',userData)
     }
 
     logout(){
