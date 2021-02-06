@@ -5,6 +5,8 @@ using serverapp.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using serverapp.Infrastructure;
+using Microsoft.AspNetCore.Http;
+using System;
 
 
 namespace serverapp.Controllers
@@ -69,9 +71,44 @@ namespace serverapp.Controllers
 
 
         [HttpGet("forgot-password")]
-        public async Task ForgotPassword(string email)
+        public async Task ForgotPassword([FromBody]ForgotPasswordData forgotPasswordData)
         {
-            await _accountService.ResetPasswordAsync(email, HttpContext);
+            await _accountService.SendResetPasswordMessageAsync(forgotPasswordData.Email);
+        }
+
+
+        [HttpGet("verify-token")]
+        public async Task VerifyToken (string id, string token)
+        {
+            try
+            {
+                token = token.Replace(" ", "+");
+                var result = await _accountService.VerifyResetPasswordTokenAsync(id, token);
+                if (result)
+                {
+                    SetCookie("userId", id);
+                    SetCookie("resetToken", token);
+                    RedirectClientToLocation("http://localhost:8080/change-password");
+                }
+                else
+                    throw new Exception();
+            }
+            catch
+            {
+                RedirectClientToLocation("http://localhost:8080/change-password-failure");
+            }
+        }
+
+
+
+        [HttpPost("reset-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordData resetPasswordData)
+        {
+            Request.Cookies.TryGetValue("userId", out string userId);
+            Request.Cookies.TryGetValue("resetToken", out string token);
+            await _accountService.ResetPasswordAsync(userId, token, resetPasswordData.NewPassword);
+
+            return Ok();
         }
 
 
@@ -79,6 +116,17 @@ namespace serverapp.Controllers
         {
             Response.StatusCode = (int)HttpStatusCode.Moved;
             Response.Headers["location"] = location;
+        }
+
+
+        private void SetCookie(string key, string value)
+        {
+            var cookiesOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append(key, value, cookiesOptions);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace serverapp.Services
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "The user with this email does not exist" });
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = $"https://localhost5001/api/account?id={user.Id}&token={token}";
+            var confirmationLink = $"https://localhost:5001/api/account?id={user.Id}&token={token}";
 
             _messageSendingService.SendMessage(emailAdress, confirmationLink, MessageContext.EmailAdressConfirmation);
         }
@@ -107,18 +107,8 @@ namespace serverapp.Services
 
         #region Reset Password functionality
 
-        public async Task ResetPasswordAsync(string email, HttpContext context)
-        {
-            var user =await _userManager.FindByEmailAsync(email);
-            if (user == null)
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
-
-            await SendResetPasswordMessageAsync(user.Email, context.Request);
-            return;
-        }
-
-
-        public async Task SendResetPasswordMessageAsync(string email, HttpRequest request)
+        
+        public async Task SendResetPasswordMessageAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -128,27 +118,40 @@ namespace serverapp.Services
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var emailConfirmationLink = $"{request.Scheme}://{request.Host}/api/account/confirm-email?id={user.Id}&token={token}";
+            var confirmationLink = $"https://localhost:5001/api/account/verify-token?id={user.Id}&token={token}";
 
-            _messageSendingService.SendMessage(user.Email, emailConfirmationLink, MessageContext.EmailAdressConfirmation);
+            _messageSendingService.SendMessage(user.Email, confirmationLink, MessageContext.ResetPassword);
         }
 
-        public async Task ConfirmResetPasswordAsync(string id, string token, string newPassword, HttpResponse response)
+
+        public async Task ResetPasswordAsync(string id, string token, string newPassword)
         {
             var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
 
-            var resultOfConfirm = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            var resultOfReset = await _userManager.ResetPasswordAsync(user, token, newPassword);
 
-            if (resultOfConfirm.Succeeded)
+            if (resultOfReset.Succeeded)
             {
-                //RedirectClientToLocation(response, "http://localhost:8080/reset-password-succes");
                 return;
             }
 
             throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
+        }
+
+        public async Task<bool> VerifyResetPasswordTokenAsync(string id, string token)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                throw new RestExcteption(HttpStatusCode.BadRequest);
+
+            var tokenProvider = _userManager.Options.Tokens.PasswordResetTokenProvider;
+            var purpose = "ResetPassword";
+            var result = await _userManager.VerifyUserTokenAsync(user, tokenProvider, purpose, token);
+
+            return result ? result : throw new RestExcteption(HttpStatusCode.BadRequest);
         }
 
         #endregion

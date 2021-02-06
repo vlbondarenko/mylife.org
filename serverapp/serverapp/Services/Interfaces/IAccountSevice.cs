@@ -13,9 +13,9 @@ namespace serverapp.Services
         Task SendEmailAdressConfirmationMassageAsync(string email);
         Task ConfirmEmailAdressAsync(string id, string token);
 
-        Task ResetPasswordAsync(string email, HttpContext context);
-        Task SendResetPasswordMessageAsync(string email, HttpRequest request);
-        Task ConfirmResetPasswordAsync(string id, string token, string newPassword, HttpResponse response);
+        Task SendResetPasswordMessageAsync(string email);
+        Task<bool> VerifyResetPasswordTokenAsync(string id, string token);
+        Task ResetPasswordAsync(string id, string token, string newPassword);
 
 
         Task<AppUser> GetUserByEmailAsync(string email);

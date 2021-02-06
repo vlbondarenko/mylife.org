@@ -14,7 +14,7 @@ namespace serverapp.Services
     public enum MessageContext
     {
         EmailAdressConfirmation,
-        ResetPsaaword
+        ResetPassword
     }
 
     public class MessageSendingService:IMessageSendingService
@@ -40,7 +40,7 @@ namespace serverapp.Services
                         Send(to, subject, html, _messageOptions.MessageFrom);
                         break;
                     }
-                case MessageContext.ResetPsaaword:
+                case MessageContext.ResetPassword:
                     {
                         subject = "Password Recovery";
                         html = $@"<p>Please click the below link to verify your email address and recowery password:</p>

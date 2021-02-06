@@ -20,4 +20,15 @@
         public string Email { get; set; }
         public string Password { get; set; }
     }
+
+    public class ForgotPasswordData 
+    { 
+        public string Email { get; set; }
+    }
+
+    public class ResetPasswordData
+    {
+        public string NewPassword { get; set; }
+    }
+
 }
