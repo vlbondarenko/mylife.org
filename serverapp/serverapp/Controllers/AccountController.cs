@@ -4,6 +4,7 @@ using serverapp.Services;
 using serverapp.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
+using serverapp.Infrastructure;
 
 
 namespace serverapp.Controllers
@@ -31,20 +32,18 @@ namespace serverapp.Controllers
         [HttpPost("sign-up")]
         public async Task<ActionResult> SignUp([FromBody] SignUpData signUpData)
         {
-            var newUser = await _accountService.SignUpAsync(signUpData);
-
-            await SendEmailAdressConfirmationLinkAsync(newUser);
+            await _accountService.SignUpAsync(signUpData);
+            await _accountService.SendEmailAdressConfirmationMassageAsync(signUpData.Email);
 
             return Ok();
         }
 
 
+        //Action to resend an email with a link to confirm the email address
         [HttpPost("email-adress-confirmation")]
         public async Task<ActionResult> SendEmailAdressConfirmationMessage(string email)
         {
-            var user = await _accountService.GetUserByEmailAsync(email);
-
-            await SendEmailAdressConfirmationLinkAsync(user);
+            await _accountService.SendEmailAdressConfirmationMassageAsync(email); 
 
             return Ok();
         }
@@ -53,37 +52,33 @@ namespace serverapp.Controllers
         [HttpGet("confirm-email")]
         public async Task ConfirmEmail(string id, string token)
         {
-            //I don't know why, but in some strange way, from the token passed through the parameter in the original query string, the '+' character is replaced with a space, 
-            //which prevents the successful confirmation of the email. Therefore, we first return the replaced characters to their place
-            token = token.Replace(" ", "+");
-            await _accountService.ConfirmEmailAdressAsync(id, token);
+            try
+            {
+                //I don't know why, but in some strange way, from the token passed through the parameter in the original query string, the '+' character is replaced with a space, 
+                //which prevents the successful confirmation of the email. Therefore, we first return the replaced characters to their place
+                token = token.Replace(" ", "+");
+                await _accountService.ConfirmEmailAdressAsync(id, token);
 
-            Response.StatusCode = (int)HttpStatusCode.Moved;
-            Response.Headers["location"] = "http://localhost:8080/confirm-email";
+                RedirectClientToLocation("http://localhost:8080/confirm-email-success");
+            }
+            catch
+            {
+                RedirectClientToLocation("http://localhost:8080/confirm-email-failure");
+            }
         }
 
 
-        [HttpGet("reset-password")]
-        public async Task ResetPassword(string email)
+        [HttpGet("forgot-password")]
+        public async Task ForgotPassword(string email)
         {
             await _accountService.ResetPasswordAsync(email, HttpContext);
         }
 
 
-       /* [Authorize]
-        [HttpGet("getbyid")]
-        public async Task<ActionResult<UserData>> GetById(string id)
+        private void RedirectClientToLocation (string location)
         {
-            return await _accountService.GetById(id);
-        }  */
-
-        private async Task SendEmailAdressConfirmationLinkAsync(AppUser user)
-        {
-
-            var confirmationToken = await _accountService.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/api/account/confirm-email?id={user.Id}&token={confirmationToken}";
-
-            await _accountService.SendEmailAdressConfirmationMassageAsync(user.Email, confirmationLink);
+            Response.StatusCode = (int)HttpStatusCode.Moved;
+            Response.Headers["location"] = location;
         }
     }
 }

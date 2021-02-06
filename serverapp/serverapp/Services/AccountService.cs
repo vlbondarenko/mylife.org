@@ -53,7 +53,7 @@ namespace serverapp.Services
 
         #region SignUp functionality
 
-        public async Task<AppUser> SignUpAsync(SignUpData signUpData)
+        public async Task SignUpAsync(SignUpData signUpData)
         {
             if (await _userDbContext.Users.Where(x => x.Email == signUpData.Email).AnyAsync())
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email is already exist" });
@@ -68,28 +68,21 @@ namespace serverapp.Services
             var signUpResult = await _userManager.CreateAsync(newUser, signUpData.Password);
             
             if (signUpResult.Succeeded)      
-                return newUser; 
+                return; 
             else                              
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Client create failure" });
         }
 
 
-        public async Task<string> GenerateEmailConfirmationTokenAsync(AppUser user)
+        public async Task SendEmailAdressConfirmationMassageAsync(string emailAdress)
         {
+            var user = await _userManager.FindByEmailAsync(emailAdress);
             if (user == null)
-            {
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
-            }
-
-            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        }
-
-
-        public async Task SendEmailAdressConfirmationMassageAsync(string emailAdress, string confirmationLink)
-        {
-            if (!await _userDbContext.Users.Where(x => x.Email == emailAdress).AnyAsync())
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "The user with this email does not exist" });
-            
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = $"https://localhost5001/api/account?id={user.Id}&token={token}";
+
             _messageSendingService.SendMessage(emailAdress, confirmationLink, MessageContext.EmailAdressConfirmation);
         }
 
@@ -107,13 +100,6 @@ namespace serverapp.Services
                 return;
             else
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
-        }
-
-
-        private void RedirectClientToLocation(HttpResponse response, string location)
-        {
-            response.StatusCode = (int)HttpStatusCode.Moved;
-            response.Headers["location"] = location;
         }
 
         #endregion
@@ -158,7 +144,7 @@ namespace serverapp.Services
 
             if (resultOfConfirm.Succeeded)
             {
-                RedirectClientToLocation(response, "http://localhost:8080/reset-password-succes");
+                //RedirectClientToLocation(response, "http://localhost:8080/reset-password-succes");
                 return;
             }
 

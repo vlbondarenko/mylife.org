@@ -9,9 +9,8 @@ namespace serverapp.Services
    {
         Task<UserData> SignInAsync(SignInData signInData);
 
-        Task<AppUser> SignUpAsync(SignUpData signUpData);
-        Task<string> GenerateEmailConfirmationTokenAsync(AppUser user);
-        Task SendEmailAdressConfirmationMassageAsync(string emailAdress, string confirmationLink);
+        Task SignUpAsync(SignUpData signUpData);
+        Task SendEmailAdressConfirmationMassageAsync(string email);
         Task ConfirmEmailAdressAsync(string id, string token);
 
         Task ResetPasswordAsync(string email, HttpContext context);

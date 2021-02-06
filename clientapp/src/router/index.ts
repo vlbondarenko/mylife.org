@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Home from '../Pages/Home.vue'
-
+import Slider from '../components/HomePage/Slider.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -18,7 +18,8 @@ const routes: Array<RouteRecordRaw> = [
         path:'/confirm-email',
         name:'Slider',
         //lazy load
-        component: () => import(/* webpackChunkName: "user" */'../components/HomePage/Slider.vue')
+        //component: () => import(/* webpackChunkName: "user" */'../components/HomePage/Slider.vue')
+        component: Slider
     }
 ]
 
