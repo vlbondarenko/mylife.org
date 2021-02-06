@@ -16,16 +16,16 @@ namespace serverapp.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IJWTGenerator _jWTGenerator;
         private readonly AppIdentityDbContext _userDbContext;
-        private readonly IEmailSendingService _emailSendingService;
+        private readonly IMessageSendingService _messageSendingService;
 
 
-        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext, IEmailSendingService emailSendingService)
+        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext, IMessageSendingService messageSendingService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jWTGenerator = jWTGenerator;
             _userDbContext = userDbContext;
-            _emailSendingService = emailSendingService;
+            _messageSendingService = messageSendingService;
         }
 
         #region SignIn functionality
@@ -53,7 +53,7 @@ namespace serverapp.Services
 
         #region SignUp functionality
 
-        public async Task SignUpAsync(SignUpData signUpData, HttpContext httpContext)
+        public async Task<AppUser> SignUpAsync(SignUpData signUpData)
         {
             if (await _userDbContext.Users.Where(x => x.Email == signUpData.Email).AnyAsync())
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email is already exist" });
@@ -66,33 +66,35 @@ namespace serverapp.Services
             };
 
             var signUpResult = await _userManager.CreateAsync(newUser, signUpData.Password);
-            if (signUpResult.Succeeded)
-            {
-                await SendEmailAdressConfirmationMessageAsync(newUser.Email, httpContext.Request);
-                return; //Ничего не возвращаем, передаем управление вызывающей стороне. Код состояния запроса - 200
-            }
-                              
-            throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Client create failure" });
+            
+            if (signUpResult.Succeeded)      
+                return newUser; 
+            else                              
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Client create failure" });
         }
 
 
-        public async Task SendEmailAdressConfirmationMessageAsync(string email, HttpRequest request)
+        public async Task<string> GenerateEmailConfirmationTokenAsync(AppUser user)
         {
-            var user =await _userManager.FindByEmailAsync(email);
-
             if (user == null)
             {
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
             }
 
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var emailConfirmationLink = $"{request.Scheme}://{request.Host}/api/account/confirm-email?id={user.Id}&token={token}";
-
-            _emailSendingService.SendEmail(user.Email, emailConfirmationLink, EmailContext.ConfirmationEmailAdress);
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
         }
 
 
-        public async Task ConfirmEmailAdressAsync(string id, string token, HttpResponse response)
+        public async Task SendEmailAdressConfirmationMassageAsync(string emailAdress, string confirmationLink)
+        {
+            if (!await _userDbContext.Users.Where(x => x.Email == emailAdress).AnyAsync())
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "The user with this email does not exist" });
+            
+            _messageSendingService.SendMessage(emailAdress, confirmationLink, MessageContext.EmailAdressConfirmation);
+        }
+
+
+        public async Task ConfirmEmailAdressAsync(string id, string token)
         {
             var user = await _userManager.FindByIdAsync(id);
 
@@ -101,13 +103,10 @@ namespace serverapp.Services
 
             var resultOfConfirm = await _userManager.ConfirmEmailAsync(user, token);
 
-            if (resultOfConfirm.Succeeded)
-            {
-                RedirectClientToLocation(response,"http://localhost:8080/confirm-email");
+            if (resultOfConfirm.Succeeded)               
                 return;
-            }
-
-            throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
+            else
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
         }
 
 
@@ -145,7 +144,7 @@ namespace serverapp.Services
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var emailConfirmationLink = $"{request.Scheme}://{request.Host}/api/account/confirm-email?id={user.Id}&token={token}";
 
-            _emailSendingService.SendEmail(user.Email, emailConfirmationLink, EmailContext.ConfirmationEmailAdress);
+            _messageSendingService.SendMessage(user.Email, emailConfirmationLink, MessageContext.EmailAdressConfirmation);
         }
 
         public async Task ConfirmResetPasswordAsync(string id, string token, string newPassword, HttpResponse response)
@@ -169,17 +168,13 @@ namespace serverapp.Services
         #endregion
 
 
-        public async Task<UserData> GetById(string id)
+        public async Task<AppUser> GetUserByEmailAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(id);
+            var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 throw new RestExcteption(HttpStatusCode.NoContent, new { Message = "User not found" });
 
-            return new UserData
-            {
-                DisplayName = user.UserName,
-                Id = user.Id
-            };
+            return user;           
         }
     }
 }

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace serverapp.Services
 {
-    public interface IEmailSendingService
+    public interface IMessageSendingService
     {
-        void SendEmail(string to, string content, EmailContext context);
+        void SendMessage(string to, string content, MessageContext context);
     }
 }

@@ -11,41 +11,41 @@ using MailKit.Security;
 
 namespace serverapp.Services
 {
-    public enum EmailContext
+    public enum MessageContext
     {
-        ConfirmationEmailAdress,
+        EmailAdressConfirmation,
         ResetPsaaword
     }
 
-    public class EmailSendingService:IEmailSendingService
+    public class MessageSendingService:IMessageSendingService
     {
-        private readonly EmailOptions _emailOptions;
+        private readonly MessageOptions _messageOptions;
 
-        public EmailSendingService(IOptionsSnapshot<EmailOptions> options)
+        public MessageSendingService(IOptionsSnapshot<MessageOptions> options)
         {
-            _emailOptions = options.Value;
+            _messageOptions = options.Value;
         }
 
-        public void SendEmail(string to, string content, EmailContext context)
+        public void SendMessage(string to, string content, MessageContext context)
         {
             var html = "";
             var subject = "";
             switch (context)
             {
-                case EmailContext.ConfirmationEmailAdress:
+                case MessageContext.EmailAdressConfirmation:
                     {
                         subject = "Sign-up Verification API - Verify Email";
                         html = $@"<p>Please click the below link to verify your email address:</p>
                                <p><a href=""{content}"">{content}</a></p>";
-                        Send(to, subject, html, _emailOptions.EmailFrom);
+                        Send(to, subject, html, _messageOptions.MessageFrom);
                         break;
                     }
-                case EmailContext.ResetPsaaword:
+                case MessageContext.ResetPsaaword:
                     {
                         subject = "Password Recovery";
                         html = $@"<p>Please click the below link to verify your email address and recowery password:</p>
                                <p><a href=""{content}"">{content}</a></p>";
-                        Send(to, subject, html, _emailOptions.EmailFrom);
+                        Send(to, subject, html, _messageOptions.MessageFrom);
                         break;
                     }
             }
@@ -55,17 +55,17 @@ namespace serverapp.Services
         public void Send(string to, string subject, string html, string from = null)
         {
             // create message
-            var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(from ?? _emailOptions.EmailFrom));
-            email.To.Add(MailboxAddress.Parse(to));
-            email.Subject = subject;
-            email.Body = new TextPart(TextFormat.Html) { Text = html };
+            var message = new MimeMessage();
+            message.From.Add(MailboxAddress.Parse(from ?? _messageOptions.MessageFrom));
+            message.To.Add(MailboxAddress.Parse(to));
+            message.Subject = subject;
+            message.Body = new TextPart(TextFormat.Html) { Text = html };
 
-            // send email
+            // send message
             using var smtp = new SmtpClient();
-            smtp.Connect(_emailOptions.SmtpHost, _emailOptions.SmtpPort, SecureSocketOptions.StartTls);
-            smtp.Authenticate(_emailOptions.SmtpUser, _emailOptions.SmtpPass);
-            smtp.Send(email);
+            smtp.Connect(_messageOptions.SmtpHost, _messageOptions.SmtpPort, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_messageOptions.SmtpUser, _messageOptions.SmtpPass);
+            smtp.Send(message);
             smtp.Disconnect(true);
         }
     }

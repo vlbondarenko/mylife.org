@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace serverapp.Infrastructure
 {
-    public class EmailOptions
+    public class MessageOptions
     {
-        public string EmailFrom { get; set; }
+        public string MessageFrom { get; set; }
         public string SmtpHost { get; set; }
         public int SmtpPort { get; set; }
         public string SmtpUser { get; set; }

@@ -9,16 +9,17 @@ namespace serverapp.Services
    {
         Task<UserData> SignInAsync(SignInData signInData);
 
-        Task SignUpAsync(SignUpData signUpData, HttpContext context);
-        Task SendEmailAdressConfirmationMessageAsync(string email, HttpRequest httpContext);
-        Task ConfirmEmailAdressAsync(string id, string token, HttpResponse response);
+        Task<AppUser> SignUpAsync(SignUpData signUpData);
+        Task<string> GenerateEmailConfirmationTokenAsync(AppUser user);
+        Task SendEmailAdressConfirmationMassageAsync(string emailAdress, string confirmationLink);
+        Task ConfirmEmailAdressAsync(string id, string token);
 
         Task ResetPasswordAsync(string email, HttpContext context);
         Task SendResetPasswordMessageAsync(string email, HttpRequest request);
         Task ConfirmResetPasswordAsync(string id, string token, string newPassword, HttpResponse response);
 
 
-        Task<UserData> GetById(string id);
+        Task<AppUser> GetUserByEmailAsync(string email);
     }
 
   

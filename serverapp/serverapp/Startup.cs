@@ -74,11 +74,11 @@ namespace serverapp
                                       .AllowAnyHeader());
             });*/
 
-            services.Configure<EmailOptions>(Configuration.GetSection("EmailOptions"));
+            services.Configure<MessageOptions>(Configuration.GetSection("MessageOptions"));
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IEmailSendingService, EmailSendingService>();    
+            services.AddScoped<IMessageSendingService, MessageSendingService>();    
         }
 
 
