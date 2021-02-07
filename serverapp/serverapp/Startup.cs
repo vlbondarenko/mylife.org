@@ -64,16 +64,6 @@ namespace serverapp
                     };
                 });
 
-           /* services.AddCors(options =>
-            {
-                options.AddPolicy("MyCorsPolicy", 
-                    builder => builder.SetIsOriginAllowedToAllowWildcardSubdomains()
-                                      .WithOrigins("http://localhost:8080")
-                                      .AllowAnyMethod()
-                                      .AllowCredentials()
-                                      .AllowAnyHeader());
-            });*/
-
             services.Configure<MessageOptions>(Configuration.GetSection("MessageOptions"));
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
@@ -88,16 +78,16 @@ namespace serverapp
             {
                 app.UseDeveloperExceptionPage();             
             }
-
-           
+   
             app.UseMiddleware<ExceptionsHandlingMiddleware>();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(x => x.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader());
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
 
             app.UseAuthentication();
 

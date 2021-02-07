@@ -10,6 +10,16 @@ using Microsoft.AspNetCore.Http;
 
 namespace serverapp.Services
 {
+
+    public static class ErrorMessages
+    {
+        public static readonly string EmailAlreadyExist = "The user with this email already exist";
+        public static readonly string UserNotFound = "Such the user does not exist";
+        public static readonly string EmailNotConfirm = "The link to confirm the email address is not valid. Try again";
+        public static readonly string NotRegistered = "The user is not registered";
+        public static readonly string PasswordNotReset = "Password could not be reset";
+    }
+
     public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> _userManager;
@@ -56,7 +66,7 @@ namespace serverapp.Services
         public async Task SignUpAsync(SignUpData signUpData)
         {
             if (await _userDbContext.Users.Where(x => x.Email == signUpData.Email).AnyAsync())
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email is already exist" });
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.EmailAlreadyExist });
 
             var newUser = new AppUser()
             {
@@ -70,7 +80,7 @@ namespace serverapp.Services
             if (signUpResult.Succeeded)      
                 return; 
             else                              
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Client create failure" });
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.NotRegistered });
         }
 
 
@@ -78,7 +88,7 @@ namespace serverapp.Services
         {
             var user = await _userManager.FindByEmailAsync(emailAdress);
             if (user == null)
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "The user with this email does not exist" });
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound});
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = $"https://localhost:5001/api/account?id={user.Id}&token={token}";
@@ -92,14 +102,14 @@ namespace serverapp.Services
             var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound });
 
             var resultOfConfirm = await _userManager.ConfirmEmailAsync(user, token);
 
             if (resultOfConfirm.Succeeded)               
                 return;
             else
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.EmailNotConfirm });
         }
 
         #endregion
@@ -114,7 +124,7 @@ namespace serverapp.Services
 
             if (user == null)
             {
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound });
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -124,12 +134,26 @@ namespace serverapp.Services
         }
 
 
+        public async Task<bool> VerifyResetPasswordTokenAsync(string id, string token)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound });
+
+            var tokenProvider = _userManager.Options.Tokens.PasswordResetTokenProvider;
+            var purpose = "ResetPassword";
+            var result = await _userManager.VerifyUserTokenAsync(user, tokenProvider, purpose, token);
+
+            return result ? result : throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.EmailNotConfirm});
+        }
+
+
         public async Task ResetPasswordAsync(string id, string token, string newPassword)
         {
             var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "User not found" });
+                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound });
 
             var resultOfReset = await _userManager.ResetPasswordAsync(user, token, newPassword);
 
@@ -138,21 +162,9 @@ namespace serverapp.Services
                 return;
             }
 
-            throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = "Email not confirm" });
+            throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.PasswordNotReset });
         }
 
-        public async Task<bool> VerifyResetPasswordTokenAsync(string id, string token)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-                throw new RestExcteption(HttpStatusCode.BadRequest);
-
-            var tokenProvider = _userManager.Options.Tokens.PasswordResetTokenProvider;
-            var purpose = "ResetPassword";
-            var result = await _userManager.VerifyUserTokenAsync(user, tokenProvider, purpose, token);
-
-            return result ? result : throw new RestExcteption(HttpStatusCode.BadRequest);
-        }
 
         #endregion
 
@@ -161,7 +173,7 @@ namespace serverapp.Services
         {
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
-                throw new RestExcteption(HttpStatusCode.NoContent, new { Message = "User not found" });
+                throw new RestExcteption(HttpStatusCode.NoContent, new { Message = ErrorMessages.UserNotFound });
 
             return user;           
         }

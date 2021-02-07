@@ -78,7 +78,7 @@ namespace serverapp.Controllers
 
 
         [HttpGet("verify-token")]
-        public async Task VerifyToken (string id, string token)
+        public async Task VerifyRessetPasswordToken (string id, string token)
         {
             try
             {
