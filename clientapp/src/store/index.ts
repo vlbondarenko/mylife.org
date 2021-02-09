@@ -1,9 +1,9 @@
 import  Vuex  from 'vuex'
-import userModule from './modules/user'
+import user from './modules/user.module'
 
 export default new Vuex.Store({
   modules:{
-    userModule:userModule
+    user:user
   }
 })
 
