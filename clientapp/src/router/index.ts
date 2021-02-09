@@ -1,12 +1,19 @@
 import { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Home from '../Pages/Home.vue'
 import Slider from '../components/HomePage/Slider.vue'
+import SignIn from '../components/HomePage/Auth/Register.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
         path:'/',
         name:'Home',
-        component: Home
+        component: Home,
+        children:[
+            {
+                path:'signup',
+                component:SignIn
+            }
+        ]
     },
     {
         path:'/user',

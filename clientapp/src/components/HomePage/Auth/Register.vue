@@ -1,7 +1,7 @@
 <template>
-  <div v-show="showModal" class="modal-wrapper">
-    <div class="modal-body">
-      Title <button class="close" @click="closeModal"><i class="fa fa-close"/></button>
+<div class="modal-wrapper">
+<div class="modal-body">
+      Title <button class="close" @click="$emit('closeSignUpModal')"><i class="fa fa-close"/></button>
       <form ref="formRef" @submit.prevent="handleSubmit">     
         <input
           type="text"
@@ -43,10 +43,10 @@
         {{ message }}
       </div>
     </div>
-  </div>
+</div>
 </template>
 <script lang="ts">
-import { defineComponent, inject, reactive, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -81,17 +81,12 @@ export default defineComponent({
       );
     };
 
-    const showModal = inject('showRegisterModal')
-    const closeModal = inject('closeRegisterModal')
-
     return {
       formRef,
       form,
       message,
       successful,
       handleSubmit,
-      showModal,
-      closeModal
     };
   },
 });

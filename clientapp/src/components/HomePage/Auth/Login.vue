@@ -1,7 +1,7 @@
 <template>
-  <div v-show="showModal" class="modal-wrapper">
+  <div class="modal-wrapper">
     <div class="modal-body">
-      <div class="title">Login</div> <button class="close" @click="closeModal"><i class="fa fa-close"></i></button>
+      <div class="title">Login</div> <button class="close" @click="$emit('closeSignInModal')"><i class="fa fa-close"></i></button>
       <form ref="formRef" @submit.prevent="handleSubmit">
         <input
           v-model="form.email"
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import router from "@/router";
-import { defineComponent, inject, reactive, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -62,19 +62,12 @@ export default defineComponent({
         );
     }; 
     
-    //The value of the showModal variable is determined by the parent component by both of provide() and inject() functions
-    //We also accept a function for changing the value of a variable in the parent component
-    //The reactivity supported
-    const showModal = inject('showLoginModal')
-    const closeModal = inject('closeLoginModal')
 
     return {
         formRef,
         form,
         message,
-        handleSubmit,
-        showModal,
-        closeModal
+        handleSubmit
     };
   },
 });
