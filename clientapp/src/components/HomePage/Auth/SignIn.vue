@@ -2,57 +2,63 @@
   <div class="modal-wrapper">
     <div class="modal-body">
       <div class="title">Login</div> <button class="close" @click="$emit('closeSignInModal')"><i class="fa fa-close"></i></button>
-      <form ref="formRef" @submit.prevent="handleSubmit">
+      <form @submit.prevent="handleSubmit">
         <input
-          v-model="form.email"
+          v-model="emailAdress"
           class="type-one"
-          type="email"
-          required
+          type="text"
           placeholder="Email"
+          @blur="v.emailAdress.$touch()"
         />
+        <span v-if="v.emailAdress.required.$invalid &&v.emailAdress.$dirty">The email address must be valid </span>
         <input
-          v-model="form.password"
+          v-model="password"
           class="type-one"
           type="password"
-          required
           placeholder="Password"
+          @blur="v.password.$touch()"
         />
-        <button
-          class="btn btn-lg"
-          :disabled="!form.email || !form.password"
-          type="submit"
-        >
+        <span v-if="v.password.required && v.password.$dirty">Name is required!</span>
+        <button type="submit" disabled:>
           Sign in
         </button>
-
-        <div v-if="message" class="alert alert-danger" role="alert">
-          {{ message }}
-        </div>
       </form>
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script lang = "ts">
 import router from "@/router";
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
+import { email, required } from '@vuelidate/validators';
+import useVuelidate from '@vuelidate/core';
 
 export default defineComponent({
   name: "Login",
   setup() {
-    const formRef = ref<HTMLFormElement | null>(null);
     const store = useStore();
-    const form = reactive({
-        email: "",
-        password: "",
-    });
-    const message = ref("");
     
-    const handleSubmit = () => {
-        if (!formRef.value?.checkValidity()) return;
+    const message = ref("");
+    const emailAdress = ref("")
+    const password = ref("")
 
-        store.dispatch("userModule/Login", form).then(
+    const v = useVuelidate(
+      {
+        emailAdress: { required, email },
+        password: { required }
+      },
+      { emailAdress, password }
+    )
+
+    function handleSubmit () {
+      v.value.$touch()
+      if(v.value.$error)  return
+      const loginData = {
+        email: emailAdress.value,
+        password:password.value
+      }
+        store.dispatch("user/Login", loginData).then(
             (data) => {
                 if (data) router.push("/user");
             },
@@ -60,14 +66,15 @@ export default defineComponent({
                 message.value = error;
             }
         );
-    }; 
+    }
     
 
     return {
-        formRef,
-        form,
         message,
-        handleSubmit
+        handleSubmit,
+        emailAdress,
+        password,
+        v
     };
   },
 });

@@ -2,35 +2,47 @@
 <div class="modal-wrapper">
 <div class="modal-body">
       Title <button class="close" @click="$emit('closeSignUpModal')"><i class="fa fa-close"/></button>
-      <form ref="formRef" @submit.prevent="handleSubmit">     
+      <form @submit.prevent="handleSubmit">     
         <input
           type="text"
           id="firstname"
-          placeholder="firstname"
-          v-model="form.firstname"
-          required
+          placeholder="First Name"
+          v-model="firstName"
+          @blur="v.firstName.$touch()"
         />  
+        <span v-if="v.firstName.$invalid&&v.firstName.$dirty">This field is required</span>
         <input
           type="text"
           id="lastname"
-          placeholder="lastname"
-          v-model="form.lastname"
-          required
+          placeholder="Last Name"
+          v-model="lastName"
+          @blur="v.lastName.$touch()"
         />    
+         <span v-if="v.lastName.$invalid&&v.lastName.$dirty">This field is required</span>
         <input
           type="email"
-          id="email"
+          id="emailAdress"
           placeholder="Email"
-          v-model="form.email"
-          required
+          v-model="emailAdress"
+          @blur="v.emailAdress.$touch()"
         /> 
+        <span v-if="v.emailAdress.$invalid&&v.emailAdress.$dirty">The email address must be valid</span>
         <input
           type="password"
           id="password"
           placeholder="Password"
-          v-model="form.password"
+          v-model="password"
+          @blur="v.password.$touch()"
         />
-
+         <span v-if="v.password.$invalid&&v.password.$dirty">The password must contain at least eight characters</span>
+         <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          v-model="confirmPassword"
+           @blur="v.confirmPassword.$touch()"
+        />
+        <span v-if="v.confirmPassword.$invalid&&v.confirmPassword.$dirty">Passwords don't match</span>
         <button class="btn btn-primary btn-block w-75 my-4" type="submit">
           Sign up
         </button>
@@ -46,29 +58,46 @@
 </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import {useVuelidate} from "@vuelidate/core"
+import {required,email,minLength, sameAs} from "@vuelidate/validators"
 
 export default defineComponent({
   name: "Register",
   setup() {
-    const formRef = ref<HTMLFormElement | null>(null);
-    const form = reactive({ 
-      email: "",
-      firstname: "",
-      lastname:"",
-      password: "",
-    });
     const store = useStore();
     const router = useRouter();
     const message = ref("");
     const successful = ref(false);
 
-    const handleSubmit = () => {
-      if (!formRef.value?.checkValidity()) return;
+    const firstName = ref("")
+    const lastName = ref ("")
+    const emailAdress = ref ("")
+    const password = ref("")
+    const confirmPassword = ref("")
+    
+    const v = useVuelidate({
+        firstName:{required},
+        lastName:{required},
+        emailAdress: { required, email },
+        password: { required, minLength:minLength(8) },
+        confirmPassword: { required, sameAs:sameAs(password) }
+      },
+      { firstName,lastName,emailAdress, password,confirmPassword })
 
-      store.dispatch("userModule/Register", form).then(
+    const handleSubmit = () => {
+      v.value.$touch()
+      if (v.value.$error) return
+
+      const userData = {
+        firstName:firstName.value,
+        lastName:lastName.value,
+        emailAdress:emailAdress.value,
+        password:password.value
+      }
+      store.dispatch("user/Register", userData).then(
         (data) => {
           if (data) {
             router.push("user");
@@ -82,11 +111,11 @@ export default defineComponent({
     };
 
     return {
-      formRef,
-      form,
       message,
       successful,
       handleSubmit,
+      firstName, lastName, emailAdress, password, confirmPassword,
+      v
     };
   },
 });
