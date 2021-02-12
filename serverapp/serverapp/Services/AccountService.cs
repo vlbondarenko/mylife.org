@@ -97,9 +97,9 @@ namespace serverapp.Services
         }
 
 
-        public async Task ConfirmEmailAdressAsync(string id, string token)
+        public async Task ConfirmEmailAdressAsync(string userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound });
@@ -134,9 +134,9 @@ namespace serverapp.Services
         }
 
 
-        public async Task<bool> VerifyResetPasswordTokenAsync(string id, string token)
+        public async Task<bool> VerifyResetPasswordTokenAsync(string userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound });
 
@@ -148,9 +148,9 @@ namespace serverapp.Services
         }
 
 
-        public async Task ResetPasswordAsync(string id, string token, string newPassword)
+        public async Task ResetPasswordAsync(string userId, string token, string newPassword)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (user == null)
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound });

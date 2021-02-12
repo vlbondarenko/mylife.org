@@ -10,7 +10,7 @@
           v-model="firstName"
           @blur="v.firstName.$touch()"
         />  
-        <span v-if="v.firstName.$invalid&&v.firstName.$dirty">This field is required</span>
+        <span v-if="v.firstName.$invalid&&v.firstName.$dirty">{{v.firstName.$errors[0].$message}}</span>
         <input
           type="text"
           id="lastname"
@@ -57,12 +57,12 @@
     </div>
 </div>
 </template>
-<script lang="ts">
+<script>
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import {useVuelidate} from "@vuelidate/core"
-import {required,email,minLength, sameAs} from "@vuelidate/validators"
+import {required,email,minLength, sameAs, helpers} from "@vuelidate/validators"
 
 export default defineComponent({
   name: "Register",
@@ -79,7 +79,7 @@ export default defineComponent({
     const confirmPassword = ref("")
     
     const v = useVuelidate({
-        firstName:{required},
+        firstName:{required:helpers.withMessage('This field is required hui',required)},
         lastName:{required},
         emailAdress: { required, email },
         password: { required, minLength:minLength(8) },
