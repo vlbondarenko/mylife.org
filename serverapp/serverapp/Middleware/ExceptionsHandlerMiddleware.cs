@@ -33,21 +33,21 @@ namespace serverapp.Middleware
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception ex, ILogger<ExceptionsHandlingMiddleware> logger)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger<ExceptionsHandlingMiddleware> logger)
         {
             object errors = null;
 
-            switch (ex)
+            switch (exception)
             {
                 case RestExcteption rest:
-                    logger.LogError(ex, "Rest error");
+                    logger.LogError(exception, "Rest error");
                     errors = rest.Errors;
                     context.Response.StatusCode = (int)rest.Code;
                     break;
                     
                 case Exception e:
-                    logger.LogError(ex, "Server error");
-                    errors = string.IsNullOrWhiteSpace(e.Message) ? "error" : e.Message;
+                    logger.LogError(exception, "Server error");
+                    errors = string.IsNullOrWhiteSpace(e.Message) ? "The request cannot be processed" : e.Message;
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     break;
             }

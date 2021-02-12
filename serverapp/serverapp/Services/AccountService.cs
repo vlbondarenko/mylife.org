@@ -80,7 +80,7 @@ namespace serverapp.Services
             if (signUpResult.Succeeded)      
                 return; 
             else                              
-                throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.NotRegistered });
+                throw new RestExcteption(HttpStatusCode.InternalServerError, new { Message = ErrorMessages.NotRegistered });
         }
 
 
