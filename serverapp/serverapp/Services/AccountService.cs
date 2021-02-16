@@ -177,5 +177,12 @@ namespace serverapp.Services
 
             return user;           
         }
+
+        public async Task<bool> CheckUniquenessOfEmailAsync(string email)
+        {
+            var user =await _userManager.FindByEmailAsync(email);
+
+            return user == null ? true : false;
+        }
     }
 }

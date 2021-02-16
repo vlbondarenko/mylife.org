@@ -19,6 +19,7 @@ namespace serverapp.Services
 
 
         Task<AppUser> GetUserByEmailAsync(string email);
+        Task<bool> CheckUniquenessOfEmailAsync(string email);
     }
 
   

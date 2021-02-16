@@ -111,6 +111,12 @@ namespace serverapp.Controllers
             return Ok();
         }
 
+        [HttpGet("check-email")]
+        public async Task<ActionResult> CheckUniquenessOfEmail(string email)
+        {
+            var result = await _accountService.CheckUniquenessOfEmailAsync(email);
+            return Ok(new { Result = result});
+        }
 
         private void RedirectClientToLocation (string location)
         {
