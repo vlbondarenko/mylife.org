@@ -20,12 +20,12 @@ export default defineComponent({
         const router = useRouter()
         const user = ref (localStorage.getItem('user'))
 
-        if (!store.state.userModule.loggedIn){
+        if (!store.state.user.loggedIn){
             router.push('/')
         }
 
         const logout = () => {
-            store.dispatch('userModule/Logout')
+            store.dispatch('user/Logout')
             router.push('/')
         }
         return{

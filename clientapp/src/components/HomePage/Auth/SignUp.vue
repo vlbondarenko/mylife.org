@@ -24,8 +24,7 @@
           id="userEmail"
           placeholder="Email"
           v-model="userEmail"
-          @blur="v.userEmail.$touch()"
-          @change="deleyTouch(v.userEmail.email)"
+          @blur="v.userEmail.$touch()"    
         /> 
         <span v-if="v.userEmail.$invalid&&v.userEmail.$dirty">{{v.userEmail.$errors[0].$message}}</span>
         <input
@@ -64,6 +63,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useVuelidate } from "@vuelidate/core"
 import { required, email, minLength, sameAs, helpers } from "@vuelidate/validators"
+import authService from '@/services/authService'
 
 export default defineComponent({
   name: "Register",
@@ -81,19 +81,20 @@ export default defineComponent({
 
     const customRequiredErrorMessage = helpers.withMessage('This field is required',required)
     const customEmailErrorMessage = helpers.withMessage('The email must be valid',email)
+    //const customCheckingEmailErrorMessage = helpers.withMessage('The email already exist',checkEmailForUniqueness(userEmail))
     
     const v = useVuelidate({
         firstName:{required: customRequiredErrorMessage},
         lastName:{required: customRequiredErrorMessage},
-        userEmail: { required: customRequiredErrorMessage, email:customEmailErrorMessage},
+        userEmail: { required: customRequiredErrorMessage, email:customEmailErrorMessage, checkEmailForUniqueness:checkEmail},
         password: { required, minLength: minLength(8)},
-        confirmPassword: { required, sameAs: sameAs(password)}
+        confirmPassword: { required:customRequiredErrorMessage, sameAs: sameAs(password)}
       },
       { firstName, lastName, userEmail, password, confirmPassword })
 
-    const handleSubmit = () => {
-      v.value.$touch()
-      if (v.value.$error) return
+    const handleSubmit = async () => {
+       const isFormCorrect = await v.value.$validate()
+       if (!isFormCorrect) return
 
       const userData = {
         firstName:firstName.value,
@@ -114,12 +115,13 @@ export default defineComponent({
       );
     };
 
-    const deleyTouch = (v) => {
-      v.value.$reset()
-      if(TouchList.has(v)){
-        clearTimeout(TouchList.get(v))
-      }
-      TouchList.set(v,setTimeout(v.value.$touch(),1250))
+   const checkEmail = helpers.withParams({type: 'checkEmailForUniqueness'},(value) => {  return authService.checkEmailForUniqueness(value).then(response => {return response})})
+
+
+    function checkEmailForUniqueness (email)
+    {
+      const response = authService.checkEmailForUniqueness(email).then(response => {return response})
+      return response
     }
 
     return {
@@ -127,7 +129,7 @@ export default defineComponent({
       successful,
       handleSubmit,
       firstName, lastName, userEmail, password, confirmPassword,
-      v, deleyTouch
+      v, checkEmailForUniqueness
     };
   },
 });
