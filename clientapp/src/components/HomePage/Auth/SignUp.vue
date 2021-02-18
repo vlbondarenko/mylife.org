@@ -81,12 +81,12 @@ export default defineComponent({
 
     const customRequiredErrorMessage = helpers.withMessage('This field is required',required)
     const customEmailErrorMessage = helpers.withMessage('The email must be valid',email)
-    //const customCheckingEmailErrorMessage = helpers.withMessage('The email already exist',checkEmailForUniqueness(userEmail))
+    const isUniqueEmail = helpers.withAsync(checkEmailForUniqueness)
     
     const v = useVuelidate({
         firstName:{required: customRequiredErrorMessage},
         lastName:{required: customRequiredErrorMessage},
-        userEmail: { required: customRequiredErrorMessage, email:customEmailErrorMessage, checkEmailForUniqueness:checkEmail},
+        userEmail: { required: customRequiredErrorMessage, email:customEmailErrorMessage,isUniqueEmail:helpers.withMessage('The email already taken', isUniqueEmail)},
         password: { required, minLength: minLength(8)},
         confirmPassword: { required:customRequiredErrorMessage, sameAs: sameAs(password)}
       },
@@ -115,13 +115,8 @@ export default defineComponent({
       );
     };
 
-   const checkEmail = helpers.withParams({type: 'checkEmailForUniqueness'},(value) => {  return authService.checkEmailForUniqueness(value).then(response => {return response})})
-
-
-    function checkEmailForUniqueness (email)
-    {
-      const response = authService.checkEmailForUniqueness(email).then(response => {return response})
-      return response
+    function checkEmailForUniqueness (value){
+      return authService.checkEmailForUniqueness(value).then(response => {return response}) 
     }
 
     return {
