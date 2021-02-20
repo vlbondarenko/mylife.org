@@ -39,18 +39,6 @@ class AuthService {
     logout(){
         localStorage.removeItem('user')
     }
-
-     checkEmailForUniqueness(email:string){
-        return axios.get(API_URL+'account/check-email', {params:email})
-        .then( async response=>
-            {
-                return Promise.resolve(Boolean(await response.data.json()))
-                // if(response.data.result=='true')
-                //     return Promise.resolve(true)
-                // else
-                //     return Promise.resolve(false)
-            })
-    }
 }
 
 export default new AuthService()

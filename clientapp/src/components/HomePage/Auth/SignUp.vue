@@ -20,7 +20,7 @@
         />    
          <span v-if="v.lastName.$invalid&&v.lastName.$dirty">{{v.lastName.$errors[0].$message}}</span>
         <input
-          type="email"
+          type="text"
           id="userEmail"
           placeholder="Email"
           v-model="userEmail"
@@ -63,7 +63,6 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useVuelidate } from "@vuelidate/core"
 import { required, email, minLength, sameAs, helpers } from "@vuelidate/validators"
-import authService from '@/services/authService'
 
 export default defineComponent({
   name: "Register",
@@ -81,12 +80,11 @@ export default defineComponent({
 
     const customRequiredErrorMessage = helpers.withMessage('This field is required',required)
     const customEmailErrorMessage = helpers.withMessage('The email must be valid',email)
-    const isUniqueEmail = helpers.withAsync(checkEmailForUniqueness)
     
     const v = useVuelidate({
         firstName:{required: customRequiredErrorMessage},
         lastName:{required: customRequiredErrorMessage},
-        userEmail: { required: customRequiredErrorMessage, email:customEmailErrorMessage,isUniqueEmail:helpers.withMessage('The email already taken', isUniqueEmail)},
+        userEmail: { required: customRequiredErrorMessage, email:customEmailErrorMessage},
         password: { required, minLength: minLength(8)},
         confirmPassword: { required:customRequiredErrorMessage, sameAs: sameAs(password)}
       },
@@ -115,16 +113,14 @@ export default defineComponent({
       );
     };
 
-    function checkEmailForUniqueness (value){
-      return authService.checkEmailForUniqueness(value).then(response => {return response}) 
-    }
+   
 
     return {
       message,
       successful,
       handleSubmit,
       firstName, lastName, userEmail, password, confirmPassword,
-      v, checkEmailForUniqueness
+      v
     };
   },
 });
