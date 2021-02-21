@@ -1,5 +1,5 @@
 <template>
-  <Modal :isOpen="isOpen" :title="currentTitle" @onClose="handleClose" @onAfterLeave="onAfterLeave">
+  <Modal :isOpen="isOpen" :title="currentTitle" @onClose="handleClose" @onEndOfTransition="clearData">
       <keep-alive :max="1">
             <component :is="currentComponent"/>
       </keep-alive>    
@@ -33,10 +33,13 @@ export default defineComponent({
 
         const handleClose = () => {
             isOpen.value = false
-            router.push('/')
+            router.go(-1)
         }
 
-        const onAfterLeave = () => {
+        //There is a problem: if you assign 'null' to the 'currentComponent' immediately after catching the 'onClose' event, 
+        //the content of the modal window will be cleared before the transition ends, which looks ugly. 
+        //Therefore, we wait for the transition to end, intercept the 'onEndOfTransition' event and only then assign the 'null' value
+        const clearData = () => {
             currentComponent.value = null
             currentTitle.value = ''
         }
@@ -46,7 +49,7 @@ export default defineComponent({
             currentTitle,
             handleClose,
             isOpen,
-            onAfterLeave
+            clearData
         }
     }
 })

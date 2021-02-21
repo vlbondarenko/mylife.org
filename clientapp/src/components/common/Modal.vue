@@ -1,5 +1,5 @@
 <template>
-  <transition v-on:after-leave="$emit('onAfterLeave')" name="fade">
+  <transition v-on:after-leave="$emit('onEndOfTransition')" name="fade">
     <div class="modal-backdrop"
       v-show="isOpen"
       :class="{open: isOpen}"
