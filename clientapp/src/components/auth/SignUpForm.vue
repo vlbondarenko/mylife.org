@@ -1,7 +1,4 @@
-<template>
-<div class="modal-wrapper">
-<div class="modal-body">
-      Title <button class="close" @click="$emit('closeSignUpModal')"><i class="fa fa-close"/></button>
+<template> 
       <form @submit.prevent="handleSubmit">     
         <input
           type="text"
@@ -42,20 +39,11 @@
           v-model="confirmPassword"
            @blur="v.confirmPassword.$touch()"
         />
-        <span v-if="v.confirmPassword.$invalid&&v.confirmPassword.$dirty">Passwords don't match</span>
+        <span v-if="v.confirmPassword.$invalid&&v.confirmPassword.$dirty">{{v.confirmPassword.$errors[0].$message}}</span>
         <button type="submit">
           Sign up
         </button>
       </form>
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >
-        {{ message }}
-      </div>
-    </div>
-</div>
 </template>
 <script>
 import { defineComponent, ref } from "vue";
@@ -63,14 +51,16 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { useVuelidate } from "@vuelidate/core"
 import { required, email, minLength, sameAs, helpers } from "@vuelidate/validators"
+import useEmitter from '@/helpers/emitter'
 
 export default defineComponent({
-  name: "Register",
+  name: "SignUpForm",
   setup() {
     const store = useStore();
     const router = useRouter();
+    const emitter = useEmitter()
+
     const message = ref("");
-    const successful = ref(false);
 
     const firstName = ref("")
     const lastName = ref ("")
@@ -78,47 +68,48 @@ export default defineComponent({
     const password = ref("")
     const confirmPassword = ref("")
 
-    const customRequiredErrorMessage = helpers.withMessage('This field is required',required)
-    const customEmailErrorMessage = helpers.withMessage('The email must be valid',email)
+    const requiredWithCustomErrorMessage = helpers.withMessage('This field is required',required)
+    const emailWithCustomErrorMessage = helpers.withMessage('The email must be valid',email)
+    const minLenthWithCustomErrorMessage = helpers.withMessage('The password must contain at least eight characters',minLength(8))
+    const sameAsWithCustomErrorMessage = helpers.withMessage('Passwords don\'t match',sameAs(password))
+    
     
     const v = useVuelidate({
-        firstName:{required: customRequiredErrorMessage},
-        lastName:{required: customRequiredErrorMessage},
-        userEmail: { required: customRequiredErrorMessage, email:customEmailErrorMessage},
-        password: { required, minLength: minLength(8)},
-        confirmPassword: { required:customRequiredErrorMessage, sameAs: sameAs(password)}
-      },
-      { firstName, lastName, userEmail, password, confirmPassword })
+        firstName:{required: requiredWithCustomErrorMessage},
+        lastName:{required: requiredWithCustomErrorMessage},
+        userEmail: { required: requiredWithCustomErrorMessage, email:emailWithCustomErrorMessage},
+        password: { required:requiredWithCustomErrorMessage, minLength: minLenthWithCustomErrorMessage},
+        confirmPassword: { required:requiredWithCustomErrorMessage, sameAs: sameAsWithCustomErrorMessage}},
+        { firstName, lastName, userEmail, password, confirmPassword })
 
     const handleSubmit = async () => {
-       const isFormCorrect = await v.value.$validate()
-       if (!isFormCorrect) return
+        const isFormCorrect = await v.value.$validate()
+        if (!isFormCorrect) return
 
-      const userData = {
-        firstName:firstName.value,
-        lastName:lastName.value,
-        userEmail:userEmail.value,
-        password:password.value
-      }
-      store.dispatch("user/Register", userData).then(
-        (data) => {
-          if (data) {
-            router.push("user");
-          }
-        },
-        (error) => {
-          message.value = error.message;
-          successful.value = false;
+        const userData = {
+            firstName:firstName.value,
+            lastName:lastName.value,
+            userEmail:userEmail.value,
+            password:password.value
         }
-      );
+        
+        store.dispatch("user/Register", userData).then(
+            (data) => {
+                if (data) {
+                    router.push("user");
+                }
+            },
+            (error) => {
+                message.value = error.message;
+            }
+        );
     };
 
     return {
       message,
-      successful,
       handleSubmit,
       firstName, lastName, userEmail, password, confirmPassword,
-      v
+      v, emitter
     };
   },
 });

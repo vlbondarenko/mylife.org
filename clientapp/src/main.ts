@@ -4,6 +4,11 @@ import router from './router'
 import store from './store'
 import './styles/styles.css'
 import 'font-awesome/css/font-awesome.min.css'
+import mitt from 'mitt'
 
-createApp(App).use(store).use(router).mount('#app')
+const emitter = mitt()
+
+let app = createApp(App)
+app.config.globalProperties.emitter = emitter
+app.use(router).use(store).mount('#app')
 

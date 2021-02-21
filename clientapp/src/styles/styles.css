@@ -93,3 +93,16 @@ input {
         font-family: 'Poppins';
         src: url('../styles/fonts/Poppins-Medium.ttf');
     }
+
+
+    .fade-enter-active, .fade-leave-active {
+        transition: 0.5s;
+      }
+      
+      .fade-enter, .fade-leave-to {
+        opacity: 0;
+      }
+      
+      .fade-enter .modal-dialog, .fade-leave-to .modal-dialog {
+        transform: translateY(-20%);
+      }

@@ -15,6 +15,7 @@
     "core-js": "^3.6.5",
     "cors": "^2.8.5",
     "font-awesome": "^4.7.0",
+    "mitt": "^2.1.0",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-property-decorator": "^9.1.2",
