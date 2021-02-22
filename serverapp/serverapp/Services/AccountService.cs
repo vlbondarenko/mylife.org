@@ -86,8 +86,11 @@ namespace serverapp.Services
 
             var signUpResult = await _userManager.CreateAsync(newUser, signUpData.Password);
             
-            if (signUpResult.Succeeded)      
-                return; 
+            if (signUpResult.Succeeded)
+            {
+                await SendEmailAdressConfirmationMassageAsync(newUser.Email);
+                return;
+            }     
             else                              
                 throw new RestExcteption(HttpStatusCode.InternalServerError, new { Message = ErrorMessages.NotRegistered });
         }
