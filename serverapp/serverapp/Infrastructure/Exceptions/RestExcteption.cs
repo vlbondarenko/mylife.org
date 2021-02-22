@@ -5,13 +5,13 @@ namespace serverapp.Infrastructure
 {
     public class RestExcteption:Exception
     {
-        public RestExcteption (HttpStatusCode code, object errors = null)
+        public RestExcteption (HttpStatusCode code, object error = null)
         {
             Code = code;
-            Errors = errors;
+            Error = error;
         }
 
         public HttpStatusCode Code { get; set; }
-        public object Errors { get; set; }
+        public object Error { get; set; }
     }
 }

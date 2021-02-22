@@ -41,6 +41,10 @@ namespace serverapp
             services.AddIdentityCore<AppUser>(config =>
                  {
                      config.SignIn.RequireConfirmedEmail = true;
+                     config.Password.RequireDigit = false;
+                     config.Password.RequireLowercase = false;
+                     config.Password.RequireNonAlphanumeric = false;
+                     config.Password.RequireUppercase = false;
                  })
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddUserManager<UserManager<AppUser>>()

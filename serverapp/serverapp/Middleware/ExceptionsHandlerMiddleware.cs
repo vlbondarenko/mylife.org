@@ -35,30 +35,30 @@ namespace serverapp.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger<ExceptionsHandlingMiddleware> logger)
         {
-            object errors = null;
+            object error = null;
 
             switch (exception)
             {
                 case RestExcteption rest:
                     logger.LogError(exception, "Rest error");
-                    errors = rest.Errors;
+                    error = rest.Error;
                     context.Response.StatusCode = (int)rest.Code;
                     break;
                     
                 case Exception e:
                     logger.LogError(exception, "Server error");
-                    errors = string.IsNullOrWhiteSpace(e.Message) ? "The request cannot be processed" : e.Message;
+                    error = string.IsNullOrWhiteSpace(e.Message) ? "The request cannot be processed" : e.Message;
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     break;
             }
 
             context.Response.ContentType = "appliation/json";
 
-            if (errors != null)
+            if (error != null)
             {
                 var result = JsonConvert.SerializeObject(new
                 {
-                    errors
+                    error
                 });
 
                 await context.Response.WriteAsync(result);

@@ -35,7 +35,7 @@ namespace serverapp.Controllers
         public async Task<ActionResult> SignUp([FromBody] SignUpData signUpData)
         {
             await _accountService.SignUpAsync(signUpData);
-            await _accountService.SendEmailAdressConfirmationMassageAsync(signUpData.Email);
+            await _accountService.SendEmailAdressConfirmationMassageAsync(signUpData.UserEmail);
 
             return Ok();
         }

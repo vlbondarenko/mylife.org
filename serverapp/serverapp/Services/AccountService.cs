@@ -7,6 +7,7 @@ using serverapp.Infrastructure;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace serverapp.Services
 {
@@ -18,6 +19,7 @@ namespace serverapp.Services
         public static readonly string EmailNotConfirm = "The link to confirm the email address is not valid. Try again";
         public static readonly string NotRegistered = "The user is not registered";
         public static readonly string PasswordNotReset = "Password could not be reset";
+        public static readonly string SendingMessageFailed = "Failed to send a message with a link to confirm the email address. Log in and try sending the message again through the settings.";
     }
 
     public class AccountService : IAccountService
@@ -27,15 +29,22 @@ namespace serverapp.Services
         private readonly IJWTGenerator _jWTGenerator;
         private readonly AppIdentityDbContext _userDbContext;
         private readonly IMessageSendingService _messageSendingService;
+        private readonly ILogger<AccountService> _logger;
 
 
-        public AccountService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJWTGenerator jWTGenerator, AppIdentityDbContext userDbContext, IMessageSendingService messageSendingService)
+        public AccountService(  UserManager<AppUser> userManager, 
+                                SignInManager<AppUser> signInManager, 
+                                IJWTGenerator jWTGenerator, 
+                                AppIdentityDbContext userDbContext, 
+                                IMessageSendingService messageSendingService,
+                                ILogger<AccountService> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jWTGenerator = jWTGenerator;
             _userDbContext = userDbContext;
             _messageSendingService = messageSendingService;
+            _logger = logger;
         }
 
         #region SignIn functionality
@@ -65,12 +74,12 @@ namespace serverapp.Services
 
         public async Task SignUpAsync(SignUpData signUpData)
         {
-            if (await _userDbContext.Users.Where(x => x.Email == signUpData.Email).AnyAsync())
+            if (await _userDbContext.Users.Where(x => x.Email == signUpData.UserEmail).AnyAsync())
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.EmailAlreadyExist });
 
             var newUser = new AppUser()
             {
-                Email = signUpData.Email,
+                Email = signUpData.UserEmail,
                 UserName = signUpData.FirstName,
                 LastName = signUpData.LastName
             };
@@ -93,7 +102,18 @@ namespace serverapp.Services
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = $"https://localhost:5001/api/account?id={user.Id}&token={token}";
 
-            _messageSendingService.SendMessage(emailAdress, confirmationLink, MessageContext.EmailAdressConfirmation);
+
+            //Just catch the exceptions that occurred when sending the message. 
+            //The user will be notified on the client that the message may not have been sent, 
+            //so that he can repeat the message later through the profile settings
+            try
+            {
+                _messageSendingService.SendMessage(emailAdress, confirmationLink, MessageContext.EmailAdressConfirmation);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }   
         }
 
 
@@ -130,7 +150,14 @@ namespace serverapp.Services
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var confirmationLink = $"https://localhost:5001/api/account/verify-token?id={user.Id}&token={token}";
 
-            _messageSendingService.SendMessage(user.Email, confirmationLink, MessageContext.ResetPassword);
+            try
+            {
+                _messageSendingService.SendMessage(user.Email, confirmationLink, MessageContext.ResetPassword);
+            }
+            catch
+            {
+                throw new RestExcteption(HttpStatusCode.InternalServerError, new { Message = ErrorMessages.SendingMessageFailed });
+            }  
         }
 
 
@@ -180,7 +207,7 @@ namespace serverapp.Services
 
         public async Task<bool> CheckUniquenessOfEmailAsync(string email)
         {
-            var user =await _userManager.FindByEmailAsync(email);
+            var user =await _userManager.FindByEmailAsync(email); 
 
             return user == null ? true : false;
         }
