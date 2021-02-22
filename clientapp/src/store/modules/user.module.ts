@@ -46,23 +46,15 @@ const userModule: Module <typeof state,any> = {
         Register ({commit},userData: any): Promise<any>{
             return authService.register(userData).
             then(response=>{
-                commit('SET_LOGGEDIN',true)
-                commit('SET_USER',response.data)
-                localStorage.setItem('user',response.data.token)
-                return Promise.resolve(response.data)
+                const message = 'Registration was successful! A message was sent to you with a link to confirm your email address. Follow the link and log in to start using the service!'
+                return Promise.resolve(message)
             },
             error=>{
-                commit('SET_LOGGEDIN',false)
-                const message = (error.response&&error.response.data&&error.response.data.message)||
+                const message = (error.response&&error.response.data&&error.response.data.error.Message)||
                 error.message||
                 error.toString()
                 return Promise.reject(message);
             })
-            // let userAsSting = JSON.stringify(userData)
-            // localStorage.setItem('user',userAsSting)
-            // commit('SET_LOGGEDIN',true)
-            // commit('SET_USER',userAsSting)
-            // return Promise.resolve(userAsSting)
         },
 
         Logout({commit}):void{

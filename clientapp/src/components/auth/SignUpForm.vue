@@ -31,7 +31,7 @@
           v-model="password"
           @blur="v.password.$touch()"
         />
-         <span v-if="v.password.$invalid&&v.password.$dirty">The password must contain at least eight characters</span>
+         <span v-if="v.password.$invalid&&v.password.$dirty">{{v.password.$errors[0].$message}}</span>
          <input
           type="password"
           id="confirmPassword"
@@ -52,6 +52,7 @@ import { useStore } from "vuex";
 import { useVuelidate } from "@vuelidate/core"
 import { required, email, minLength, sameAs, helpers } from "@vuelidate/validators"
 import useEmitter from '@/helpers/emitter'
+import SignUpResult from '../auth/SignUpFailed'
 
 export default defineComponent({
   name: "SignUpForm",
@@ -59,8 +60,6 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const emitter = useEmitter()
-
-    const message = ref("");
 
     const firstName = ref("")
     const lastName = ref ("")
@@ -75,41 +74,42 @@ export default defineComponent({
     
     
     const v = useVuelidate({
-        firstName:{required: requiredWithCustomErrorMessage},
-        lastName:{required: requiredWithCustomErrorMessage},
+        firstName: { required: requiredWithCustomErrorMessage},
+        lastName:  { required: requiredWithCustomErrorMessage},
         userEmail: { required: requiredWithCustomErrorMessage, email:emailWithCustomErrorMessage},
-        password: { required:requiredWithCustomErrorMessage, minLength: minLenthWithCustomErrorMessage},
-        confirmPassword: { required:requiredWithCustomErrorMessage, sameAs: sameAsWithCustomErrorMessage}},
+        password:  { required:requiredWithCustomErrorMessage, minLength: minLenthWithCustomErrorMessage},
+        confirmPassword:{ required:requiredWithCustomErrorMessage, sameAs: sameAsWithCustomErrorMessage}},
         { firstName, lastName, userEmail, password, confirmPassword })
+
+    const handleResult = (title, props) =>{
+        emitter.emit('open',{component:SignUpResult, title: title , props: props})
+    }
 
     const handleSubmit = async () => {
         const isFormCorrect = await v.value.$validate()
         if (!isFormCorrect) return
 
         const userData = {
+            userEmail:userEmail.value,
             firstName:firstName.value,
             lastName:lastName.value,
-            userEmail:userEmail.value,
             password:password.value
         }
         
         store.dispatch("user/Register", userData).then(
-            (data) => {
-                if (data) {
-                    router.push("user");
-                }
+            (message) => {
+                  handleResult('Congratulations!',{ message: message, showButton: false})
             },
-            (error) => {
-                message.value = error.message;
+            (errorMessage) => {               
+                  handleResult('Something went wrong!',{ message: errorMessage, showButton: true})
             }
         );
     };
 
     return {
-      message,
       handleSubmit,
       firstName, lastName, userEmail, password, confirmPassword,
-      v, emitter
+      v, emitter, router
     };
   },
 });

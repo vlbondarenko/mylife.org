@@ -1,15 +1,17 @@
 import axios from 'axios'
 
-const API_URL ='http://localhost:5000/api/';
+const API_URL ='https://localhost:5001/api/';
 
 interface AuthData{
     email: string,
     password: string
 }
 
-interface UserData extends AuthData{
+interface SignUpData {
+    userEmail:string,
     firstName: string,
-    lastName: string
+    lastName: string,
+    password:string
 }
 
 interface ResponseData {
@@ -32,8 +34,8 @@ class AuthService {
         })
     }
 
-    register(userData:UserData){
-        return axios.post<ResponseData>(API_URL + 'account/register',userData)
+    register(userData:SignUpData){
+        return axios.post(API_URL + 'account/sign-up', userData)
     }
 
     logout(){

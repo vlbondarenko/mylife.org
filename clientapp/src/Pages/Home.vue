@@ -4,7 +4,7 @@
       This is Home Component
       <button @click="openSignInModal()">Login</button>
       <button @click="openSignUpModal()">Register</button>
-       <button @click="openModal()">Open Modal</button>
+      <button @click="openModal()">Open Modal</button>
           
       <sign-in v-if="showSignInModal" @closeSignInModal="closeSignInModal()"/>
       <sign-up v-if="showSignUpModal" @closeSignUpModal="closeSignUpModal()"/>

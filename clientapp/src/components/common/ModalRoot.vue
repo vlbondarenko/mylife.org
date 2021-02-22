@@ -1,7 +1,7 @@
 <template>
   <Modal :isOpen="isOpen" :title="currentTitle" @onClose="handleClose" @onEndOfTransition="clearData">
-      <keep-alive :max="1">
-            <component :is="currentComponent"/>
+      <keep-alive :max="5">
+            <component :is="currentComponent" v-bind="properties"/>
       </keep-alive>    
   </Modal>
 </template>
@@ -20,14 +20,16 @@ export default defineComponent({
         const currentComponent = shallowRef(null)
         const currentTitle = ref('')
         const isOpen = ref(false)
+        const properties = ref (null)
 
         const router = useRouter()
         const emitter = useEmitter()
 
 
-        emitter.on('open',({component = null, title = ''}) => {
+        emitter.on('open',({component = null, title = '', props = null}) => {
            currentComponent.value = component
            currentTitle.value = title
+           properties.value = props
            isOpen.value = true
         })
 
@@ -49,7 +51,8 @@ export default defineComponent({
             currentTitle,
             handleClose,
             isOpen,
-            clearData
+            clearData,
+            properties
         }
     }
 })
