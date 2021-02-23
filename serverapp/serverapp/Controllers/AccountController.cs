@@ -60,11 +60,11 @@ namespace serverapp.Controllers
                 token = token.Replace(" ", "+");
                 await _accountService.ConfirmEmailAdressAsync(id, token);
 
-                RedirectClientToLocation("http://localhost:8080/confirm-email-success");
+                RedirectClientToLocation("http://localhost:8081/confirm-email-success");
             }
             catch
             {
-                RedirectClientToLocation("http://localhost:8080/confirm-email-failure");
+                RedirectClientToLocation("http://localhost:8081/confirm-email-failure");
             }
         }
 

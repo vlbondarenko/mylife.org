@@ -103,7 +103,7 @@ namespace serverapp.Services
                 throw new RestExcteption(HttpStatusCode.BadRequest, new { Message = ErrorMessages.UserNotFound});
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = $"https://localhost:5001/api/account?id={user.Id}&token={token}";
+            var confirmationLink = $"https://localhost:5001/api/account/confirm-email?id={user.Id}&token={token}";
 
 
             //Just catch the exceptions that occurred when sending the message. 
