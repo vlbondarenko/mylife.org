@@ -2,7 +2,7 @@
     <div>
         <p>{{ message }}</p>
     </div>  
-    <div v-show="showButton" >
+    <div v-show="!!sourceComponentOfModal" >
         <button @click="onBack">Back</button>
     </div>
 </template>
@@ -10,22 +10,22 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import useEmitter from '@/helpers/emitter'
-import SignUpForm from '../auth/SignUpForm.vue'
 
 export default defineComponent({
     props:{
         message:String,
-        showButton:Boolean
+        sourceComponentOfModal:Object,
+        sourceTitleOfModal: String
     },
-    setup (){
+    setup (props){
         const emitter = useEmitter()
 
         const onBack = () => {
-            emitter.emit('onOpenModal', {component:SignUpForm, title:'Login'})
+            emitter.emit('onOpenModal', {component:props.sourceComponentOfModal, title:props.sourceTitleOfModal})
         }
 
         return {
-            onBack
+            onBack,
         }
     }
 })

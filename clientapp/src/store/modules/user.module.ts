@@ -24,23 +24,17 @@ const userModule: Module <typeof state,any> = {
     actions:{
         Login({commit},authData): Promise<any> {
             return authService.login(authData)
-            .then( user => {
+            .then( response => {
                 commit('SET_LOGGEDIN',true)
-                commit('SET_USER',user)
-                return Promise.resolve(user)
+                commit('SET_USER',response.data)
+                return Promise.resolve(response.data)
             },error=>{
                 commit('SET_LOGGEDIN',false)
-                const message = (error.response&&error.response.data&&error.response.data.message)||
+                const message = (error.response&&error.response.data&&error.response.data.error.Message)||
                 error.message||
                 error.toString()
                 return Promise.reject(message);
             })
-
-            // let userAsSting = JSON.stringify(authData)
-            // localStorage.setItem('user',userAsSting)
-            // commit('SET_LOGGEDIN',true)
-            // commit('SET_USER',userAsSting)
-            // return Promise.resolve(userAsSting)
         },
 
         Register ({commit},userData: any): Promise<any>{

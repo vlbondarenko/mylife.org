@@ -69,7 +69,7 @@ namespace serverapp.Controllers
         }
 
 
-        [HttpGet("forgot-password")]
+        [HttpPost("forgot-password")]
         public async Task ForgotPassword([FromBody]ForgotPasswordData forgotPasswordData)
         {
             await _accountService.SendResetPasswordMessageAsync(forgotPasswordData.Email);

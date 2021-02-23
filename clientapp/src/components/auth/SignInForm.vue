@@ -1,7 +1,4 @@
 <template>
-  <div class="modal-wrapper">
-    <div class="modal-body">
-      <div class="title">Login</div> <button class="close" @click="$emit('closeSignInModal')"><i class="fa fa-close"></i></button>
       <form @submit.prevent="handleSubmit">
         <input
           v-model="emailAdress"
@@ -10,7 +7,7 @@
           placeholder="Email"
           @blur="v.emailAdress.$touch()"
         />
-        <span v-if="v.emailAdress.required.$invalid &&v.emailAdress.$dirty">The email address must be valid </span>
+        <span v-if="v.emailAdress.$invalid &&v.emailAdress.$dirty">{{v.emailAdress.$errors[0].$message}}</span>
         <input
           v-model="password"
           class="type-one"
@@ -18,38 +15,46 @@
           placeholder="Password"
           @blur="v.password.$touch()"
         />
-        <span v-if="v.password.required && v.password.$dirty">Name is required!</span>
-        <button type="submit" disabled:>
+        <span v-if="v.password.$invalid && v.password.$dirty">{{v.password.$errors[0].$message}}</span>
+        <button type="submit" >
           Sign in
         </button>
       </form>
-    </div>
-  </div>
+      <a @click="openForgotPasswordForm">Forgot Password?</a>
 </template>
 
 <script lang = "ts">
 import router from "@/router";
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
-import { email, required } from '@vuelidate/validators';
+import {required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
+import useEmitter from "@/helpers/emitter";
+import ShowResult from "./ShowResult.vue";
+import currentComponent from '../auth/SignInForm.vue';
+import ForgotPasswordForm from "./ForgotPasswordForm.vue";
 
 export default defineComponent({
   name: "Login",
   setup() {
-    const store = useStore();
-    
-    const message = ref("");
+    const store = useStore()
+    const emitter = useEmitter()
+
     const emailAdress = ref("")
     const password = ref("")
 
     const v = useVuelidate(
       {
-        emailAdress: { required, email },
+        emailAdress: { required},
         password: { required }
       },
       { emailAdress, password }
     )
+
+    const openForgotPasswordForm = () =>{
+      emitter.emit('onOpenModal', {component: ForgotPasswordForm, title:'Forgot Password'})
+      router.push('/forgot-password')
+    }
 
     function handleSubmit () {
       v.value.$touch()
@@ -62,19 +67,18 @@ export default defineComponent({
             (data) => {
                 if (data) router.push("/user");
             },
-            (error) => {
-                message.value = error;
+            (errorMessage) => {
+                emitter.emit('onOpenModal', {component:ShowResult, title: 'Something went wrong!', props: {message:errorMessage, sourceComponentOfModal:currentComponent, sourceTitleOfModal:'Sign In'} })
             }
         );
     }
     
 
     return {
-        message,
         handleSubmit,
         emailAdress,
         password,
-        v
+        v, openForgotPasswordForm
     };
   },
 });

@@ -12,18 +12,18 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import SignIn from '../components/HomePage/Auth/SignIn.vue'
 import ModalRoot from '../components/common/ModalRoot.vue'
 import SignUpForm from '../components/auth/SignUpForm.vue'
+import SignInForm from '../components/auth/SignInForm.vue'
 import useEmitter from '../helpers/emitter'
+import ForgotPasswordFormVue from '@/components/auth/ForgotPasswordForm.vue'
 
 export default defineComponent({
   name:'HomePage',
   components:{
-    SignIn,
     ModalRoot,
   },
   setup(){
@@ -35,47 +35,33 @@ export default defineComponent({
     if (store.state.user.loggedIn){
       router.push('/user') 
     } 
-
-    
-
-    //Logic for opening/closening the sign in modal window
-    //If the modal window was open before the page was reloaded, then it remains open after the reload
-    const showSignInModal = route.path =='/sign-in'? ref(true):ref(false)
-   
-    
+ 
     const openSignInModal = () => {
-      showSignInModal.value = true
-      router.push('sign-in')    
+      emitter.emit('onOpenModal', { component:SignInForm, title: 'Sign In' })
+      router.push('/sign-in')
     }
-
-    const closeSignInModal = () => {
-      showSignInModal.value = false
-      router.go(-1)
-    }
-
-
-
-
-    
-
 
     const openSignUpModal = () => {
       emitter.emit('onOpenModal', { component:SignUpForm, title: 'Sign Up' })
-      router.push('sign-up')
+      router.push('/sign-up')
     }
 
      onMounted  (() => {
         if (route.path =='/sign-up'){
           openSignUpModal()
         }
+        if (route.path =='/sign-in'){
+          openSignInModal()
+        }
+        if (route.path =='/forgot-password'){
+          emitter.emit('onOpenModal', { component:ForgotPasswordFormVue, title: 'Forgot Password' })
+        }
     })
 
     
   return{
-    showSignInModal,
     openSignUpModal,
     openSignInModal,
-    closeSignInModal,
   }
 }
 })

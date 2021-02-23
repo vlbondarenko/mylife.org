@@ -52,7 +52,8 @@ import { useStore } from "vuex";
 import { useVuelidate } from "@vuelidate/core"
 import { required, email, minLength, sameAs, helpers } from "@vuelidate/validators"
 import useEmitter from '@/helpers/emitter'
-import SignUpResult from '../auth/SignUpResult'
+import ShowResult from '../auth/ShowResult'
+import currentComponent from '../auth/SignUpForm.vue';
 
 export default defineComponent({
   name: "SignUpForm",
@@ -82,7 +83,7 @@ export default defineComponent({
         { firstName, lastName, userEmail, password, confirmPassword })
 
     const handleResult = (title, props) =>{
-        emitter.emit('onOpenModal',{component:SignUpResult, title: title , props: props})
+        emitter.emit('onOpenModal',{component:ShowResult, title: title , props: props})
     }
 
     const handleSubmit = async () => {
@@ -98,10 +99,10 @@ export default defineComponent({
         
         store.dispatch("user/Register", userData).then(
             (message) => {
-                  handleResult('Congratulations!',{ message: message, showButton: false})
+                  handleResult('Congratulations!',{ message: message, sourceComponentOfModal:null, sourceTitleOfModal:'' })
             },
             (errorMessage) => {               
-                  handleResult('Something went wrong!',{ message: errorMessage, showButton: true})
+                  handleResult('Something went wrong!',{ message: errorMessage, sourceComponentOfModal:currentComponent, sourceTitleOfModal:'Sign Up'})
             }
         );
     };

@@ -21,21 +21,30 @@ interface ResponseData {
     token:string
 }
 
+
 class AuthService {
     login(authData: AuthData){
-        return axios
-        .post<ResponseData>(API_URL + 'account/login',authData)
-        .then(responce=>{
-            if(responce.data){
-                localStorage.setItem('user',responce.data.token)
-            }
-
-            return responce.data
-        })
+        return axios.post<ResponseData>(API_URL + 'account/sign-in',authData)
     }
 
     register(userData:SignUpData){
         return axios.post(API_URL + 'account/sign-up', userData)
+    }
+
+    forgotPassword(userEmail: String){
+        return axios.post(API_URL +'account/forgot-password', { email: userEmail})
+        .then(response => {
+            let message = "A message was sent to your email address with the order of further actions"
+            if(response.data.message){
+                message = response.data.message
+            }   
+            return Promise.resolve(message)
+        }, (error) =>{
+            const message = (error.response&&error.response.data&&error.response.data.error.Message)||
+                error.message||
+                error.toString()
+                return Promise.reject(message);
+        })
     }
 
     logout(){
