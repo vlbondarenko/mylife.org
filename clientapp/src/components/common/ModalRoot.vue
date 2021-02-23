@@ -1,5 +1,5 @@
 <template>
-  <Modal :isOpen="isOpen" :title="currentTitle" @onClose="handleClose" @onEndOfTransition="clearData">
+  <Modal :isOpen="isOpen" :title="currentTitle" @onCloseModal="handleClose" @onEndOfTransition="clearData">
       <keep-alive :max="5">
             <component :is="currentComponent" v-bind="properties"/>
       </keep-alive>    
@@ -26,7 +26,7 @@ export default defineComponent({
         const emitter = useEmitter()
 
 
-        emitter.on('open',({component = null, title = '', props = null}) => {
+        emitter.on('onOpenModal',({component = null, title = '', props = null}) => {
            currentComponent.value = component
            currentTitle.value = title
            properties.value = props

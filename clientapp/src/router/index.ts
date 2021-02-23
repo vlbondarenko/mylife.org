@@ -3,6 +3,8 @@ import Home from '../Pages/Home.vue'
 import Slider from '../components/HomePage/Slider.vue'
 import SignUpForm from '../components/auth/SignUpForm.vue'
 import SignIn from '../components/HomePage/Auth/SignIn.vue'
+import ConfirmEmailSuccess from '../components/auth/ConfirmEmailSuccess.vue'
+import ConfirmEmailFailure from '../components/auth/ConfirmEmailFailure.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -34,6 +36,16 @@ const routes: Array<RouteRecordRaw> = [
         //lazy load
         //component: () => import(/* webpackChunkName: "user" */'../components/HomePage/Slider.vue')
         component: Slider
+    },
+    {
+        path:'/confirm-email-success',
+        name:'ConfirmEmailSuccess',
+        component:ConfirmEmailSuccess
+    },
+    {
+        path:'/confirm-email-failure',
+        name:'ConfirmEmailFailure',
+        component:ConfirmEmailFailure
     }
 ]
 

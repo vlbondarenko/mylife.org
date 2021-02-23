@@ -21,7 +21,7 @@ export default defineComponent({
         const emitter = useEmitter()
 
         const onBack = () => {
-            emitter.emit('open', {component:SignUpForm, title:'signUp'})
+            emitter.emit('onOpenModal', {component:SignUpForm, title:'Login'})
         }
 
         return {

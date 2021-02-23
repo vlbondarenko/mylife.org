@@ -52,7 +52,7 @@ import { useStore } from "vuex";
 import { useVuelidate } from "@vuelidate/core"
 import { required, email, minLength, sameAs, helpers } from "@vuelidate/validators"
 import useEmitter from '@/helpers/emitter'
-import SignUpResult from '../auth/SignUpFailed'
+import SignUpResult from '../auth/SignUpResult'
 
 export default defineComponent({
   name: "SignUpForm",
@@ -82,7 +82,7 @@ export default defineComponent({
         { firstName, lastName, userEmail, password, confirmPassword })
 
     const handleResult = (title, props) =>{
-        emitter.emit('open',{component:SignUpResult, title: title , props: props})
+        emitter.emit('onOpenModal',{component:SignUpResult, title: title , props: props})
     }
 
     const handleSubmit = async () => {
