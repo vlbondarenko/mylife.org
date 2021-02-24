@@ -1,5 +1,5 @@
 <template>
-  <Modal :isOpen="isOpen" :title="currentTitle" @onCloseModal="handleClose" @onEndOfTransition="clearData">
+  <Modal :isOpen="isOpen" :title="currentTitle" :showCloseButton="showCloseButton" @onCloseModal="handleClose" @onEndOfTransition="clearData">
       <keep-alive :max="5">
             <component :is="currentComponent" v-bind="properties"/>
       </keep-alive>    
@@ -20,17 +20,19 @@ export default defineComponent({
         const currentComponent = shallowRef(null)
         const currentTitle = ref('')
         const isOpen = ref(false)
+        const showCloseButton = ref(true)
         const properties = ref (null)
 
         const router = useRouter()
         const emitter = useEmitter()
 
 
-        emitter.on('onOpenModal',({component = null, title = '', props = null}) => {
+        emitter.on('onOpenModal',({component = null, title = '', props = null,closeButton = true}) => {
            currentComponent.value = component
            currentTitle.value = title
            properties.value = props
            isOpen.value = true
+           showCloseButton.value = closeButton
         })
 
         const handleClose = () => {
@@ -52,7 +54,8 @@ export default defineComponent({
             handleClose,
             isOpen,
             clearData,
-            properties
+            properties,
+            showCloseButton
         }
     }
 })

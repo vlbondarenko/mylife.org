@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const API_URL ='https://localhost:5001/api/';
 
-interface AuthData{
+interface SignInData{
     email: string,
     password: string
 }
@@ -21,9 +21,8 @@ interface ResponseData {
     token:string
 }
 
-
 class AuthService {
-    login(authData: AuthData){
+    login(authData: SignInData){
         return axios.post<ResponseData>(API_URL + 'account/sign-in',authData)
     }
 
@@ -40,6 +39,19 @@ class AuthService {
             }   
             return Promise.resolve(message)
         }, (error) =>{
+            const message = (error.response&&error.response.data&&error.response.data.error.Message)||
+                error.message||
+                error.toString()
+                return Promise.reject(message);
+        })
+    }
+
+    resetPassword(newPassword:string) {
+        return axios.post(API_URL + 'account/reset-password', { newPassword: newPassword })
+        .then(response => {
+            const message = "Password changed successfully"
+            return Promise.resolve(message)
+        }, error =>{
             const message = (error.response&&error.response.data&&error.response.data.error.Message)||
                 error.message||
                 error.toString()

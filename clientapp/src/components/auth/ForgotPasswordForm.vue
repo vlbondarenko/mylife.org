@@ -19,7 +19,7 @@ import useEmitter from '@/helpers/emitter'
 import {required, email } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core'
 import authService from '@/services/authService'
-import ShowMessage from './ShowResult.vue'
+import ShowMessage from './ShowMessage.vue'
 import currentComponent from '@/components/auth/ForgotPasswordForm.vue'
 
 export default defineComponent({

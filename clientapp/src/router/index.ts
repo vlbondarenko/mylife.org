@@ -6,6 +6,8 @@ import SignInForm from '../components/auth/SignInForm.vue'
 import ConfirmEmailSuccess from '../components/auth/ConfirmEmailSuccess.vue'
 import ConfirmEmailFailure from '../components/auth/ConfirmEmailFailure.vue'
 import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm.vue'
+import ResetPasswordForm from '@/components/auth/ForgotPasswordForm.vue'
+import ConfirmResultRoot from '@/components/common/ConfirmResultRoot.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -52,6 +54,11 @@ const routes: Array<RouteRecordRaw> = [
         path:'/confirm-email-failure',
         name:'ConfirmEmailFailure',
         component:ConfirmEmailFailure
+    },
+    {
+        path:'/reset-password',
+        name:'ConfirmResultRoot',
+        component:ConfirmResultRoot,
     }
 ]
 

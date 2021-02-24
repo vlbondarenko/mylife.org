@@ -30,7 +30,7 @@ import { useStore } from "vuex";
 import {required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 import useEmitter from "@/helpers/emitter";
-import ShowResult from "./ShowResult.vue";
+import ShowMessage from "./ShowMessage.vue";
 import currentComponent from '../auth/SignInForm.vue';
 import ForgotPasswordForm from "./ForgotPasswordForm.vue";
 
@@ -68,7 +68,7 @@ export default defineComponent({
                 if (data) router.push("/user");
             },
             (errorMessage) => {
-                emitter.emit('onOpenModal', {component:ShowResult, title: 'Something went wrong!', props: {message:errorMessage, sourceComponentOfModal:currentComponent, sourceTitleOfModal:'Sign In'} })
+                emitter.emit('onOpenModal', {component:ShowMessage, title: 'Something went wrong!', props: {message:errorMessage, sourceComponentOfModal:currentComponent, sourceTitleOfModal:'Sign In'} })
             }
         );
     }
@@ -83,4 +83,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+a:hover{
+    border-bottom: 1px solid rgb(158, 158, 158);
+    cursor: pointer;
+}
+</style>
 
