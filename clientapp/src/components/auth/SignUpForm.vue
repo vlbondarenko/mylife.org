@@ -67,7 +67,6 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
 import { useVuelidate } from "@vuelidate/core";
 import {
   required,
@@ -77,6 +76,7 @@ import {
   helpers,
 } from "@vuelidate/validators";
 import Message from "../common/Message.vue";
+import authService from '@/services/authService'
 
 export default defineComponent({
   name: "SignUpForm",
@@ -85,8 +85,6 @@ export default defineComponent({
   },
 
   setup() {
-    const store = useStore();
-
     const firstName = ref("");
     const lastName = ref("");
     const userEmail = ref("");
@@ -148,7 +146,7 @@ export default defineComponent({
         password: password.value,
       };
 
-      store.dispatch("user/Register", userData).then(
+      authService.signUp(userData).then(
         (msg) => {
           message.value = msg;
           showBackButton.value = false;

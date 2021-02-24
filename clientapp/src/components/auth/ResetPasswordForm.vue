@@ -79,7 +79,7 @@ export default defineComponent({
     );
 
     const message = ref("");
-    const showBackButton = ref(true);
+    const showBackButton = ref(false);
     const handleCloseMessage = () => {
       message.value = "";
     };

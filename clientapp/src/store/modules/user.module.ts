@@ -22,8 +22,8 @@ const userModule: Module <typeof state,any> = {
     },
 
     actions:{
-        Login({commit},authData): Promise<any> {
-            return authService.login(authData)
+        SignIn({commit},authData): Promise<any> {
+            return authService.signIn(authData)
             .then( response => {
                 commit('SET_LOGGEDIN',true)
                 commit('SET_USER',response.data)
@@ -38,7 +38,7 @@ const userModule: Module <typeof state,any> = {
         },
 
         Register ({commit},userData: any): Promise<any>{
-            return authService.register(userData).
+            return authService.signUp(userData).
             then(response=>{
                 const message = 'Registration was successful! A message was sent to you with a link to confirm your email address. Follow the link and log in to start using the service!'
                 return Promise.resolve(message)

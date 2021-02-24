@@ -76,7 +76,7 @@ export default defineComponent({
         email: emailAdress.value,
         password: password.value,
       };
-      store.dispatch("user/Login", loginData).then(
+      store.dispatch("user/signIn", loginData).then(
         (data) => {
           if (data) router.push("/user");
         },

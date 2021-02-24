@@ -1,6 +1,6 @@
 <template>
   <transition v-on:after-leave="$emit('onEndOfTransition')" name="fade">
-    <div class="modal-backdrop" v-show="isOpen" :class="{ open: isOpen }">
+    <div class="modal-backdrop blur" v-show="isOpen" :class="{ open: isOpen }">
       <div class="modal-dialog" :class="{ open: isOpen }" @click.stop>
         <button
           v-show="showCloseButton"
@@ -68,6 +68,11 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
 }
+
+ .blur {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(3px); 
+  }
 
 .modal-dialog {
   width: 30rem;

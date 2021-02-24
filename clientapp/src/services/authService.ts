@@ -1,65 +1,75 @@
 import axios from 'axios'
 
-const API_URL ='https://localhost:5001/api/';
+const API_URL = 'https://localhost:5001/api/';
 
-interface SignInData{
+interface SignInData {
     email: string,
     password: string
 }
 
 interface SignUpData {
-    userEmail:string,
+    userEmail: string,
     firstName: string,
     lastName: string,
-    password:string
+    password: string
 }
 
-interface ResponseData {
-    email:string,
-    message:string,
-    name:string,
-    token:string
+interface SignInResponseData {
+    email: string,
+    message: string,
+    name: string,
+    token: string
 }
 
 class AuthService {
-    login(authData: SignInData){
-        return axios.post<ResponseData>(API_URL + 'account/sign-in',authData)
+    signIn(authData: SignInData) {
+        return axios.post<SignInResponseData>(API_URL + 'account/sign-in', authData)
     }
 
-    register(userData:SignUpData){
-        return axios.post(API_URL + 'account/sign-up', userData)
-    }
-
-    forgotPassword(userEmail: String){
-        return axios.post(API_URL +'account/forgot-password', { email: userEmail})
-        .then(response => {
-            let message = "A message was sent to your email address with the order of further actions"
-            if(response.data.message){
-                message = response.data.message
-            }   
+    signUp(userData: SignUpData) {
+        return axios.post(API_URL + 'account/sign-up', userData).
+        then(response=>{
+            const message = 'Registration was successful! A message was sent to you with a link to confirm your email address. Follow the link and log in to start using the service!'
             return Promise.resolve(message)
-        }, (error) =>{
+        },
+        error=>{
             const message = (error.response&&error.response.data&&error.response.data.error.Message)||
-                error.message||
-                error.toString()
-                return Promise.reject(message);
+            error.message||
+            error.toString()
+            return Promise.reject(message);
         })
     }
 
-    resetPassword(newPassword:string) {
-        return axios.post(API_URL + 'account/reset-password', { newPassword: newPassword })
-        .then(response => {
-            const message = "Password changed successfully"
-            return Promise.resolve(message)
-        }, error =>{
-            const message = (error.response&&error.response.data&&error.response.data.error.Message)||
-                error.message||
-                error.toString()
+    forgotPassword(userEmail: String) {
+        return axios.post(API_URL + 'account/forgot-password', { email: userEmail })
+            .then(response => {
+                let message = "A message was sent to your email address with the order of further actions"
+                if (response.data.message) {
+                    message = response.data.message
+                }
+                return Promise.resolve(message)
+            }, (error) => {
+                const message = (error.response && error.response.data && error.response.data.error.Message) ||
+                    error.message ||
+                    error.toString()
                 return Promise.reject(message);
-        })
+            })
     }
 
-    logout(){
+    resetPassword(newPassword: string) {
+        return axios.post(API_URL + 'account/reset-password/', { newPassword: newPassword }, { withCredentials: true })
+            .then(response => {
+                const message = "Password changed successfully"
+                return Promise.resolve(message)
+            }, error => {
+                const message = (error.response && error.response.data && error.response.data.error.Message) ||
+                    error.message ||
+                    error.toString()
+                return Promise.reject(message);
+            })
+    }
+
+    logout() {
         localStorage.removeItem('user')
     }
 }

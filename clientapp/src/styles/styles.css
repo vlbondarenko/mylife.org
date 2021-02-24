@@ -70,7 +70,6 @@ input {
        font-family: 'Poppins';
    }
 .btn{
-        position: absolute;
         margin-left: 125px;
         margin-top:50px;
         width: 200px;
@@ -91,8 +90,10 @@ input {
 
     @font-face{
         font-family: 'Poppins';
-        src: url('../styles/fonts/Poppins-Medium.ttf');
+        src: url('../styles/fonts/Poppins-Light.ttf');
     }
+
+   
 
 
     .fade-enter-active, .fade-leave-active {
