@@ -1,12 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Home from '../Pages/Home.vue'
 import Slider from '../components/HomePage/Slider.vue'
-import SignUpForm from '../components/auth/SignUpForm.vue'
-import SignInForm from '../components/auth/SignInForm.vue'
-import ConfirmEmailSuccess from '../components/auth/ConfirmEmailSuccess.vue'
-import ConfirmEmailFailure from '../components/auth/ConfirmEmailFailure.vue'
-import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm.vue'
-import ResetPasswordForm from '@/components/auth/ForgotPasswordForm.vue'
+import ConfirmEmailSuccess from '@/Pages/ConfirmEmailSuccess.vue'
+import ConfirmEmailFailure from '@/Pages/ConfirmEmailFailure.vue'
 import ConfirmResultRoot from '@/components/common/ConfirmResultRoot.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -14,23 +10,6 @@ const routes: Array<RouteRecordRaw> = [
         path:'/',
         name:'Home',
         component: Home,
-        children:[
-            {
-                path:'/sign-up',
-                name:'SignUp',
-                component:SignUpForm
-            },
-            {
-                path:'/sign-in',
-                name:'SignIn',
-                component: SignInForm
-            },
-            {
-                path:'/forgot-password',
-                name:'ForgotPassword',
-                component: ForgotPasswordForm
-            }
-        ]
     },
     {
         path:'/user',

@@ -1,20 +1,27 @@
 <template>
   <transition v-on:after-leave="$emit('onEndOfTransition')" name="fade">
-    <div class="modal-backdrop"
-      v-show="isOpen"
-      :class="{open: isOpen}"
-    >
-      <div class="modal-dialog" :class="{open: isOpen}" @click.stop>
-        <button v-show="showCloseButton" class="modal-close" @click="$emit('onCloseModal')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+    <div class="modal-backdrop" v-show="isOpen" :class="{ open: isOpen }">
+      <div class="modal-dialog" :class="{ open: isOpen }" @click.stop>
+        <button
+          v-show="showCloseButton"
+          class="modal-close"
+          @click="$emit('onCloseModal')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+          >
             <path
-              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+            />
             <path d="M0 0h24v24H0z" fill="none" />
           </svg>
         </button>
         <div class="modal-title" v-if="title">{{ title }}</div>
         <div class="modal-bodys">
-            <slot />   
+          <slot />
         </div>
       </div>
     </div>
@@ -22,27 +29,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent } from "vue";
 
-export default defineComponent( {
+export default defineComponent({
   props: {
     isOpen: Boolean,
     title: String,
-    showCloseButton:Boolean
-  }
-})
+    showCloseButton: Boolean,
+  },
+});
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: 0.5s;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
-.fade-enter .modal-dialog, .fade-leave-to .modal-dialog {
+.fade-enter .modal-dialog,
+.fade-leave-to .modal-dialog {
   transform: translateY(-20%);
 }
 
@@ -56,14 +66,15 @@ export default defineComponent( {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 .modal-dialog {
   width: 30rem;
   background: rgb(255, 255, 255);
   padding: 1.5rem 2rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border-radius: 0.3rem;
   transition: 0.5s;
   position: relative;

@@ -1,57 +1,75 @@
 <template>
+  <div v-show="!message">
     <form @submit.prevent="handleSubmit">
-        <input
+      <input
         type="text"
         id="email"
         placeholder="Email"
         v-model="userEmail"
         @blur="v.userEmail.$touch()"
-         />
-         <span v-if="v.userEmail.$invalid&&v.userEmail.$dirty" >{{v.userEmail.$errors[0].$message}}</span>
-
-        <button @click="hundleSubmit">Restore Password</button>
-    </form>      
+      />
+      <span v-if="v.userEmail.$invalid && v.userEmail.$dirty">{{
+        v.userEmail.$errors[0].$message
+      }}</span>
+      <button @click="handleSubmit">Restore Password</button>
+    </form>
+  </div>
+  <Message
+    :showBackButton="showBackButton"
+    v-show="message"
+    @closeMessage="handleCloseMessage"
+  >
+    {{ message }}
+  </Message>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import useEmitter from '@/helpers/emitter'
-import {required, email } from '@vuelidate/validators';
-import useVuelidate from '@vuelidate/core'
-import authService from '@/services/authService'
-import ShowMessage from './ShowMessage.vue'
-import currentComponent from '@/components/auth/ForgotPasswordForm.vue'
+import { required, email } from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
+import authService from "@/services/authService";
+import Message from "../common/Message.vue";
 
 export default defineComponent({
-    setup (){
-        const emitter = useEmitter()
-        const userEmail = ref("")
+  components: {
+    Message,
+  },
+  setup() {
+    const userEmail = ref("");
 
-        const v = useVuelidate({
-            userEmail:{required, email}
+    const v = useVuelidate({ userEmail: { required, email } }, { userEmail });
+
+    const message = ref("");
+    const showBackButton = ref(false);
+
+    const handleCloseMessage = () => {
+      message.value = "";
+    };
+    const handleSubmit = () => {
+      v.value.$touch();
+      if (v.value.$invalid) return;
+
+      authService.forgotPassword(userEmail.value).then(
+        (msg) => {
+          message.value = msg;
         },
-        {userEmail})
-
-        const showMessage = (title:string, props:any) =>{
-            emitter.emit('onOpenModal', { component: ShowMessage, title: title, props: props})
+        (errorMsg) => {
+          message.value = errorMsg;
+          showBackButton.value = true;
         }
+      );
+    };
 
-        const hundleSubmit = () => {
-            v.value.$touch()
-            if(v.value.$invalid) return
+    return {
+      userEmail,
 
-            authService.forgotPassword(userEmail.value)
-                .then(message => {
-                    showMessage('Success', {sourceComponentOfModal:null, sourceTitleOfModal:'', message: message})
-                }, errorMessage => {
-                    showMessage('Failure', {sourceComponentOfModal:currentComponent, sourceTitleOfModal:'Forgot Password', message: errorMessage})
-                })
-        }
+      message,
+      showBackButton,
+      handleCloseMessage,
 
-        return {
-            hundleSubmit,
-            v, userEmail
-        }
-    }
-})
+      handleSubmit,
+      v,
+    };
+  },
+});
 </script>

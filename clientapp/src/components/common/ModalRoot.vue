@@ -1,62 +1,62 @@
 <template>
-  <Modal :isOpen="isOpen" :title="currentTitle" :showCloseButton="showCloseButton" @onCloseModal="handleClose" @onEndOfTransition="clearData">
-      <keep-alive :max="5">
-            <component :is="currentComponent" v-bind="properties"/>
-      </keep-alive>    
+  <Modal
+    :isOpen="isOpen"
+    :title="currentTitle"
+    :showCloseButton="showCloseButton"
+    @onCloseModal="handleClose"
+    @onEndOfTransition="clearData"
+  >
+    <component :is="currentComponent" />
   </Modal>
 </template>
 
 <script lang="ts">
-import Modal from '../common/Modal.vue'
-import { defineComponent, ref, shallowRef} from 'vue'
-import useEmitter from '@/helpers/emitter'
-import { useRouter } from 'vue-router'
+import Modal from "../common/Modal.vue";
+import { defineComponent, ref, shallowRef } from "vue";
+import useEmitter from "@/helpers/emitter";
 
 export default defineComponent({
-    components:{
-        Modal
-    },
-    setup(){
-        const currentComponent = shallowRef(null)
-        const currentTitle = ref('')
-        const isOpen = ref(false)
-        const showCloseButton = ref(true)
-        const properties = ref (null)
+  components: {
+    Modal,
+  },
+  setup() {
+    const emitter = useEmitter();
 
-        const router = useRouter()
-        const emitter = useEmitter()
+    const currentComponent = shallowRef(null);
+    const currentTitle = ref("");
+    const isOpen = ref(false);
+    const showCloseButton = ref(true);
 
+    emitter.on(
+      "onOpenModal",
+      ({ component = null, title = "", closeButton = true }) => {
+        currentComponent.value = component;
+        currentTitle.value = title;
+        isOpen.value = true;
+        showCloseButton.value = closeButton;
+      }
+    );
 
-        emitter.on('onOpenModal',({component = null, title = '', props = null,closeButton = true}) => {
-           currentComponent.value = component
-           currentTitle.value = title
-           properties.value = props
-           isOpen.value = true
-           showCloseButton.value = closeButton
-        })
+    const handleClose = () => {
+      isOpen.value = false;
+    };
 
-        const handleClose = () => {
-            isOpen.value = false
-            router.go(-1)
-        }
+    //There is a problem: if you assign 'null' to the 'currentComponent' immediately after catching the 'onClose' event,
+    //the content of the modal window will be cleared before the transition ends, which looks ugly.
+    //Therefore, we wait for the transition to end, intercept the 'onEndOfTransition' event and only then assign the 'null' value
+    const clearData = () => {
+      currentComponent.value = null;
+      currentTitle.value = "";
+    };
 
-        //There is a problem: if you assign 'null' to the 'currentComponent' immediately after catching the 'onClose' event, 
-        //the content of the modal window will be cleared before the transition ends, which looks ugly. 
-        //Therefore, we wait for the transition to end, intercept the 'onEndOfTransition' event and only then assign the 'null' value
-        const clearData = () => {
-            currentComponent.value = null
-            currentTitle.value = ''
-        }
-
-        return {
-            currentComponent,
-            currentTitle,
-            handleClose,
-            isOpen,
-            clearData,
-            properties,
-            showCloseButton
-        }
-    }
-})
+    return {
+      currentComponent,
+      currentTitle,
+      handleClose,
+      isOpen,
+      clearData,
+      showCloseButton,
+    };
+  },
+});
 </script>
