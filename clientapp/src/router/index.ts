@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory, RouteRecordRaw} from 'vue-router'
 import Home from '../Pages/Home.vue'
-import Slider from '../components/HomePage/Slider.vue'
-import ConfirmEmailSuccess from '@/Pages/ConfirmEmailSuccess.vue'
-import ConfirmEmailFailure from '@/Pages/ConfirmEmailFailure.vue'
-import ConfirmResultRoot from '@/components/common/ConfirmResultRoot.vue'
+import ConfirmEmailSuccess from '@/Pages/SubPages/ConfirmEmailSuccess.vue'
+import ConfirmEmailFailure from '@/Pages/SubPages/ConfirmEmailFailure.vue'
+import ResetPasswordFailure from '@/Pages/SubPages/ResetPasswordFailure.vue'
+import ResetPassword from '@/Pages/SubPages/ResetPassword.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -18,13 +18,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "user" */'../Pages/User.vue')
     },
     {
-        path:'/confirm-email',
-        name:'Slider',
-        //lazy load
-        //component: () => import(/* webpackChunkName: "user" */'../components/HomePage/Slider.vue')
-        component: Slider
-    },
-    {
         path:'/confirm-email-success',
         name:'ConfirmEmailSuccess',
         component:ConfirmEmailSuccess
@@ -35,9 +28,14 @@ const routes: Array<RouteRecordRaw> = [
         component:ConfirmEmailFailure
     },
     {
+        path:'/reset-password-failure',
+        name:'ResetPasswordFailure',
+        component:ResetPasswordFailure,
+    },
+    {
         path:'/reset-password',
-        name:'ConfirmResultRoot',
-        component:ConfirmResultRoot,
+        name:'ResetPassword',
+        component:ResetPassword,
     }
 ]
 

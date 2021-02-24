@@ -80,6 +80,9 @@ export default defineComponent({
 
     const message = ref("");
     const showBackButton = ref(true);
+    const handleCloseMessage = () => {
+      message.value = "";
+    };
 
     function handleSubmit() {
       v.value.$touch();
@@ -104,8 +107,9 @@ export default defineComponent({
 
       message,
       showBackButton,
+      handleCloseMessage,
 
-      handleSubmit,
+      handleSubmit
     };
   },
 });
