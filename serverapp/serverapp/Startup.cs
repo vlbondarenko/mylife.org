@@ -25,9 +25,21 @@ namespace serverapp
         }
 
         public IConfiguration Configuration { get; }
-        
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:8080","http://localhost:8081")
+                                             .AllowAnyHeader()
+                                             .AllowAnyMethod()
+                                             .AllowCredentials();
+                                  });
+            });
             services.AddControllers().AddJsonOptions(options => 
             { 
                 options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull; 
@@ -85,9 +97,7 @@ namespace serverapp
    
             app.UseMiddleware<ExceptionsHandlingMiddleware>();
 
-            app.UseCors(x => x.AllowAnyOrigin()
-                              .AllowAnyMethod()
-                              .AllowAnyHeader());
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseHttpsRedirection();
 
