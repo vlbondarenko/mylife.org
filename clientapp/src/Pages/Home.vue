@@ -1,6 +1,8 @@
 <template>
   <div id="home">
-    <div id="header">This is header</div>
+    <div id="header">
+      <p>This is header</p>
+    </div>
     <div id="container">
       <div id="menu">
         This is Home Component
@@ -11,9 +13,20 @@
           Sign Up
         </button>
       </div>
-      <div id="content"></div>
+      <div id="content">
+        <div class="content-text">This is content this is content
+          This is content this is content
+          This is content this is content
+          This is content this is content
+          This is content this is content
+          This is content this is content
+          This is content this is content
+        </div>
+      </div>
     </div>
-    <div id="footer">Footer</div>
+    <div id="footer">
+      <p>Footer</p>
+    </div>
     <modal-root />
   </div>
 </template>
@@ -56,52 +69,85 @@ export default defineComponent({
 });
 </script>
 <style>
+
+
+body{
+  font-family: "Poppins";
+}
+
+.img{
+  height: 500px;
+  width: 500px;
+}
+
+.content-text{
+  height: 200px;
+  width: 300px;
+  flex:0 0 auto;
+ background: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0));
+}
 #home{
   width: 100%;
   min-height: 100%;
-  background: rgb(187, 219, 155);
   display: flex;
   flex-direction: column;
   position: absolute;
   left: 0;
   top: 0;
+  flex:1 1 auto;
+  justify-content: center;
+  align-items: center;
+ z-index: 0;
+ background: rgb(238, 238, 238);
 }
 #footer{
-  background: rgb(226, 226, 222);
-  height: 70px;
+  height: 50px;
   width: 100%;
   flex: 0 0 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 #header{
-  background: lavender;
-  height: 70px;
+  height: 50px;
   width: 100%;
+  flex: 0 0 auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 #container{
   height: 100%;
   width: 100%;
-  background: lightcoral;
   flex: 1 0 auto;
   display: flex;
   flex-direction: row-reverse;
-  min-height: 500px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 #content{
-  min-width: 300px;
+  min-width: 500px;
+   min-height: 500px;
   flex: 1 0 auto;
-  background: turquoise;
-   
+  background-image:  url("../assets/Fon1.png");
+  background-size: cover;
+  background-position: 50% 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #menu{
-  min-width: 200px;
+  width: 500px;
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  background: rgba(34, 36, 36, 0.295);
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
 }
 .floating-button {
   display: inline-block;
