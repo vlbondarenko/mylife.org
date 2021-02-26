@@ -1,3 +1,157 @@
+body{
+    font-family: "Poppins";
+  }
+
+  .slider-bg{
+    background-image:  url("../assets/Fon1.png");
+    background-size: cover;
+    background-position: 50% 50%;
+  }
+
+  .slider-content{
+    text-align: center;
+    height: 600px;
+    width: 600px;
+  }
+
+.page{
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgb(238, 238, 238);
+}
+
+.menu{
+    width: 500px;
+    min-height: 500px;
+  }
+
+.flex{
+    display: flex;
+}
+
+.f-column{
+    display: flex;
+    flex-direction: column;
+}
+
+.f-inline{
+    display: inline-flex;
+}
+
+.f-w-reverse{
+    flex-wrap: wrap-reverse;
+}
+
+
+.j-c-center{
+    justify-content: center;
+}
+
+.j-c-start{
+    justify-content: start;
+}
+
+.a-i-center{
+    align-items: center;
+}
+
+.f-g-0{
+    flex-grow: 0;
+    flex-basis: auto;
+}
+
+.f-g-1{
+    flex-grow: 1;
+    flex-basis: auto;
+}
+
+
+.f-s-0{
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+.f-s-1{
+    flex-shrink: 1;
+    flex-basis: auto;
+}
+
+
+.jc-ai-center{
+    justify-content: center;
+    align-items: center;
+}
+
+.header{
+    height: 50px;
+    width: 100%;
+}
+
+.footer{
+    height: 70px;
+    width: 100%;
+}
+
+.header-link{
+    margin-left: 60px;
+    text-decoration: none;
+    color: rgb(0,0,0);
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.footer-link{
+    margin: 60px 30px;
+    color: rgb(0,0,0);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+
+.floating-button {
+    display: inline-block;
+    width: 140px;
+    border-radius: 50px;
+    margin: 20px 20px;
+    font-family: "Poppins";
+    font-size: 11px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 3px;
+    font-weight: 500;
+    color: #000000;
+    background: rgb(255, 255, 255);
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.322);
+    transition: 0.3s ease-in-out;
+    outline: none;
+    padding: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.075);
+    position: relative;
+  }
+  .floating-button:hover {
+    background: rgb(94, 94, 94);
+    box-shadow: 0 5px 10px rgba(75, 75, 75, 0.774);
+    color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.075);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .modal-wrapper{
     position: fixed;
     overflow: auto;
