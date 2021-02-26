@@ -42,33 +42,52 @@ export default defineComponent({
 
 <style scoped>
 .fade-enter-active{
-  transition: all 0.3s ease-out;
+  transition: scale 0.5s cubic-bezier(0, 2, 0, 0);
+  transition: opacity 0.5s;
 }
 .fade-leave-active {
-  transition: all 0.7s;
-  
+  transition: scale 0.5s cubic-bezier(0, 2, 0, 0);
+  transition: opacity 0.5s; 
 }
 
-.fade-enter{
-  opacity: 1;
+.fade-enter-from{
+  opacity: 0;
+}
+
+.fade-enter-from .modal-dialog{
+  transform: scale(0.8);
 }
 .fade-leave-to .modal-dialog {
   opacity: 0;
-  animation: bounce 0.7s;
+   transform: scale(0.8);
 }
 
+
+
+
 @keyframes bounce {
+  0% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounce-reverse {
   0% {
     transform: scale(1);
   }
   50% {
-    transform: scale(0.75);
+    transform: scale(0.9);
   }
   100% {
     transform: scale(0.5);
   }
 }
-
 
 
 .modal-backdrop {
@@ -90,7 +109,7 @@ export default defineComponent({
   padding: 2rem 2rem;
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.322);
   border-radius: 20px;
-  transition: 0.7s;
+  transition:all 0.5s;
   position: relative;
 }
 
