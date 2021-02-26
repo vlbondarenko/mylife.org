@@ -78,4 +78,10 @@ span {
   font-size: 20px;
   font-weight: 550;
 }
+
+.slider-content {
+  text-align: center;
+  height: 600px;
+  width: 600px;
+}
 </style>

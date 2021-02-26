@@ -44,3 +44,19 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.page {
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgb(238, 238, 238);
+}
+
+.slider-bg {
+  background-image: url("../assets/Fon1.png");
+  background-size: cover;
+  background-position: 50% 50%;
+}
+</style>

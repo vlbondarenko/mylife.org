@@ -10,3 +10,16 @@
 import { defineComponent } from "vue";
 export default defineComponent({});
 </script>
+<style scoped>
+.footer {
+  height: 70px;
+  width: 100%;
+}
+
+.footer-link {
+  margin: 60px 30px;
+  color: rgb(0, 0, 0);
+  font-size: 14px;
+  font-weight: 500;
+}
+</style>

@@ -43,7 +43,7 @@ export default defineComponent({
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: 0.5s;
+  transition: 0.7s;
 }
 
 .fade-enter,
@@ -53,11 +53,11 @@ export default defineComponent({
 
 .fade-enter .modal-dialog,
 .fade-leave-to .modal-dialog {
-  transform: translateY(-20%);
+  opacity: 0;
 }
 
 .modal-backdrop {
-  background: rgba(250, 250, 250, 0.8);
+  background: rgba(131, 131, 131, 0.8);
   position: fixed;
   top: 0;
   left: 0;
@@ -69,19 +69,19 @@ export default defineComponent({
   align-items: center;
 }
 
- .blur {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(3px); 
-  }
+.blur {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(3px);
+}
 
 .modal-dialog {
   width: 30rem;
-  background: rgb(255, 255, 255);
+  background: rgb(238, 238, 238);
   padding: 1.5rem 2rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border-radius: 0.3rem;
-  transition: 0.5s;
+  transition: 0.7s;
   position: relative;
 }
 

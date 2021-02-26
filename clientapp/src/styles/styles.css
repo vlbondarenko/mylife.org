@@ -2,32 +2,6 @@ body {
     font-family: "Poppins";
 }
 
-.slider-bg {
-    background-image: url("../assets/Fon1.png");
-    background-size: cover;
-    background-position: 50% 50%;
-}
-
-.slider-content {
-    text-align: center;
-    height: 600px;
-    width: 600px;
-}
-
-.page {
-    width: 100%;
-    min-height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: rgb(238, 238, 238);
-}
-
-.menu {
-    width: 500px;
-    min-height: 500px;
-}
-
 .flex {
     display: flex;
 }
@@ -80,31 +54,6 @@ body {
 .jc-ai-center {
     justify-content: center;
     align-items: center;
-}
-
-.header {
-    height: 50px;
-    width: 100%;
-}
-
-.footer {
-    height: 70px;
-    width: 100%;
-}
-
-.header-link {
-    margin-left: 60px;
-    text-decoration: none;
-    color: rgb(0, 0, 0);
-    font-size: 20px;
-    font-weight: 500;
-}
-
-.footer-link {
-    margin: 60px 30px;
-    color: rgb(0, 0, 0);
-    font-size: 14px;
-    font-weight: 500;
 }
 
 .floating-button {
@@ -240,8 +189,4 @@ input {
 
 .fade-enter, .fade-leave-to {
     opacity: 0;
-}
-
-.fade-enter .modal-dialog, .fade-leave-to .modal-dialog {
-    transform: translateY(-20%);
 }

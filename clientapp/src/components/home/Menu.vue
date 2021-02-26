@@ -31,3 +31,9 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.menu {
+  width: 500px;
+  min-height: 500px;
+}
+</style>
