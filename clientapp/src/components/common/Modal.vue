@@ -1,7 +1,7 @@
 <template>
-  <transition v-on:after-leave="$emit('onEndOfTransition')" name="fade">
-    <div class="modal-backdrop blur" v-show="isOpen" :class="{ open: isOpen }">
-      <div class="modal-dialog" :class="{ open: isOpen }" @click.stop>
+  <transition  name="fade" v-on:after-leave="$emit('onEndOfTransition')">
+    <div class="flex jc-ai-center modal-backdrop blur" v-show="isOpen" >
+      <div class="f-column jc-ai-center modal-dialog" :class="{ open: isOpen }" @click.stop>
         <button
           v-show="showCloseButton"
           class="modal-close"
@@ -9,9 +9,9 @@
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
           >
             <path
               d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
@@ -20,7 +20,7 @@
           </svg>
         </button>
         <div class="modal-title" v-if="title">{{ title }}</div>
-        <div class="modal-bodys">
+        <div class="flex jc-ai-center modal-bodys">
           <slot />
         </div>
       </div>
@@ -41,46 +41,55 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.fade-enter-active,
+.fade-enter-active{
+  transition: all 0.3s ease-out;
+}
 .fade-leave-active {
-  transition: 0.7s;
+  transition: all 0.7s;
+  
 }
 
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
+.fade-enter{
+  opacity: 1;
 }
-
-.fade-enter .modal-dialog,
 .fade-leave-to .modal-dialog {
   opacity: 0;
+  animation: bounce 0.7s;
 }
 
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.75);
+  }
+  100% {
+    transform: scale(0.5);
+  }
+}
+
+
+
 .modal-backdrop {
-  background: rgba(131, 131, 131, 0.8);
+  background: rgba(255, 255, 255, 0.4);
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  
 }
 
 .blur {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
 }
 
 .modal-dialog {
-  width: 30rem;
   background: rgb(238, 238, 238);
-  padding: 1.5rem 2rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-radius: 0.3rem;
+  padding: 2rem 2rem;
+  box-shadow: 0 4px 7px rgba(0, 0, 0, 0.322);
+  border-radius: 20px;
   transition: 0.7s;
   position: relative;
 }
@@ -89,32 +98,33 @@ export default defineComponent({
   background: none;
   border: none;
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 5px;
+  right: 10px;
   outline: none;
-  height: 1.2rem;
-  width: 1.2rem;
+  height: 2rem;
+  width: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  
 }
 
 .modal-close svg {
-  fill: rgb(150, 150, 150);
+  fill: rgb(0, 0, 0);
 }
 
 .modal-close svg:hover {
-  fill: rgb(100, 100, 100);
+  fill: rgb(148, 148, 148);
 }
 
 .modal-title {
   font-weight: bold;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  color: rgb(100, 100, 100);
+  font-size: 20px;
+  color: rgb(0, 0, 0);
 }
 
 .modal-bodys {
-  color: rgb(180, 180, 180);
+  color: rgb(0, 0, 0);
+  position: relative;
 }
 </style>
