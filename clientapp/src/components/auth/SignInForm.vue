@@ -1,11 +1,10 @@
 <template>
-  <transition name="fader">
   <div>
     <div class="f-column jc-ai-center" v-show="!message">
       <form @submit.prevent="handleSubmit">
         <div class="conteiner">
           <input
-            v-model="emailAdress"
+            
             type="text"
             placeholder=" "
             @blur="v.emailAdress.$touch()"
@@ -37,7 +36,7 @@
             </transition>
           </div>
         </div>
-
+        <Input v-model:modelValue="emailAdress" :inputType="'text'" :inputLabel="'Email'" :validator="v.emailAdress"/>
         <button class="floating-button" type="submit">Sign in</button>
       </form>
       <a @click="openForgotPasswordForm">Forgot Password?</a>
@@ -47,7 +46,6 @@
       {{ message }}
     </message>
   </div>
-  </transition>
 </template>
 
 <script lang = "ts">
@@ -59,11 +57,13 @@ import useVuelidate from "@vuelidate/core";
 import useEmitter from "@/helpers/emitter";
 import Message from "../common/Message.vue";
 import ForgotPasswordForm from "./ForgotPasswordForm.vue";
+import Input from "../common/Input.vue";
 
 export default defineComponent({
   name: "SignInForm",
   components: {
     Message,
+    Input,
   },
   setup() {
     const store = useStore();
@@ -169,9 +169,9 @@ a:hover {
 }
 
 a {
-  border-bottom: 1px solid rgb(100, 100, 100);
-  font-size: 14px;
-  color: rgb(100, 100, 100);
+  border-bottom: 1px solid rgb(160, 160, 160);
+  font-size: 11px;
+  color: rgb(160, 160, 160);
 }
 
 input {
@@ -193,8 +193,9 @@ form {
 }
 
 button {
-  left: 90px;
+  max-width: 150px;
   margin-top: 10px;
+  left: 90px;
 }
 
 label {
