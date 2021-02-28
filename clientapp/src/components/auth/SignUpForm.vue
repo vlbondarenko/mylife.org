@@ -2,66 +2,50 @@
   <div>
     <div v-show="!message">
       <form @submit.prevent="handleSubmit">
-        <input
-          type="text"
-          id="firstname"
-          placeholder="First Name"
-          v-model="firstName"
-          @blur="v.firstName.$touch()"
+        <Input
+          v-model:modelValue="firstName"
+          :inputType="'text'"
+          :inputLabel="'First Name'"
+          :validator="v.firstName"
         />
-        <span v-if="v.firstName.$invalid && v.firstName.$dirty">{{
-          v.firstName.$errors[0].$message
-        }}</span>
-        <input
-          type="text"
-          id="lastname"
-          placeholder="Last Name"
-          v-model="lastName"
-          @blur="v.lastName.$touch()"
+        <Input
+          v-model:modelValue="lastName"
+          :inputType="'text'"
+          :inputLabel="'Last Name'"
+          :validator="v.lastName"
         />
-        <span v-if="v.lastName.$invalid && v.lastName.$dirty">{{
-          v.lastName.$errors[0].$message
-        }}</span>
-        <input
-          type="text"
-          id="userEmail"
-          placeholder="Email"
-          v-model="userEmail"
-          @blur="v.userEmail.$touch()"
+        <Input
+          v-model:modelValue="userEmail"
+          :inputType="'text'"
+          :inputLabel="'Email'"
+          :validator="v.userEmail"
         />
-        <span v-if="v.userEmail.$invalid && v.userEmail.$dirty">{{
-          v.userEmail.$errors[0].$message
-        }}</span>
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          v-model="password"
-          @blur="v.password.$touch()"
+        <Input
+          v-model:modelValue="password"
+          :inputType="'password'"
+          :inputLabel="'Password'"
+          :validator="v.password"
         />
-        <span v-if="v.password.$invalid && v.password.$dirty">{{
-          v.password.$errors[0].$message
-        }}</span>
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Confirm Password"
-          v-model="confirmPassword"
-          @blur="v.confirmPassword.$touch()"
+         <Input
+          v-model:modelValue="confirmPassword"
+          :inputType="'password'"
+          :inputLabel="'Confirm Password'"
+          :validator="v.confirmPassword"
         />
-        <span v-if="v.confirmPassword.$invalid && v.confirmPassword.$dirty">{{
-          v.confirmPassword.$errors[0].$message
-        }}</span>
-        <button type="submit">Sign up</button>
+        <Button
+          :buttonType="'submit'"
+          :buttonText="'Sign Up'"
+          :loading="loading"
+        />
       </form>
     </div>
-    <message
+    <Message
       v-show="message"
       :showBackButton="showBackButton"
       @closeMessage="handleCloseMessage"
     >
       {{ message }}
-    </message>
+    </Message>
   </div>
 </template>
 
@@ -77,11 +61,15 @@ import {
 } from "@vuelidate/validators";
 import Message from "../common/Message.vue";
 import authService from '@/services/authService'
+import Input from '../common/Input.vue'
+import Button from '../common/Button.vue'
 
 export default defineComponent({
   name: "SignUpForm",
   components: {
     Message,
+    Input,
+    Button
   },
 
   setup() {
@@ -129,6 +117,7 @@ export default defineComponent({
     );
 
     const message = ref("");
+    const loading = ref(false)
     const showBackButton = ref(false);
 
     const handleCloseMessage = () => {
@@ -138,6 +127,8 @@ export default defineComponent({
     const handleSubmit = async () => {
       const isFormCorrect = await v.value.$validate();
       if (!isFormCorrect) return;
+
+      loading.value = true
 
       const userData = {
         userEmail: userEmail.value,
@@ -150,10 +141,12 @@ export default defineComponent({
         (msg) => {
           message.value = msg;
           showBackButton.value = false;
+          loading.value = false
         },
         (errorMsg) => {
           message.value = errorMsg;
           showBackButton.value = true;
+          loading.value = false
         }
       );
     };
@@ -167,6 +160,7 @@ export default defineComponent({
       v,
 
       message,
+      loading,
       showBackButton,
       handleCloseMessage,
 

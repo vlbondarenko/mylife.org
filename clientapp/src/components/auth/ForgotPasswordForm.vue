@@ -1,17 +1,18 @@
 <template>
   <div v-show="!message">
     <form @submit.prevent="handleSubmit">
-      <input
-        type="text"
-        id="email"
-        placeholder="Email"
-        v-model="userEmail"
-        @blur="v.userEmail.$touch()"
-      />
-      <span v-if="v.userEmail.$invalid && v.userEmail.$dirty">{{
-        v.userEmail.$errors[0].$message
-      }}</span>
-      <button @click="handleSubmit">Restore Password</button>
+       <Input
+          v-model:modelValue="userEmail"
+          :inputType="'text'"
+          :inputLabel="'Email'"
+          :validator="v.userEmail"
+        />
+        <Button
+          :buttonType="'submit'"
+          :buttonText="'Reset Password'"
+          :loading="loading"
+          :optionalClass = "'btn'"
+        />
     </form>
   </div>
   <Message
@@ -29,10 +30,14 @@ import { required, email } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import authService from "@/services/authService";
 import Message from "../common/Message.vue";
+import Input from "../common/Input.vue";
+import Button from "../common/Button.vue";
 
 export default defineComponent({
   components: {
     Message,
+    Input,
+    Button
   },
   setup() {
     const userEmail = ref("");
@@ -40,6 +45,7 @@ export default defineComponent({
     const v = useVuelidate({ userEmail: { required, email } }, { userEmail });
 
     const message = ref("");
+    const loading = ref(false)
     const showBackButton = ref(false);
 
     const handleCloseMessage = () => {
@@ -49,13 +55,17 @@ export default defineComponent({
       v.value.$touch();
       if (v.value.$invalid) return;
 
+      loading.value = true
+
       authService.forgotPassword(userEmail.value).then(
         (msg) => {
           message.value = msg;
+           loading.value = false
         },
         (errorMsg) => {
           message.value = errorMsg;
           showBackButton.value = true;
+           loading.value = false
         }
       );
     };
@@ -64,6 +74,7 @@ export default defineComponent({
       userEmail,
 
       message,
+      loading,
       showBackButton,
       handleCloseMessage,
 
@@ -73,3 +84,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.btn{
+  min-width: 220px;
+}
+</style>

@@ -1,5 +1,4 @@
 <template>
-    <div>Confirm Result Root</div>
     <modal-root />
 </template>
 

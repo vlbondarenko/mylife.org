@@ -1,17 +1,16 @@
 <template>
-  <div class="conteiner">
+  <div class="container">
     <input
-    :value="modelValue"
-   @input="$emit('update:modelValue', $event.target.value)"
       :type="inputType"
       placeholder=" "
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
       @blur="validator.$touch()"
-      
     />
-    <label>{{inputLabel}}</label>
-    <div class="notif">
+    <label>{{ inputLabel }}</label>
+    <div class="error-notif">
       <p></p>
-      <transition name="form">
+      <transition name="error">
         <span v-if="validator.$invalid && validator.$dirty">{{
           validator.$errors[0].$message
         }}</span>
@@ -21,67 +20,57 @@
 </template>
 
 <script>
-import { defineComponent} from "vue";
-
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Input",
-  props:{
-     inputType:String,
-     inputLabel:String,
-     validator:Object,
-     modelValue:String
+  props: {
+    inputType: String,
+    inputLabel: String,
+    validator: Object,
+    modelValue: String,
   },
-  emits:['update:modelValue'],
-  setup(){
-  }
-  })
+  emits: ["update:modelValue"],
+  setup() {},
+});
 </script>
 
 <style scoped>
-.form-enter-active {
-  transition: opacity 0.4s;
-}
-.form-leave-active {
+.error-enter-active,
+.error-leave-active {
   transition: opacity 0.5s;
 }
 
-.form-enter-from {
+.error-enter-from,
+.error-leave-to {
   opacity: 0;
 }
 
-.form-leave-from {
+.error-leave-from {
   opacity: 1;
 }
-.form-leave-to {
-  opacity: 0;
-}
 
-.fader-enter-active,
-.fader-leave-active {
-  transition: height 0.5s;
-}
-.fader-enter-from,
-.fader-leave-to {
-  height: 0;
-  margin: 0;
-  border: 0;
-}
-
-a:hover {
-  border-bottom: 1px solid rgb(0, 0, 0);
-  cursor: pointer;
-  color: rgb(0, 0, 0);
-}
-
-.notif {
+.error-notif {
   display: inline-flex;
 }
 
-a {
-  border-bottom: 1px solid rgb(160, 160, 160);
-  font-size: 11px;
-  color: rgb(160, 160, 160);
+.container {
+  position: relative;
+}
+
+label {
+  color: rgb(131, 131, 131);
+  font-size: 14px;
+  line-height: 16px;
+  padding: 5px 20px;
+  pointer-events: none;
+  position: absolute;
+  transition: all 200ms;
+  top: 7px;
+  left: 20px;
+}
+p {
+  margin-bottom: 0px;
 }
 
 input {
@@ -97,32 +86,6 @@ input:hover {
   background-color: rgb(245, 245, 245);
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-button {
-  max-width: 150px;
-  margin-top: 10px;
-  left: 90px;
-}
-
-label {
-  color: rgb(131, 131, 131);
-  font-size: 14px;
-  line-height: 16px;
-  padding: 5px 20px;
-  pointer-events: none;
-  position: absolute;
-  transition: all 200ms;
-  top: 47px;
-  left: 20px;
-}
-p {
-  margin-bottom: 0px;
-}
-
 span {
   position: relative;
   color: rgb(255, 68, 68);
@@ -133,14 +96,10 @@ span {
 
 input:focus + label,
 input:not(:placeholder-shown) + label {
-  top: 13px;
+  top: -27px;
   left: 0px;
   font-size: 14px;
   color: rgb(0, 0, 0);
-}
-
-.conteiner {
-  position: relative;
 }
 
 input:focus + span,

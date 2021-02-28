@@ -1,8 +1,15 @@
 <template>
   <div class="f-column jc-ai-center menu">
     This is Home Component
-    <button class="floating-button" @click="openSignInModal()">Sign In</button>
-    <button class="floating-button" @click="openSignUpModal()">Sign Up</button>
+    <Button
+      :buttonText="'Sign In'"
+      @onClick="openSignInModal()"
+    />
+
+    <Button
+      :buttonText="'Sign Up'"
+      @onClick="openSignUpModal()"
+    />
   </div>
 </template>
 
@@ -11,8 +18,10 @@ import { defineComponent } from "vue";
 import SignUpForm from "../auth/SignUpForm.vue";
 import SignInForm from "../auth/SignInForm.vue";
 import useEmitter from "@/helpers/emitter";
+import Button from "../common/Button.vue";
 
 export default defineComponent({
+  components: { Button },
   setup() {
     const emitter = useEmitter();
 

@@ -1,6 +1,12 @@
 <template>
-  <div>
-    <button class="floating-button" :disabled="loading" type="{{buttonType}}">
+  <div class="flex jc-ai-center">
+    <button
+      class="floating-button"
+        :class="optionalClass"
+      :disabled="loading"
+      :type="buttonType ?? buttonType"
+      @click="$emit('onClick')"
+    >
       {{ buttonText }}
       <svg
         v-if="loading"
@@ -22,6 +28,8 @@ export default defineComponent({
     loading: Boolean,
     buttonText: String,
     buttonType: String,
+    class:String,
+    optionalClass:String
   },
 });
 </script>
@@ -31,7 +39,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12;
+  font-size: 12px;
   border-radius: 50px;
   margin: 20px 20px;
   font-family: "Poppins";
@@ -44,9 +52,10 @@ export default defineComponent({
   box-shadow: 0 4px 7px rgba(0, 0, 0, 0.322);
   transition: 0.3s ease-in-out;
   outline: none;
-  padding: 6px 25px 6px 25px;
+  padding: 6px 6px 6px 6px;
   border: 1px solid rgba(0, 0, 0, 0.075);
   position: relative;
+  min-width: 150px;
 }
 
 .floating-button:hover {

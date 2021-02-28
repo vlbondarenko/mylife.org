@@ -2,49 +2,30 @@
   <div>
     <div class="f-column jc-ai-center" v-show="!message">
       <form @submit.prevent="handleSubmit">
-        <div class="conteiner">
-          <input
-            
-            type="text"
-            placeholder=" "
-            @blur="v.emailAdress.$touch()"
-          />
-          <label>Email</label>
-          <div class="notif">
-            <p></p>
-            <transition name="form">
-              <span v-if="v.emailAdress.$invalid && v.emailAdress.$dirty">{{
-                v.emailAdress.$errors[0].$message
-              }}</span>
-            </transition>
-          </div>
-        </div>
-        <div class="conteiner">
-          <input
-            v-model="password"
-            type="password"
-            placeholder=" "
-            @blur="v.password.$touch()"
-          />
-          <label>Password</label>
-          <div class="notif">
-            <p></p>
-            <transition name="form">
-              <span v-if="v.password.$invalid && v.password.$dirty">{{
-                v.password.$errors[0].$message
-              }}</span>
-            </transition>
-          </div>
-        </div>
-        <Input v-model:modelValue="emailAdress" :inputType="'text'" :inputLabel="'Email'" :validator="v.emailAdress"/>
-        <button class="floating-button" type="submit">Sign in</button>
+        <Input
+          v-model:modelValue="emailAdress"
+          :inputType="'text'"
+          :inputLabel="'Email'"
+          :validator="v.emailAdress"
+        />
+        <Input
+          v-model:modelValue="password"
+          :inputType="'password'"
+          :inputLabel="'Password'"
+          :validator="v.password"
+        />
+        <Button
+          :buttonType="'submit'"
+          :buttonText="'Sign In'"
+          :loading="loading"
+        />
       </form>
       <a @click="openForgotPasswordForm">Forgot Password?</a>
     </div>
 
-    <message v-show="message" @closeMessage="handleCloseMessage">
+    <Message v-show="message" @closeMessage="handleCloseMessage">
       {{ message }}
-    </message>
+    </Message>
   </div>
 </template>
 
@@ -58,12 +39,14 @@ import useEmitter from "@/helpers/emitter";
 import Message from "../common/Message.vue";
 import ForgotPasswordForm from "./ForgotPasswordForm.vue";
 import Input from "../common/Input.vue";
+import Button from "../common/Button.vue";
 
 export default defineComponent({
   name: "SignInForm",
   components: {
     Message,
     Input,
+    Button,
   },
   setup() {
     const store = useStore();
@@ -71,6 +54,7 @@ export default defineComponent({
 
     const emailAdress = ref("");
     const password = ref("");
+    const loading = ref(false);
 
     const v = useVuelidate(
       {
@@ -89,6 +73,9 @@ export default defineComponent({
     function handleSubmit() {
       v.value.$touch();
       if (v.value.$error) return;
+
+      loading.value = true;
+
       const loginData = {
         email: emailAdress.value,
         password: password.value,
@@ -96,9 +83,11 @@ export default defineComponent({
       store.dispatch("user/SignIn", loginData).then(
         (data) => {
           if (data) router.push("/user");
+          loading.value = false;
         },
         (errorMessage) => {
           message.value = errorMessage;
+          loading.value = false;
         }
       );
     }
@@ -115,6 +104,7 @@ export default defineComponent({
       password,
       v,
 
+      loading,
       message,
       handleCloseMessage,
 
@@ -126,128 +116,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.form-enter-active {
-  transition: opacity 0.4s;
-}
-.form-leave-active {
-  transition: opacity 0.5s;
-}
-
-.form-enter-from {
-  opacity: 0;
-}
-
-.form-leave-from {
-  opacity: 1;
-}
-.form-leave-to {
-  opacity: 0;
-}
-
-
-.fader-enter-active,
-.fader-leave-active {
-  transition: height 0.5s;
-}
-.fader-enter-from,
-.fader-leave-to {
-  height: 0;
-  margin: 0;
-  border: 0;
-}
-
-
-
-a:hover {
-  border-bottom: 1px solid rgb(0, 0, 0);
-  cursor: pointer;
-  color: rgb(0, 0, 0);
-}
-
-.notif {
-  display: inline-flex;
-}
-
 a {
   border-bottom: 1px solid rgb(160, 160, 160);
   font-size: 11px;
   color: rgb(160, 160, 160);
 }
 
-input {
-  margin: 40px 20px 5px 20px;
-  width: 300px;
-  border-radius: 10px;
-  border: 0;
-  transition: 0.5s background-color;
-  font-family: "Poppins";
-}
-
-input:hover {
-  background-color: rgb(245, 245, 245);
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-button {
-  max-width: 150px;
-  margin-top: 10px;
-  left: 90px;
-}
-
-label {
-  color: rgb(131, 131, 131);
-  font-size: 14px;
-  line-height: 16px;
-  padding: 5px 20px;
-  pointer-events: none;
-  position: absolute;
-  transition: all 200ms;
-  top: 47px;
-  left: 20px;
-}
-p {
-  margin-bottom: 0px;
-}
-
-span {
-  position: relative;
-  color: rgb(255, 68, 68);
-  font-size: 12px;
-  margin-left: 20px;
-  transition: all 0.5s;
-}
-
-input:focus + label,
-input:not(:placeholder-shown) + label {
-  top: 13px;
-  left: 0px;
-  font-size: 14px;
+a:hover {
+  border-bottom: 1px solid rgb(0, 0, 0);
+  cursor: pointer;
   color: rgb(0, 0, 0);
-}
-
-.conteiner {
-  position: relative;
-}
-
-input:focus + span,
-input:not(:placeholder-shown) + span {
-  animation: light 0.6s;
-}
-
-@keyframes light {
-  0% {
-    color: rgba(0, 0, 0, 1);
-  }
-  50% {
-    color: rgba(0, 0, 0, 0.5);
-  }
-  100% {
-    color: rgba(0, 0, 0, 1);
-  }
 }
 </style>
 

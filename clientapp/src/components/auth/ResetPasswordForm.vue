@@ -2,27 +2,24 @@
   <div>
     <div v-show="!message">
       <form @submit.prevent="handleSubmit">
-        <input
-          v-model="password"
-          class="type-one"
-          type="password"
-          placeholder="Password"
-          @blur="v.password.$touch()"
+         <Input
+          v-model:modelValue="password"
+          :inputType="'password'"
+          :inputLabel="'Password'"
+          :validator="v.password"
         />
-        <span v-if="v.password.$invalid && v.password.$dirty">{{
-          v.password.$errors[0].$message
-        }}</span>
-        <input
-          v-model="confirmPassword"
-          class="type-one"
-          type="password"
-          placeholder="Confirm Password"
-          @blur="v.confirmPassword.$touch()"
+         <Input
+          v-model:modelValue="confirmPassword"
+          :inputType="'password'"
+          :inputLabel="'Confirm Password'"
+          :validator="v.confirmPassword"
         />
-        <span v-if="v.confirmPassword.$invalid && v.confirmPassword.$dirty">{{
-          v.confirmPassword.$errors[0].$message
-        }}</span>
-        <button type="submit">Reset Password</button>
+        <Button
+          :buttonType="'submit'"
+          :buttonText="'Reset Password'"
+          :loading="loading"
+          :optionalClass="'btn'"
+        />
       </form>
     </div>
     <message
@@ -41,11 +38,15 @@ import { required, minLength, sameAs, helpers } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import Message from "../common/Message.vue";
 import authService from "@/services/authService";
+import Input from '../common/Input.vue'
+import Button from '../common/Button.vue'
 
 export default defineComponent({
   name: "ResetPasswordForm",
   components: {
     Message,
+    Input,
+    Button
   },
   setup() {
     const password = ref("");
@@ -79,6 +80,7 @@ export default defineComponent({
     );
 
     const message = ref("");
+    const loading = ref(false)
     const showBackButton = ref(false);
     const handleCloseMessage = () => {
       message.value = "";
@@ -88,14 +90,18 @@ export default defineComponent({
       v.value.$touch();
       if (v.value.$error) return;
 
+      loading.value = true
+
       authService.resetPassword(password.value).then(
         (msg) => {
           message.value = msg;
           showBackButton.value = false;
+          loading.value = false
         },
         (errorMessage) => {
           message.value = errorMessage;
           showBackButton.value = true;
+          loading.value = false
         }
       );
     }
@@ -106,6 +112,7 @@ export default defineComponent({
       v,
 
       message,
+      loading,
       showBackButton,
       handleCloseMessage,
 
@@ -114,4 +121,9 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.btn{
+  min-width: 250px;
+}
+</style>
 
