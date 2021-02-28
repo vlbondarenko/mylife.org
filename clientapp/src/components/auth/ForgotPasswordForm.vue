@@ -11,7 +11,7 @@
           :buttonType="'submit'"
           :buttonText="'Reset Password'"
           :loading="loading"
-          :optionalClass = "'btn'"
+          :optionalClass = "'forgot-password-btn'"
         />
     </form>
   </div>
@@ -84,8 +84,8 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.btn{
-  min-width: 220px;
+<style>
+.forgot-password-btn{
+  width: 200px;
 }
 </style>

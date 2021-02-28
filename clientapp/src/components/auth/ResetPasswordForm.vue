@@ -5,7 +5,7 @@
          <Input
           v-model:modelValue="password"
           :inputType="'password'"
-          :inputLabel="'Password'"
+          :inputLabel="'New Password'"
           :validator="v.password"
         />
          <Input
@@ -18,16 +18,20 @@
           :buttonType="'submit'"
           :buttonText="'Reset Password'"
           :loading="loading"
-          :optionalClass="'btn'"
+          :optionalClass="'reset-password-btn'"
         />
       </form>
     </div>
     <message
+    :showBackButton="false"
       v-show="message"
-      :showBackButton="showBackButton"
-      @closeMessage="handleCloseMessage"
     >
       {{ message }}
+       <Button
+          :buttonText="'Home'"
+          @onClick="goHome"
+          :optionalClass="'go-home-btn'"
+        />
     </message>
   </div>
 </template>
@@ -40,6 +44,7 @@ import Message from "../common/Message.vue";
 import authService from "@/services/authService";
 import Input from '../common/Input.vue'
 import Button from '../common/Button.vue'
+import router from "@/router";
 
 export default defineComponent({
   name: "ResetPasswordForm",
@@ -81,10 +86,6 @@ export default defineComponent({
 
     const message = ref("");
     const loading = ref(false)
-    const showBackButton = ref(false);
-    const handleCloseMessage = () => {
-      message.value = "";
-    };
 
     function handleSubmit() {
       v.value.$touch();
@@ -95,15 +96,17 @@ export default defineComponent({
       authService.resetPassword(password.value).then(
         (msg) => {
           message.value = msg;
-          showBackButton.value = false;
           loading.value = false
         },
         (errorMessage) => {
           message.value = errorMessage;
-          showBackButton.value = true;
           loading.value = false
         }
       );
+    }
+
+    const goHome = () =>{
+      router.push('/')
     }
 
     return {
@@ -113,17 +116,22 @@ export default defineComponent({
 
       message,
       loading,
-      showBackButton,
-      handleCloseMessage,
+      goHome,
 
       handleSubmit
     };
   },
 });
 </script>
-<style scoped>
-.btn{
-  min-width: 250px;
+<style>
+.reset-password-btn{
+  width: 200px;
+}
+.go-home-btn{
+  position: absolute;
+  left: -5px;
+  margin-bottom: 0px;
+  bottom: -20px;
 }
 </style>
 

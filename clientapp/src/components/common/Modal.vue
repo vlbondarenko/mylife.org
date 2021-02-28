@@ -50,7 +50,8 @@ export default defineComponent({
   transition: opacity 0.4s; 
 }
 
-.fade-enter-from{
+.fade-enter-from,
+.fade-leave-to{
   opacity: 0;
 }
 
@@ -99,6 +100,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   
 }
 

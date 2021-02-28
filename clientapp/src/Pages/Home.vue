@@ -1,6 +1,5 @@
 <template>
-  <div class="page f-column">
-    <Header />
+  <SubPage>
     <div class="f-inline j-c-center f-w-reverse f-g-1">
       <div class="f-inline f-g-1 j-c-center slider-bg">
         <div class="flex jc-ai-center f-g-1 f-s-1">
@@ -9,9 +8,8 @@
       </div>
       <Menu />
     </div>
-    <Footer />
-    <ModalRoot />
-  </div>
+  </SubPage>
+  <ModalRoot />
 </template>
 
 <script lang="ts">
@@ -21,18 +19,16 @@ import { useStore } from "vuex";
 import ModalRoot from "../components/common/ModalRoot.vue";
 
 import Slider from "@/components/home/Slider.vue";
-import Header from "@/components/home/Header.vue";
-import Footer from "@/components/home/Footer.vue";
 import Menu from "@/components/home/Menu.vue";
+import SubPage from "@/components/common/SubPage.vue";
 
 export default defineComponent({
   name: "HomePage",
   components: {
     ModalRoot,
     Slider,
-    Header,
-    Footer,
     Menu,
+    SubPage,
   },
   setup() {
     const store = useStore();

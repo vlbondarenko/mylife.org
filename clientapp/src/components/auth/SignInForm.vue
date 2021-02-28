@@ -3,10 +3,10 @@
     <div class="f-column jc-ai-center" v-show="!message">
       <form @submit.prevent="handleSubmit">
         <Input
-          v-model:modelValue="emailAdress"
+          v-model:modelValue="userEmail"
           :inputType="'text'"
           :inputLabel="'Email'"
-          :validator="v.emailAdress"
+          :validator="v.userEmail"
         />
         <Input
           v-model:modelValue="password"
@@ -52,16 +52,16 @@ export default defineComponent({
     const store = useStore();
     const emitter = useEmitter();
 
-    const emailAdress = ref("");
+    const userEmail = ref("");
     const password = ref("");
     const loading = ref(false);
 
     const v = useVuelidate(
       {
-        emailAdress: { required },
+        userEmail: { required },
         password: { required },
       },
-      { emailAdress, password }
+      { userEmail, password }
     );
 
     const message = ref("");
@@ -77,7 +77,7 @@ export default defineComponent({
       loading.value = true;
 
       const loginData = {
-        email: emailAdress.value,
+        email: userEmail.value,
         password: password.value,
       };
       store.dispatch("user/SignIn", loginData).then(
@@ -100,7 +100,7 @@ export default defineComponent({
     };
 
     return {
-      emailAdress,
+      userEmail,
       password,
       v,
 

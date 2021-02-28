@@ -1,9 +1,12 @@
 <template>
-  <div>
-    <div>
+  <div class="flex jc-ai-center">
+     <button v-show="showBackButton" @click="$emit('closeMessage')">
+      <i class="fa fa-angle-left fa-2x" aria-hidden="true"></i>
+    </button>
+    <div class="message-body">
       <slot />
     </div>
-    <button v-show="showBackButton" @click="$emit('closeMessage')">Back</button>
+   
   </div>
 </template>
 
@@ -19,3 +22,29 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.message-body{
+  padding: 40px 20px 20px 20px ;
+  min-width: 200px;
+  max-width: 300px;
+  position: relative;
+  left: 5px;
+}
+button{
+  border: 0;
+  position: absolute;
+  outline: none;
+  top:-53px;
+  left: -27px;
+  background: none;
+  cursor: pointer;
+}
+i{
+  width: 20px;
+  height: 20px;
+  color: rgb(0, 0, 0);
+}
+button i:hover{
+  color: rgb(150, 150, 150);
+}
+</style>

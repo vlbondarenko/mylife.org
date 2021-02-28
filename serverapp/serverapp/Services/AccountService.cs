@@ -20,6 +20,7 @@ namespace serverapp.Services
         public static readonly string NotRegistered = "The user is not registered";
         public static readonly string PasswordNotReset = "Password could not be reset";
         public static readonly string SendingMessageFailed = "Failed to send a message with a link to confirm the email address. Log in and try sending the message again through the settings.";
+        public static readonly string SendingResetPasswordMessageFailed = "Failed to send a message with a link to confirm the email address. Try sending the message later.";
     }
 
     public class AccountService : IAccountService
@@ -159,7 +160,7 @@ namespace serverapp.Services
             }
             catch
             {
-                throw new RestExcteption(HttpStatusCode.InternalServerError, new { Message = ErrorMessages.SendingMessageFailed });
+                throw new RestExcteption(HttpStatusCode.InternalServerError, new { Message = ErrorMessages.SendingResetPasswordMessageFailed });
             }  
         }
 
