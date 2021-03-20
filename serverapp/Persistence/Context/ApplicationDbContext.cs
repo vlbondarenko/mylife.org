@@ -24,10 +24,13 @@ namespace Persistence.Context
         {
             return base.SaveChangesAsync(cancellationToken);
         }
+<<<<<<< HEAD
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
+=======
+>>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
     }
 }

@@ -33,6 +33,11 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
 
+<<<<<<< HEAD
+=======
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
+>>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
             services.AddIdentity(Configuration);
 
             services.AddInfrastructureServices();
@@ -42,8 +47,11 @@ namespace WebApi
             services.AddCors();
 
             services.AddControllers();
+<<<<<<< HEAD
 
             services.AddMediatR(typeof(Infrastructure.DependencyInjection).Assembly);
+=======
+>>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

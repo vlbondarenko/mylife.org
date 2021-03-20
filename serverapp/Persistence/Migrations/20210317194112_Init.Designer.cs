@@ -2,56 +2,28 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-<<<<<<< HEAD
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-=======
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
->>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
 using Persistence.Context;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210317194112_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-<<<<<<< HEAD
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.4")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-=======
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
->>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
 
             modelBuilder.Entity("ApplicationCore.Entities.UserProfile", b =>
                 {
                     b.Property<string>("Id")
-<<<<<<< HEAD
-                        .HasColumnType("text")
-                        .HasColumnName("Id");
-
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("timestamp");
-
-                    b.Property<string>("City")
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("varchar(15)");
-=======
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("BirthDate")
@@ -68,7 +40,6 @@ namespace Persistence.Migrations
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
->>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
 
                     b.HasKey("Id");
 

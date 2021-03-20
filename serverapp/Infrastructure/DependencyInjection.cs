@@ -22,9 +22,16 @@ namespace Infrastructure
     {
         public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
         {
+<<<<<<< HEAD
          
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));
+=======
+           
+
+            services.AddDbContext<IdentityDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+>>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
 
             services.AddIdentityCore<ApplicationUser>(config =>
             {

@@ -19,7 +19,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+<<<<<<< HEAD
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
+=======
+>>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
   </ItemGroup>
 
   <ItemGroup>
