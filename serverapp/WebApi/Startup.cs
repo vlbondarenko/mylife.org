@@ -33,8 +33,6 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-
             services.AddIdentity(Configuration);
 
             services.AddInfrastructureServices();
@@ -44,6 +42,8 @@ namespace WebApi
             services.AddCors();
 
             services.AddControllers();
+
+            services.AddMediatR(typeof(Infrastructure.DependencyInjection).Assembly);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
