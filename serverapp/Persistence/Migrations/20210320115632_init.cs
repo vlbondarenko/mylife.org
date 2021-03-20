@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,12 +11,12 @@ namespace Persistence.Migrations
                 name: "UserProfiles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "varchar(15)", nullable: true),
+                    LastName = table.Column<string>(type: "varchar(15)", nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "timestamp", nullable: true),
+                    Country = table.Column<string>(type: "varchar(15)", nullable: true),
+                    City = table.Column<string>(type: "varchar(15)", nullable: true)
                 },
                 constraints: table =>
                 {
