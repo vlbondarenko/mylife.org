@@ -16,11 +16,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-<<<<<<< HEAD
     <PackageReference Include="Npgsql" Version="5.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
-=======
->>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
   </ItemGroup>
 
   <ItemGroup>

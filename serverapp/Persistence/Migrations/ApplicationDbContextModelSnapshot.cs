@@ -2,13 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-<<<<<<< HEAD
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-=======
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
->>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
 using Persistence.Context;
 
 namespace Persistence.Migrations
@@ -20,20 +15,13 @@ namespace Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-<<<<<<< HEAD
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-=======
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.4")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
->>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
 
             modelBuilder.Entity("ApplicationCore.Entities.UserProfile", b =>
                 {
                     b.Property<string>("Id")
-<<<<<<< HEAD
                         .HasColumnType("text")
                         .HasColumnName("Id");
 
@@ -51,24 +39,6 @@ namespace Persistence.Migrations
 
                     b.Property<string>("LastName")
                         .HasColumnType("varchar(15)");
-=======
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
->>>>>>> a77b91fdbc6c3a05d478c5f2d2a82c71b79b2e84
 
                     b.HasKey("Id");
 
