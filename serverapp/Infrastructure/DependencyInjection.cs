@@ -26,7 +26,7 @@ namespace Infrastructure
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));
 
-            services.AddIdentityCore<ApplicationUser>(config =>
+            services.AddIdentityCore<AppUser>(config =>
             {
                 config.Password.RequireDigit = false;
                 config.Password.RequireLowercase = false;
@@ -34,8 +34,8 @@ namespace Infrastructure
                 config.Password.RequireUppercase = false;
             })
               .AddEntityFrameworkStores<IdentityDbContext>()
-              .AddUserManager<UserManager<ApplicationUser>>()
-              .AddSignInManager<SignInManager<ApplicationUser>>()
+              .AddUserManager<UserManager<AppUser>>()
+              .AddSignInManager<SignInManager<AppUser>>()
               .AddDefaultTokenProviders();
 
             services.AddAuthentication(options =>

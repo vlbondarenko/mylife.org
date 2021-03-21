@@ -15,31 +15,31 @@ using ApplicationCore.Entities;
 
 namespace Infrastructure.Identity.Commands
 {
-    public class CreateUserCommand:IRequest
+    public class CreateAppUserCommand:IRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }
         public string UserName { get; set; }
 
-        public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand>
+        public class CreateUserCommandHandler : IRequestHandler<CreateAppUserCommand>
         {
             private IApplicationDbContext _appDbContext;
             private IdentityDbContext _identityDbContext;
-            private UserManager<ApplicationUser> _userManager;
+            private UserManager<AppUser> _userManager;
 
-            public CreateUserCommandHandler(IApplicationDbContext appDbContext, UserManager<ApplicationUser> userManager, IdentityDbContext identityDbContext)
+            public CreateUserCommandHandler(IApplicationDbContext appDbContext, UserManager<AppUser> userManager, IdentityDbContext identityDbContext)
             {
                 _appDbContext = appDbContext;
                 _userManager = userManager;
                 _identityDbContext = identityDbContext;
             }
 
-            public async Task<Unit> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
             {
                 if (await _identityDbContext.Users.Where(user => user.Email == request.Email).AnyAsync())
                     throw new IdentityException() { ErrorMessage = "Email already exist" };
 
-                var user = new ApplicationUser()
+                var user = new AppUser()
                 {
                     Email = request.Email,
                     UserName = request.UserName
