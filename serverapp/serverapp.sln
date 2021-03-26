@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "ApplicationCore\ApplicationCore.csproj", "{34A46C43-40CD-4F88-BBB8-5F0031E61610}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{D1711451-E921-43AA-BB3F-2A788F8F6216}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{D1711451-E921-43AA-BB3F-2A788F8F6216}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{E50F2BFB-5279-49F3-91FB-310779B5145E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{E50F2BFB-5279-49F3-91FB-310779B5145E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Identity", "Infrastructure.Identity\Infrastructure.Identity.csproj", "{D4128F78-5CA2-47B8-A4BC-346249852FB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{E50F2BFB-5279-49F3-91FB-310779B5145E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E50F2BFB-5279-49F3-91FB-310779B5145E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E50F2BFB-5279-49F3-91FB-310779B5145E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4128F78-5CA2-47B8-A4BC-346249852FB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4128F78-5CA2-47B8-A4BC-346249852FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4128F78-5CA2-47B8-A4BC-346249852FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4128F78-5CA2-47B8-A4BC-346249852FB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
