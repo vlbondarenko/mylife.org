@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 using Infrastructure.Interfaces;
 
-namespace Infrastructure.Services
+namespace Infrastructure.Identity
 {
     class IdentityTokenClaimService:ITokenClaimsService
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Interfaces
+namespace Infrastructure.Identity
 {
     public interface ITokenClaimsService
     {
