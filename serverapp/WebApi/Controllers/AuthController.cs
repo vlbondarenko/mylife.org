@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using MediatR;
 using Infrastructure.Identity.Commands;
+using Infrastructure.Identity.Interfaces;
 
 namespace WebApi.Controllers
 {
@@ -15,11 +16,20 @@ namespace WebApi.Controllers
     [ApiController]
     public class AuthController : ApiControllerBase
     {
+
+        private readonly IUserManager _userManager;
+
+        public AuthController(IUserManager userManager)
+        {
+            _userManager = userManager;
+        }
+
         [HttpPost]
         [Route("registration")]
-        public async Task<IActionResult> Registration ([FromBody] CreateUserCommand command)
+        public async Task<IActionResult> Register ([FromBody] CreateAppUserCommand request)
         {
-            await Mediator.Send(command);
+            await Mediator.Send(request);
+            await _userManager.SendConfirmationEmail(request.Email);
             return Ok();
         }
     }

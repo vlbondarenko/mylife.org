@@ -15,6 +15,7 @@ using MediatR;
 using Infrastructure.Identity;
 using Infrastructure.Interfaces;
 using Infrastructure.Services;
+using Infrastructure.Identity.Interfaces;
 
 namespace Infrastructure
 {
@@ -22,7 +23,7 @@ namespace Infrastructure
     {
         public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
         {
-         
+            
             services.AddDbContext<IdentityDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));
 
@@ -54,7 +55,12 @@ namespace Infrastructure
                          ValidateIssuer = false
                      };
                  });
-          
+
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
+            services.AddScoped<IUserManager, UserManager>();
+
             return services;
         }
 

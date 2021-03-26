@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MediatR;
 using Persistence.Interfaces;
-using Infrastructure.Exceptions;
+using Infrastructure.Identity.Exceptions;
 using ApplicationCore.Entities;
 
 namespace Infrastructure.Identity.Commands
@@ -23,13 +23,11 @@ namespace Infrastructure.Identity.Commands
 
         public class CreateUserCommandHandler : IRequestHandler<CreateAppUserCommand>
         {
-            private IApplicationDbContext _appDbContext;
             private IdentityDbContext _identityDbContext;
             private UserManager<AppUser> _userManager;
 
-            public CreateUserCommandHandler(IApplicationDbContext appDbContext, UserManager<AppUser> userManager, IdentityDbContext identityDbContext)
+            public CreateUserCommandHandler(UserManager<AppUser> userManager, IdentityDbContext identityDbContext)
             {
-                _appDbContext = appDbContext;
                 _userManager = userManager;
                 _identityDbContext = identityDbContext;
             }
@@ -37,29 +35,24 @@ namespace Infrastructure.Identity.Commands
             public async Task<Unit> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
             {
                 if (await _identityDbContext.Users.Where(user => user.Email == request.Email).AnyAsync())
-                    throw new IdentityException() { ErrorMessage = "Email already exist" };
+                    throw new UserNotCreatedException("Email already taken.");
+
+                if (await _identityDbContext.Users.Where(user => user.UserName == request.UserName).AnyAsync())
+                    throw new UserNotCreatedException("Username already taken.");
 
                 var user = new AppUser()
                 {
                     Email = request.Email,
-                    UserName = request.UserName
+                    UserName = request.UserName,
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 var result = await _userManager.CreateAsync(user, request.Password);
 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    var userProfile = new UserProfile()
-                    {
-                        Id = user.Id
-                    };
-
-                   await _appDbContext.UserProfiles.AddAsync(userProfile,cancellationToken);
-                   await _appDbContext.SaveChangesAsync(cancellationToken);
-                }
-                else
-                {
-                    throw new IdentityException() { ErrorMessage = "" };
+                    var errors = result.Errors.Select(error => error.Description);
+                    throw new UserNotCreatedException (errors);
                 }
 
                 return Unit.Value;

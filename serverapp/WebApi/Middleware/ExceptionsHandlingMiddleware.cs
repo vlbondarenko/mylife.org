@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
-using Infrastructure.Exceptions;
+using Infrastructure.Identity.Exceptions;
 
 namespace WebApi.Middleware
 {
@@ -31,24 +31,24 @@ namespace WebApi.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex, _logger);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger<ExceptionsHandlingMiddleware> logger)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             object error = null;
 
             switch (exception)
             {
                 case IdentityException identity:
-                    logger.LogError(exception, "Rest error");
+                    _logger.LogError(exception, "Rest error");
                     error = identity.ErrorMessage;
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     break;
 
                 case Exception e:
-                    logger.LogError(exception, "Server error");
+                    _logger.LogError(exception, "Server error");
                     error = string.IsNullOrWhiteSpace(e.Message) ? "The request cannot be processed" : e.Message;
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     break;
