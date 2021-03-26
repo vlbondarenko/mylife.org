@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Identity
+namespace Infrastructure.Identity.Data
 {
     public class AppUser:IdentityUser
     {

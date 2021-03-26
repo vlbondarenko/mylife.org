@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
+﻿using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using MediatR;
 
-using Infrastructure.Identity;
-using Infrastructure.Interfaces;
-using Infrastructure.Services;
+using Infrastructure.Identity.Services;
 using Infrastructure.Identity.Interfaces;
+using Infrastructure.Identity.Data;
 
-namespace Infrastructure.Identity
+namespace Infrastructure.Identity.DependencyInjection
 {
     public static class DependencyInjection
     {
@@ -59,7 +52,7 @@ namespace Infrastructure.Identity
             services.AddHttpContextAccessor();
 
             services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
-            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IUserManagerService, UserManagerService>();
 
             return services;
         }

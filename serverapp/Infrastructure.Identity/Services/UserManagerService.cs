@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Infrastructure.Identity.Exceptions;
 using Infrastructure.Identity.Interfaces;
+using Infrastructure.Identity.Data;
 
-namespace Infrastructure.Identity
+namespace Infrastructure.Identity.Services
 {
-    class UserManager:IUserManager
+    internal class UserManagerService:IUserManagerService
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IEmailService _emailService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         
-        public UserManager (UserManager<AppUser> userManager, IEmailService emailService, IHttpContextAccessor httpContextAccessor)
+        public UserManagerService (UserManager<AppUser> userManager, IEmailService emailService, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _emailService = emailService;

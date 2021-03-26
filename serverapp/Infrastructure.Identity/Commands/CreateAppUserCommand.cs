@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -9,9 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using MediatR;
-using Persistence.Interfaces;
 using Infrastructure.Identity.Exceptions;
-using ApplicationCore.Entities;
+using Infrastructure.Identity.Data;
 
 namespace Infrastructure.Identity.Commands
 {

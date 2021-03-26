@@ -17,9 +17,9 @@ namespace WebApi.Controllers
     public class AuthController : ApiControllerBase
     {
 
-        private readonly IUserManager _userManager;
+        private readonly IUserManagerService _userManager;
 
-        public AuthController(IUserManager userManager)
+        public AuthController(IUserManagerService userManager)
         {
             _userManager = userManager;
         }

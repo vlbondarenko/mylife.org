@@ -2,8 +2,8 @@
 
 namespace Infrastructure.Identity.Interfaces
 {
-    internal interface ITokenClaimsService
+    public interface IUserManagerService
     {
-        Task<string> CreateToken(string userId);
+        Task SendConfirmationEmail(string userEmeil);
     }
 }
