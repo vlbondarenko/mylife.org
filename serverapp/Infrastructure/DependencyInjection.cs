@@ -54,14 +54,16 @@ namespace Infrastructure
                          ValidateIssuer = false
                      };
                  });
-
+          
             return services;
         }
 
-        public static IServiceCollection AddInfrastructureServices (this IServiceCollection services)
+        public static IServiceCollection AddInfrastructureServices (this IServiceCollection services, IConfiguration configuration)
         {
+
+            services.Configure<EmailOptions>(configuration.GetSection("EmailOptions"));
             services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
+
             return services;
         }
     }

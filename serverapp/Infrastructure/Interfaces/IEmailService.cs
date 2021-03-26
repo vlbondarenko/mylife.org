@@ -5,6 +5,6 @@ namespace Infrastructure.Interfaces
 {
     public interface IEmailService
     {
-        Task SendEmail(string email, string subject, string message);
+        void SendEmail(string to, string subject, string content, string from = null);
     }
 }

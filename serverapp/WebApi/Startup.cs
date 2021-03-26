@@ -25,7 +25,11 @@ namespace WebApi
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .AddConfiguration(configuration)
+                .AddJsonFile("appsettings.Infrastructure.json");
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -35,7 +39,7 @@ namespace WebApi
 
             services.AddIdentity(Configuration);
 
-            services.AddInfrastructureServices();
+            services.AddInfrastructureServices(Configuration);
 
             services.AddPersistence(Configuration);
 
