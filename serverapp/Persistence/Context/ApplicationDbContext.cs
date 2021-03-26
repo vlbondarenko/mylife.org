@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 using Microsoft.EntityFrameworkCore;
-using ApplicationCore.Entities;
+using Domain.Entities;
 using Persistence.Interfaces;
 
 namespace Persistence.Context

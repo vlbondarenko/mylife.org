@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationCore.Entities
+namespace Domain.Entities
 {
-    public class Post
+    public class Chat
     {
     }
 }
