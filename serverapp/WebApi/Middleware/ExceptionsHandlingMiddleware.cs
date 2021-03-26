@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
@@ -14,10 +15,12 @@ namespace WebApi.Middleware
     {
         private readonly RequestDelegate _next;
 
+        private readonly ILogger<ExceptionsHandlingMiddleware> _logger;
 
-        public ExceptionsHandlingMiddleware(RequestDelegate next)
+        public ExceptionsHandlingMiddleware(RequestDelegate next, ILogger<ExceptionsHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -52,14 +55,20 @@ namespace WebApi.Middleware
         {
             switch (exception)
             {
-                case UserNotCreatedException createdException:
-                    await CreateErrorResponse(createdException.Errors, context, HttpStatusCode.BadRequest);
+                case UserNotCreatedException notCreatedException:
+                    LogException(notCreatedException, "User creation failure");
+                    await CreateErrorResponse(notCreatedException.Errors, context, HttpStatusCode.BadRequest);
                     break;
                 case IdentityException identityException:
+                    LogException(identityException, "Identity error");
                     await CreateErrorResponse(identityException.Errors, context, HttpStatusCode.InternalServerError);
                     break;
             }
         }
+
+        private void LogException(Exception e, string message)=>
+            _logger.LogError(e,message);
+        
 
         private async Task CreateErrorResponse (object errors, HttpContext context, HttpStatusCode statusCode)
         {
