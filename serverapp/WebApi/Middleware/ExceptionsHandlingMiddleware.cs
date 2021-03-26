@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
 
@@ -15,12 +14,10 @@ namespace WebApi.Middleware
     {
         private readonly RequestDelegate _next;
 
-        private readonly ILogger<ExceptionsHandlingMiddleware> _logger;
 
-        public ExceptionsHandlingMiddleware(RequestDelegate next, ILogger<ExceptionsHandlingMiddleware> logger)
+        public ExceptionsHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -37,30 +34,43 @@ namespace WebApi.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            object error = null;
 
             switch (exception)
             {
-                case IdentityException identity:
-                    _logger.LogError(exception, "Rest error");
-                    error = identity.ErrorMessage;
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                case IdentityException identityException:
+                    await HandleIdentityException(identityException, context);
                     break;
 
                 case Exception e:
-                    _logger.LogError(exception, "Server error");
-                    error = string.IsNullOrWhiteSpace(e.Message) ? "The request cannot be processed" : e.Message;
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    var errors = string.IsNullOrWhiteSpace(e.Message) ? "The request cannot be processed" : e.Message;
+                    await CreateErrorResponse(errors, context, HttpStatusCode.InternalServerError);
                     break;
             }
+        }
 
+        private async Task HandleIdentityException (IdentityException exception, HttpContext context)
+        {
+            switch (exception)
+            {
+                case UserNotCreatedException createdException:
+                    await CreateErrorResponse(createdException.Errors, context, HttpStatusCode.BadRequest);
+                    break;
+                case IdentityException identityException:
+                    await CreateErrorResponse(identityException.Errors, context, HttpStatusCode.InternalServerError);
+                    break;
+            }
+        }
+
+        private async Task CreateErrorResponse (object errors, HttpContext context, HttpStatusCode statusCode)
+        {
+            context.Response.StatusCode = (int)statusCode;
             context.Response.ContentType = "appliation/json";
 
-            if (error != null)
+            if (errors != null)
             {
                 var result = JsonConvert.SerializeObject(new
                 {
-                    error
+                    errors
                 });
 
                 await context.Response.WriteAsync(result);

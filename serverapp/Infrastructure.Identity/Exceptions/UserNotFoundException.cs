@@ -1,14 +1,11 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Infrastructure.Identity.Exceptions
 {
-    class UserNotFoundException:Exception
+    class UserNotFoundException:IdentityException
     {
-        public UserNotFoundException (string errorMessage)
-        {
-            ErrorMessage = errorMessage;
-        }
+        public UserNotFoundException(string error) : base(error) { }
 
-        public string ErrorMessage { get; }
+        public UserNotFoundException(IEnumerable<string> errors) : base(errors) { }
     }
 }
