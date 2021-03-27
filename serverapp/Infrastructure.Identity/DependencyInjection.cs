@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MediatR;
 
 using Infrastructure.Identity.Services;
 using Infrastructure.Identity.Interfaces;
@@ -53,6 +54,8 @@ namespace Infrastructure.Identity.DependencyInjection
 
             services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
             services.AddScoped<IUserManagerService, UserManagerService>();
+
+            services.AddMediatR(typeof(DependencyInjection).Assembly);
 
             return services;
         }

@@ -40,7 +40,7 @@ namespace WebApi
 
             services.AddControllers();
 
-            services.AddMediatR(typeof(Infrastructure.Identity.DependencyInjection.DependencyInjection).Assembly);
+          
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
