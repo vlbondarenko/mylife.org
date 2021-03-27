@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Identity.Exceptions
 {
-    class UserNotFoundException:IdentityException
+    public class UserNotFoundException:IdentityException
     {
         public UserNotFoundException(string error) : base(error) { }
 
