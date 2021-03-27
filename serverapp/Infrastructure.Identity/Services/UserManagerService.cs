@@ -29,7 +29,7 @@ namespace Infrastructure.Identity.Services
                 throw new UserNotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/account/confirm-email?id={user.Id}&token={token}";
+            var confirmationLink = GetConfirmationLink("confirm-email", user.Id, token);
 
 
             //Just catch the exceptions that occurred when sending the message. 
@@ -43,6 +43,12 @@ namespace Infrastructure.Identity.Services
             {
                 //TODO: add logging
             }
+        }
+
+        private string GetConfirmationLink(string method, string id, string token)
+        {
+            return $"<a href=\"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/account/{method}?id={id}&token={token}\">Click Here</a>";
+
         }
     }
 }

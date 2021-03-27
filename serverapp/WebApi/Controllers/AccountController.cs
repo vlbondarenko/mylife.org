@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
 
 using MediatR;
 using Infrastructure.Identity.Commands;
@@ -25,8 +26,7 @@ namespace WebApi.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost]
-        [Route("register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register ([FromBody] CreateAppUserCommand createAppUserCommand)
         {
 
@@ -38,6 +38,31 @@ namespace WebApi.Controllers
             await _userManager.SendConfirmationEmail(createAppUserCommand.Email);
 
             return Ok();
+        }
+
+        [HttpGet("confirm-email")]
+        public async Task ConfirmEmail([FromQuery] ConfirmEmailCommand confirmEmailCommand)
+        {
+            var origin = Request.Scheme + "://" + Request.Host;
+            try
+            {
+                //I don't know why, but in some strange way, from the token passed through the parameter in the original query string, the '+' character is replaced with a space, 
+                //which prevents the successful confirmation of the email. Therefore, we first return the replaced characters to their place
+                confirmEmailCommand.Token = confirmEmailCommand.Token.Replace(" ", "+");
+                await Mediator.Send(confirmEmailCommand);
+
+                RedirectClientToLocation(origin + "/confirm-email-success");
+            }
+            catch
+            {
+                RedirectClientToLocation(origin + "/confirm-email-failure");
+            }
+        }
+
+        private void RedirectClientToLocation(string location)
+        {
+            Response.StatusCode = (int)HttpStatusCode.Moved;
+            Response.Headers["location"] = location;
         }
     }
 }
