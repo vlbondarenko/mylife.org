@@ -11,6 +11,7 @@ using Infrastructure;
 using Infrastructure.Identity.DependencyInjection;
 using Persistence;
 using WebApi.Middleware;
+using Application;
 
 namespace WebApi
 {
@@ -35,6 +36,8 @@ namespace WebApi
             services.AddInfrastructureServices(Configuration);
 
             services.AddPersistence(Configuration);
+
+            services.AddApplication();
 
             services.AddCors();
 
