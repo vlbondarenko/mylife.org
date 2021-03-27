@@ -12,30 +12,30 @@ using Infrastructure.Identity.Data;
 
 namespace Infrastructure.Identity.Commands
 {
-    public class CreateAppUserCommand:IRequest
+    public class CreateAppUserCommand:IRequest<string>
     {
         public string Email { get; set; }
         public string Password { get; set; }
         public string UserName { get; set; }
 
-        public class CreateUserCommandHandler : IRequestHandler<CreateAppUserCommand>
+        public class CreateAppUserCommandHandler : IRequestHandler<CreateAppUserCommand, string>
         {
             private IdentityDbContext _identityDbContext;
             private UserManager<AppUser> _userManager;
 
-            public CreateUserCommandHandler(UserManager<AppUser> userManager, IdentityDbContext identityDbContext)
+            public CreateAppUserCommandHandler(UserManager<AppUser> userManager, IdentityDbContext identityDbContext)
             {
                 _userManager = userManager;
                 _identityDbContext = identityDbContext;
             }
 
-            public async Task<Unit> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
+            public async Task<string> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
             {
                 if (await _identityDbContext.Users.Where(user => user.Email == request.Email).AnyAsync())
-                    throw new UserNotCreatedException("Email already taken.");
+                    throw new UserNotCreatedException($"Email {request.Email} already taken.");
 
                 if (await _identityDbContext.Users.Where(user => user.UserName == request.UserName).AnyAsync())
-                    throw new UserNotCreatedException("Username already taken.");
+                    throw new UserNotCreatedException($"Username {request.UserName} already taken.");
 
                 var user = new AppUser()
                 {
@@ -49,10 +49,10 @@ namespace Infrastructure.Identity.Commands
                 if (!result.Succeeded)
                 {
                     var errors = result.Errors.Select(error => error.Description);
-                    throw new UserNotCreatedException (errors);
+                    throw new IdentityException(errors);
                 }
 
-                return Unit.Value;
+                return user.Id;
             }
         }
     }

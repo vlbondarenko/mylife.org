@@ -16,11 +16,11 @@ namespace Application.UseCases.UserProfiles.Commands
     {
         public string Id { get; set; }
 
-        public class Handler : IRequestHandler<CreateUserProfileCommand>
+        public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfileCommand>
         {
             private readonly IApplicationDbContext _applicationDbContext;
 
-            public Handler (IApplicationDbContext applicationDbContext)
+            public CreateUserProfileCommandHandler (IApplicationDbContext applicationDbContext)
             {
                 _applicationDbContext = applicationDbContext;
             }
