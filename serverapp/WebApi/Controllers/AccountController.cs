@@ -43,7 +43,6 @@ namespace WebApi.Controllers
         [HttpGet("confirm-email")]
         public async Task ConfirmEmail([FromQuery] ConfirmEmailCommand confirmEmailCommand)
         {
-            var origin = Request.Scheme + "://" + Request.Host;
             try
             {
                 //I don't know why, but in some strange way, from the token passed through the parameter in the original query string, the '+' character is replaced with a space, 
@@ -51,11 +50,11 @@ namespace WebApi.Controllers
                 confirmEmailCommand.Token = confirmEmailCommand.Token.Replace(" ", "+");
                 await Mediator.Send(confirmEmailCommand);
 
-                RedirectClientToLocation(origin + "/confirm-email-success");
+                RedirectClientToLocation(OriginUrl + "/confirm-email-success");
             }
             catch
             {
-                RedirectClientToLocation(origin + "/confirm-email-failure");
+                RedirectClientToLocation(OriginUrl + "/confirm-email-failure");
             }
         }
 
