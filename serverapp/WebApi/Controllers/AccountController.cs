@@ -21,11 +21,11 @@ namespace WebApi.Controllers
     public class AccountController : ApiControllerBase
     {
 
-        private readonly IUserManagerService _userManager;
+        private readonly IUserManagerService _userManagerService;
 
-        public AccountController(IUserManagerService userManager)
+        public AccountController(IUserManagerService userManagerService)
         {
-            _userManager = userManager;
+            _userManagerService = userManagerService;
         }
 
 
@@ -54,8 +54,15 @@ namespace WebApi.Controllers
 
             await Mediator.Send(new CreateUserProfileCommand { Id = newAppUserId });
 
-            await _userManager.SendConfirmationEmail(createAppUserCommand.Email);
+            await _userManagerService.SendConfirmationEmail(createAppUserCommand.Email);
 
+            return Ok();
+        }
+
+        [HttpGet("send-confirmation-email")]
+        public async Task<IActionResult> SendConfirmEmail(string userEmail)
+        {
+            await _userManagerService.SendConfirmationEmail(userEmail);
             return Ok();
         }
 
