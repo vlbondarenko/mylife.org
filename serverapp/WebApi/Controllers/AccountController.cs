@@ -9,8 +9,10 @@ using System.Net;
 
 using MediatR;
 using Infrastructure.Identity.Commands;
+using Infrastructure.Identity.Queries;
 using Infrastructure.Identity.Interfaces;
 using Application.UseCases.UserProfiles.Commands;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -24,6 +26,23 @@ namespace WebApi.Controllers
         public AccountController(IUserManagerService userManager)
         {
             _userManager = userManager;
+        }
+
+
+        [HttpPost("login")]
+        public async Task<UserInfo> Login([FromBody] LoginQuery query)
+        {
+            var appUser = await Mediator.Send(query);
+
+            return new UserInfo()
+            {
+                Id = appUser.Id,
+                UserName = appUser.UserName,
+                Email = appUser.Email,
+                EmailConfirmed = appUser.EmailConfirmed,
+                CreatedAt = appUser.CreatedAt,
+                AccessToken = appUser.AccessToken
+            };
         }
 
         [HttpPost("register")]

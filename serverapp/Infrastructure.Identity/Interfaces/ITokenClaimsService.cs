@@ -2,8 +2,8 @@
 
 namespace Infrastructure.Identity.Interfaces
 {
-    internal interface ITokenClaimsService
+    public interface ITokenClaimsService
     {
-        Task<string> CreateToken(string userId);
+        string CreateToken(string userId);
     }
 }

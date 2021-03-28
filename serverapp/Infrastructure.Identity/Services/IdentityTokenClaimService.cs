@@ -1,4 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 using Infrastructure.Identity.Interfaces;
 
@@ -6,9 +13,31 @@ namespace Infrastructure.Identity.Services
 {
     internal class IdentityTokenClaimService:ITokenClaimsService
     {
-        public async Task<string> CreateToken(string userId)
+        private SymmetricSecurityKey _key;
+
+        public IdentityTokenClaimService(IConfiguration configuration)
         {
-            return "";
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
+        }
+
+        public string CreateToken(string userId)
+        {
+            var claims = new List<Claim> { new Claim("userid", userId) };
+
+            var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = credentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
     }
 }
