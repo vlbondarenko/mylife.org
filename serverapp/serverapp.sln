@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "serverapp", "serverapp\serverapp.csproj", "{C658666E-01E8-45AE-BD61-46E0B607396A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{7C1561ED-ED3B-4239-813A-63E2DAA93DCC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{D1711451-E921-43AA-BB3F-2A788F8F6216}"
@@ -15,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Identity", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{95CC4905-2484-4366-B6BB-6803C4159C42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{C3D7A7D6-B6D3-40F4-8F13-684353886EA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{C3D7A7D6-B6D3-40F4-8F13-684353886EA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C658666E-01E8-45AE-BD61-46E0B607396A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C658666E-01E8-45AE-BD61-46E0B607396A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C658666E-01E8-45AE-BD61-46E0B607396A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C658666E-01E8-45AE-BD61-46E0B607396A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7C1561ED-ED3B-4239-813A-63E2DAA93DCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7C1561ED-ED3B-4239-813A-63E2DAA93DCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C1561ED-ED3B-4239-813A-63E2DAA93DCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
