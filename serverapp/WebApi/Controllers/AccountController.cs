@@ -84,10 +84,60 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpGet("send-reset-password-email")]
+        public async Task<IActionResult> SendResetPasswordEmail(string userEmail)
+        {
+            await _userManagerService.SendResetPasswordEmail(userEmail);
+            return Ok();
+        }
+
+        [HttpGet("verify-token")]
+        public async Task VerifyRessetPasswordToken(string id, string token)
+        {
+            try
+            {
+                token = token.Replace(" ", "+");
+                var result = await _userManagerService.VerifyResetPasswordTokenAsync(id, token);
+                if (result)
+                {
+                    SetCookie("userId", id);
+                    SetCookie("resetToken", token);
+                    RedirectClientToLocation(OriginUrl + "/reset-password");
+                }
+                else
+                    throw new Exception();
+            }
+            catch
+            {
+                RedirectClientToLocation(OriginUrl + "/reset-password-failure");
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
+        {
+            Request.Cookies.TryGetValue("userId", out string userId);
+            Request.Cookies.TryGetValue("resetToken", out string token);
+            await _userManagerService.ResetPasswordAsync(userId, token, resetPasswordModel.NewPassword);
+
+            return Ok();
+        }
+
         private void RedirectClientToLocation(string location)
         {
             Response.StatusCode = (int)HttpStatusCode.Moved;
             Response.Headers["location"] = location;
+        }
+
+
+        private void SetCookie(string key, string value)
+        {
+            var cookiesOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append(key, value, cookiesOptions);
         }
     }
 }

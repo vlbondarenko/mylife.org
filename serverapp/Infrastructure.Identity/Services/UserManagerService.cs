@@ -29,7 +29,7 @@ namespace Infrastructure.Identity.Services
                 throw new UserNotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = GetConfirmationLink("confirm-email", user.Id, token);
+            var confirmationLink = GetLink("confirm-email", user.Id, token);
 
 
             //Just catch the exceptions that occurred when sending the message. 
@@ -45,7 +45,59 @@ namespace Infrastructure.Identity.Services
             }
         }
 
-        private string GetConfirmationLink(string method, string id, string token)
+
+        public async Task SendResetPasswordEmail(string userEmail)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user is null)
+                throw new UserNotFoundException($"User {userEmail} not found");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetPasswordLink = GetLink("reset-password", user.Id, token);
+
+            try
+            {
+                _emailService.SendEmail(userEmail, "Reset Password", resetPasswordLink);
+            }
+            catch (Exception e)
+            {
+                //TODO: add logging
+            }
+
+        }
+
+        public async Task<bool> VerifyResetPasswordTokenAsync(string userId,string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new UserNotFoundException($"User id{userId} not found");
+
+            var tokenProvider = _userManager.Options.Tokens.PasswordResetTokenProvider;
+            var purpose = "ResetPassword";
+            var result = await _userManager.VerifyUserTokenAsync(user, tokenProvider, purpose, token);
+
+            return result ? result : throw new IdentityException("Reset password failure");
+        }
+
+
+        public async Task ResetPasswordAsync(string userId, string token, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+                throw new UserNotFoundException($"User id{userId} not found");
+
+            var resultOfReset = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            if (resultOfReset.Succeeded)
+            {
+                return;
+            }
+
+            throw new IdentityException("Reset password failure");
+        }
+
+        private string GetLink(string method, string id, string token)
         {
             return $"<a href=\"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/account/{method}?id={id}&token={token}\">Click Here</a>";
 
