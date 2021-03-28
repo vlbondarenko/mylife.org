@@ -53,7 +53,7 @@ namespace Infrastructure.Identity.Services
                 throw new UserNotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var resetPasswordLink = GetLink("reset-password", user.Id, token);
+            var resetPasswordLink = GetLink("verify-token", user.Id, token);
 
             try
             {
@@ -77,24 +77,6 @@ namespace Infrastructure.Identity.Services
             var result = await _userManager.VerifyUserTokenAsync(user, tokenProvider, purpose, token);
 
             return result ? result : throw new IdentityException("Reset password failure");
-        }
-
-
-        public async Task ResetPasswordAsync(string userId, string token, string newPassword)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null)
-                throw new UserNotFoundException($"User id{userId} not found");
-
-            var resultOfReset = await _userManager.ResetPasswordAsync(user, token, newPassword);
-
-            if (resultOfReset.Succeeded)
-            {
-                return;
-            }
-
-            throw new IdentityException("Reset password failure");
         }
 
         private string GetLink(string method, string id, string token)

@@ -114,11 +114,15 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("reset-password")]
-        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordModel resetPasswordModel)
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordCommand request)
         {
             Request.Cookies.TryGetValue("userId", out string userId);
             Request.Cookies.TryGetValue("resetToken", out string token);
-            await _userManagerService.ResetPasswordAsync(userId, token, resetPasswordModel.NewPassword);
+
+            request.UserId = userId;
+            request.Token = token;
+
+            await Mediator.Send(request);
 
             return Ok();
         }
