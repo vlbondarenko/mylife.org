@@ -22,6 +22,9 @@ namespace Infrastructure.Identity.Services
 
         public string CreateToken(string userId)
         {
+            if (userId is null)
+                throw new ArgumentNullException(nameof(userId));
+
             var claims = new List<Claim> { new Claim("userid", userId) };
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
