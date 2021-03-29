@@ -11,7 +11,7 @@ using Infrastructure.Identity.Interfaces;
 
 namespace Infrastructure.Identity.Services
 {
-    internal class IdentityTokenClaimService:ITokenClaimsService
+    public class IdentityTokenClaimService:ITokenClaimsService
     {
         private SymmetricSecurityKey _key;
 
