@@ -27,11 +27,14 @@ namespace Infrastructure.Identity.Tests.UnitTests
 
 
         [Fact]
-        public void TokenSecretKeyFromUserSecretsIsNotNull()
+        public void TokenSecretKeyFromUserSecretsIsNotNullAndValid()
         {
             var tokenKey = _configuration["TokenKey"];
 
             Assert.NotNull(tokenKey);
+            //The secret key must be greater than 16 characters.
+            //Otherwise an exception will be thrown when creating a jwt token
+            Assert.True(tokenKey.Length > 16);
         }
 
         [Theory]
