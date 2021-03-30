@@ -40,8 +40,7 @@ namespace Infrastructure.Identity.Commands
                 var user = new AppUser()
                 {
                     Email = request.Email,
-                    UserName = request.UserName,
-                    CreatedAt = DateTime.UtcNow
+                    UserName = request.UserName
                 };
 
                 var result = await _userManager.CreateAsync(user, request.Password);

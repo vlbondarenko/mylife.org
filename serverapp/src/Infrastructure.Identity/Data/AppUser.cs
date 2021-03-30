@@ -5,6 +5,6 @@ namespace Infrastructure.Identity.Data
 {
     public class AppUser:IdentityUser
     {
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreatedAt => DateTime.UtcNow;
     }
 }
