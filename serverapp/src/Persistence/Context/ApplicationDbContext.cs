@@ -7,7 +7,7 @@ using Persistence.Interfaces;
 
 namespace Persistence.Context
 {
-    class ApplicationDbContext:DbContext,IUserProfileDbContext
+    public class ApplicationDbContext:DbContext,IUserProfileDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
