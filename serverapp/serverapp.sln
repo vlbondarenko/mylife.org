@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BE76EC4F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Identity.Tests", "tests\InfrastructureTests.Identity\Infrastructure.Identity.Tests.csproj", "{7454B758-787B-47E8-B77F-A2F008615970}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Tests", "tests\Persistence.Tests\Persistence.Tests.csproj", "{96E26794-4B26-4259-A01E-EB5F2A1D011C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,10 +55,6 @@ Global
 		{7454B758-787B-47E8-B77F-A2F008615970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7454B758-787B-47E8-B77F-A2F008615970}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7454B758-787B-47E8-B77F-A2F008615970}.Release|Any CPU.Build.0 = Release|Any CPU
-		{96E26794-4B26-4259-A01E-EB5F2A1D011C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{96E26794-4B26-4259-A01E-EB5F2A1D011C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{96E26794-4B26-4259-A01E-EB5F2A1D011C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{96E26794-4B26-4259-A01E-EB5F2A1D011C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,7 +67,6 @@ Global
 		{95CC4905-2484-4366-B6BB-6803C4159C42} = {11304F75-0CFD-47B2-8451-337969B985E1}
 		{C3D7A7D6-B6D3-40F4-8F13-684353886EA9} = {11304F75-0CFD-47B2-8451-337969B985E1}
 		{7454B758-787B-47E8-B77F-A2F008615970} = {BE76EC4F-A291-4A73-BE1F-6DF21863BDC7}
-		{96E26794-4B26-4259-A01E-EB5F2A1D011C} = {BE76EC4F-A291-4A73-BE1F-6DF21863BDC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C8534EDD-2237-48F2-BCB1-96D7CEB31FE2}
