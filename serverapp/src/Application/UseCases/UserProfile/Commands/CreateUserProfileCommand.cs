@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Threading;
 
 using MediatR;
@@ -18,11 +14,11 @@ namespace Application.UseCases.UserProfiles.Commands
 
         public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfileCommand>
         {
-            private readonly IApplicationDbContext _applicationDbContext;
+            private readonly IUserProfileDbContext _userProfileDbContext;
 
-            public CreateUserProfileCommandHandler (IApplicationDbContext applicationDbContext)
+            public CreateUserProfileCommandHandler (IUserProfileDbContext userProfileDbContext)
             {
-                _applicationDbContext = applicationDbContext;
+                _userProfileDbContext = userProfileDbContext;
             }
 
             public async Task<Unit> Handle (CreateUserProfileCommand request, CancellationToken cancellationToken)
@@ -32,8 +28,8 @@ namespace Application.UseCases.UserProfiles.Commands
                     Id = request.Id 
                 };
 
-                await _applicationDbContext.UserProfiles.AddAsync(userProfile, cancellationToken);
-                await _applicationDbContext.SaveChangesAsync(cancellationToken);
+                await _userProfileDbContext.UserProfiles.AddAsync(userProfile, cancellationToken);
+                await _userProfileDbContext.SaveChangesAsync(cancellationToken);
 
                 return Unit.Value;
             }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Threading;
 
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +7,7 @@ using Persistence.Interfaces;
 
 namespace Persistence.Context
 {
-    class ApplicationDbContext:DbContext,IApplicationDbContext
+    class ApplicationDbContext:DbContext,IUserProfileDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
