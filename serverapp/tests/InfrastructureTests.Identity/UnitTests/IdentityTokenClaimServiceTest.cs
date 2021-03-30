@@ -35,12 +35,12 @@ namespace Infrastructure.Identity.Tests.UnitTests
         }
 
         [Theory]
-        [InlineData("asdfgh-jklpoiuyt-rewertyu")]
+        [InlineData("04606c77-5c4a-4c77-8bcd-841b8f49431c")]
         public void CreatedTokenIsNotNullAndValid(string userId)
         {
-            var tokenAsString = _identityTokenClaimService.CreateToken(userId);
-
             var tokenhandler = new JwtSecurityTokenHandler();
+
+            var tokenAsString = _identityTokenClaimService.CreateToken(userId);
             var tokenAsObject = tokenhandler.ReadJwtToken(tokenAsString);
             var userIdClaim = tokenAsObject.Payload.Claims.First(claim => claim.Type == "userid");
 
