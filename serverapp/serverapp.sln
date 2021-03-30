@@ -19,9 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{11304F75-0CF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BE76EC4F-A291-4A73-BE1F-6DF21863BDC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "tests\Infrastructure\Infrastructure.csproj", "{E908CC6C-BF4C-4336-B624-FC69767FDBE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "tests\Infrastructure\Infrastructure.csproj", "{E908CC6C-BF4C-4336-B624-FC69767FDBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureTests.Identity", "tests\InfrastructureTests.Identity\InfrastructureTests.Identity.csproj", "{7454B758-787B-47E8-B77F-A2F008615970}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Identity.Tests", "tests\InfrastructureTests.Identity\Infrastructure.Identity.Tests.csproj", "{7454B758-787B-47E8-B77F-A2F008615970}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

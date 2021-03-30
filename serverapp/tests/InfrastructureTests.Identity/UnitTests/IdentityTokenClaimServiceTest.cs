@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 using Infrastructure.Identity.Services;
 
-namespace InfrastructureTests.Identity.UnitTests
+namespace Infrastructure.Identity.Tests.UnitTests
 {
     public class IdentityTokenClaimServiceTest
     {
