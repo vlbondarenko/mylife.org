@@ -32,9 +32,8 @@ namespace Application.Tests.UnitTests
             handler.Handle(command, CancellationToken.None).Wait();
 
 
-            var userProfiles = _userProfileDbContext.UserProfiles.Where(up => up.Id == command.Id);
-            Assert.True(userProfiles.Any());
-            Assert.True(userProfiles.Count() == 1);
+            var userProfiles = _userProfileDbContext.UserProfiles.Where(up => up.Id == command.Id).ToArray();
+            Assert.Single(userProfiles);
         }
     }
 }

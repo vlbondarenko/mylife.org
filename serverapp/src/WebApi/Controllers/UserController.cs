@@ -18,12 +18,12 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ApiControllerBase
+    public class UserController : ApiControllerBase
     {
 
         private readonly IUserManagerService _userManagerService;
 
-        public AccountController(IUserManagerService userManagerService)
+        public UserController(IUserManagerService userManagerService)
         {
             _userManagerService = userManagerService;
         }
@@ -45,18 +45,18 @@ namespace WebApi.Controllers
             };
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register ([FromBody] CreateAppUserCommand createAppUserCommand)
+        [HttpPost("authorize")]
+        public async Task<IActionResult> Authorize([FromBody] CreateAppUserCommand request)
         {
 
             //The user is created in two iterations: creating identity data and creating a user profile with public data
-            var newAppUserId = await Mediator.Send(createAppUserCommand);
+            var newAppUserId = await Mediator.Send(request);
 
             await Mediator.Send(new CreateUserProfileCommand { Id = newAppUserId });
 
-            await _userManagerService.SendConfirmationEmail(createAppUserCommand.Email);
+            await _userManagerService.SendConfirmationEmail(request.Email);
 
-            return Ok();
+            return Created(string.Empty,null);
         }
 
         [HttpGet("send-confirmation-email")]
