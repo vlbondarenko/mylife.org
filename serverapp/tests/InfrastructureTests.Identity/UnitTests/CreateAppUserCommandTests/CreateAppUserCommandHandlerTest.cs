@@ -13,14 +13,14 @@ using Infrastructure.Identity.Data;
 using Infrastructure.Identity.Commands;
 using Infrastructure.Identity.Exceptions;
 
-namespace Infrastructure.Identity.Tests.UnitTests
+namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests
 {
     public class CreateAppUserCommandHandlerTest:CommandHandlerTestBase
     {
 
        [Theory]
-       [InlineData("first","third@mail.com" )]
-       [InlineData("third","first@mail.com")]
+       [InlineData("first","unique@unique.com" )]
+       [InlineData("unique","first@mail.com")]
        public void ThrowExceptionWhenUserNameOrEmailAlreadyTaken(string userName, string email)
        {
             var userManager = MockHelper.MockUserManager<AppUser>().Object;
@@ -31,7 +31,7 @@ namespace Infrastructure.Identity.Tests.UnitTests
        }
 
         [Theory]
-        [InlineData("third", "third@mail.com")]
+        [InlineData("unique", "unique@unique.com")]
         public void ReturnedUserIdValueNotNull(string userName, string email)
         {
             var mockMngr = MockHelper.MockUserManager<AppUser>();

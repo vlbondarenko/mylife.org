@@ -7,11 +7,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using MediatR;
+using FluentValidation;
 using Infrastructure.Identity.Exceptions;
 using Infrastructure.Identity.Data;
 
 namespace Infrastructure.Identity.Commands
 {
+    public class CreateAppUserCommandValidator : AbstractValidator<CreateAppUserCommand>
+    {
+        public CreateAppUserCommandValidator()
+        {
+
+            RuleFor(x => x.Email).NotEmpty().EmailAddress();
+            RuleFor(x => x.UserName).NotEmpty();
+            RuleFor(x => x.Password).NotEmpty().MinimumLength(8);
+        }
+    }
     public class CreateAppUserCommand:IRequest<string>
     {
         public string Email { get; set; }

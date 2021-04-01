@@ -12,6 +12,7 @@ using Infrastructure.Identity.DependencyInjection;
 using Persistence;
 using WebApi.Middleware;
 using Application;
+using Common;
 
 namespace WebApi
 {
@@ -39,11 +40,11 @@ namespace WebApi
 
             services.AddApplication();
 
+            services.AddCommonServices();
+
             services.AddCors();
 
-            services.AddControllers();
-
-          
+            services.AddControllers();     
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

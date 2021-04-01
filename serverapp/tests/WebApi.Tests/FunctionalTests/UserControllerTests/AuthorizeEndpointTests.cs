@@ -58,5 +58,26 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
+        [Theory]
+        [InlineData("", "", "")]
+        [InlineData(null, null, null)]
+        [InlineData("unique","unique","somepassword")]
+        [InlineData("unique@unique.com","unique","pswd")]
+        public async Task ReturnsUnprocessableEntityStatusCode_WhenDataIsNotValid(string email, string userName, string password)
+        {
+            var client = _factory.GetAnonymousClient();
+            var command = new CreateAppUserCommand()
+            {
+                Email = email,
+                UserName = userName,
+                Password = password
+            };
+            var content = Utilities.GetRequestContent(command);
+
+            var response = await client.PostAsync($"api/user/authorize", content);
+
+            Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+        }
+
     }
 }

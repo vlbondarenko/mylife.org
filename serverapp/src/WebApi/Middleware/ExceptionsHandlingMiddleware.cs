@@ -4,10 +4,13 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using FluentValidation;
 
 using Newtonsoft.Json;
 
 using Infrastructure.Identity.Exceptions;
+
+using ValidationException = Common.Exceptions.ValidationException;
 
 namespace WebApi.Middleware
 {
@@ -42,6 +45,10 @@ namespace WebApi.Middleware
             {
                 case IdentityException identityException:
                     await HandleIdentityException(identityException, context);
+                    break;
+
+                case ValidationException validationException:
+                    await CreateErrorResponse(validationException.Errors, context, HttpStatusCode.UnprocessableEntity);
                     break;
 
                 case Exception e:
