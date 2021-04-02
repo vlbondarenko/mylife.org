@@ -14,7 +14,7 @@ namespace Infrastructure.Identity.Mapping
     {
         public IdentityMappingProfile()
         {
-            CreateMap<AppUser, AppUserDTO>();
+            CreateMap<AppUser, AppUserDto>();
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Identity.Queries
 {
-    public class AppUserDTO
+    public class AppUserDto
     {
         public string Id { get; set; }
         public string UserName { get; set; }

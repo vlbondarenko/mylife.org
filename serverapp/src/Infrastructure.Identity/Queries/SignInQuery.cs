@@ -15,12 +15,12 @@ using Infrastructure.Identity.Interfaces;
 
 namespace Infrastructure.Identity.Queries
 {
-    public class SignInQuery:IRequest<AppUserDTO>
+    public class SignInQuery:IRequest<AppUserDto>
     {
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public class LoginQueryHandler : IRequestHandler<SignInQuery, AppUserDTO>
+        public class LoginQueryHandler : IRequestHandler<SignInQuery, AppUserDto>
         {
             private readonly UserManager<AppUser> _userManager;
             private readonly SignInManager<AppUser> _signInManager;
@@ -35,7 +35,7 @@ namespace Infrastructure.Identity.Queries
                 _mapper = mapper;
             }
 
-            public async Task<AppUserDTO> Handle (SignInQuery query, CancellationToken cancellationToken)
+            public async Task<AppUserDto> Handle (SignInQuery query, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(query.Email);
                 if (user is null)
@@ -45,7 +45,7 @@ namespace Infrastructure.Identity.Queries
 
                 if (loginResult.Succeeded)
                 {
-                    var appUserInfo = _mapper.Map<AppUserDTO>(user);
+                    var appUserInfo = _mapper.Map<AppUserDto>(user);
                     appUserInfo.AccessToken = _tokenClaimsService.CreateToken(appUserInfo.Id);
 
                     return appUserInfo;
