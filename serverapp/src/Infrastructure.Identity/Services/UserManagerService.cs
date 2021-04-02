@@ -30,7 +30,7 @@ namespace Infrastructure.Identity.Services
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             token = EncodeTokenForUrl(token);
-            var confirmationLink = GetConfirmationLink(originUrl,"confirm-email", user.Id, token);
+            var confirmationLink = GetConfirmationLink(originUrl,"confirmemail", user.Id, token);
 
             //Just catch the exceptions that occurred when sending the message. 
             //The user will be notified on the client that the message may not have been sent, 

@@ -58,26 +58,21 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{email}/confirmationemail")]
-        public async Task<IActionResult> SendConfirmEmail(string email)
+        public async Task<IActionResult> SendConfirmationEmail(string email)
         {
             await _userManagerService.SendConfirmationEmail(email, OriginUrl);
 
             return Ok();
         }
 
-        [HttpGet("{id}/confirm-email")]
-        public async Task ConfirmEmail(string id, string token)
+        [HttpGet("{id}/confirmemail")]
+        public async Task<IActionResult> ConfirmEmail(string id, string token)
         {
-            try
-            {
-                await Mediator.Send(new ConfirmEmailCommand() { Id = id, Token = token});
+            var confirmationResult = await Mediator.Send(new ConfirmEmailCommand() { Id = id, Token = token});
 
-                RedirectClientToLocation(OriginUrl + "/confirm-email-success");
-            }
-            catch (Exception e)
-            {
-                RedirectClientToLocation(OriginUrl + "/confirm-email-failure");
-            }
+            var localUrl = $"/user/{id}/confirmemail" + (confirmationResult ? "success" : "failure");
+
+            return LocalRedirect(localUrl);
         }
 
         [HttpGet("send-reset-password-email")]

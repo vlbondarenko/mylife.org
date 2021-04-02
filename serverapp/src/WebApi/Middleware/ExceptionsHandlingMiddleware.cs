@@ -68,7 +68,7 @@ namespace WebApi.Middleware
                     break;
                 case UserNotFoundException notFoundException:
                     LogException(notFoundException, "User not found");
-                    await CreateErrorResponse(notFoundException.Errors, context, HttpStatusCode.Unauthorized);
+                    await CreateErrorResponse(notFoundException.Errors, context, HttpStatusCode.NotFound);
                     break;
                 case IdentityException identityException:
                     LogException(identityException, "Identity error");
