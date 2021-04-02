@@ -28,6 +28,18 @@ namespace WebApi.Controllers
             _userManagerService = userManagerService;
         }
 
+        [HttpPost("authorize")]
+        public async Task<IActionResult> Authorize([FromBody] CreateAppUserCommand request)
+        {
+
+            //The user is created in two iterations: creating identity data and creating a user profile with public data
+            var newAppUserId = await Mediator.Send(request);
+            await Mediator.Send(new CreateUserProfileCommand { Id = newAppUserId });
+
+            await _userManagerService.SendConfirmationEmail(request.Email, OriginUrl);
+
+            return Created();
+        }
 
         [HttpPost("login")]
         public async Task<UserInfo> Login([FromBody] LoginQuery query)
@@ -45,40 +57,24 @@ namespace WebApi.Controllers
             };
         }
 
-        [HttpPost("authorize")]
-        public async Task<IActionResult> Authorize([FromBody] CreateAppUserCommand request)
+        [HttpGet("{email}/confirmationemail")]
+        public async Task<IActionResult> SendConfirmEmail(string email)
         {
+            await _userManagerService.SendConfirmationEmail(email, OriginUrl);
 
-            //The user is created in two iterations: creating identity data and creating a user profile with public data
-            var newAppUserId = await Mediator.Send(request);
-
-            await Mediator.Send(new CreateUserProfileCommand { Id = newAppUserId });
-
-            await _userManagerService.SendConfirmationEmail(request.Email);
-
-            return Created(string.Empty,null);
-        }
-
-        [HttpGet("send-confirmation-email")]
-        public async Task<IActionResult> SendConfirmEmail(string userEmail)
-        {
-            await _userManagerService.SendConfirmationEmail(userEmail);
             return Ok();
         }
 
-        [HttpGet("confirm-email")]
-        public async Task ConfirmEmail([FromQuery] ConfirmEmailCommand confirmEmailCommand)
+        [HttpGet("{id}/confirm-email")]
+        public async Task ConfirmEmail(string id, string token)
         {
             try
             {
-                //I don't know why, but in some strange way, from the token passed through the parameter in the original query string, the '+' character is replaced with a space, 
-                //which prevents the successful confirmation of the email. Therefore, we first return the replaced characters to their place
-                confirmEmailCommand.Token = confirmEmailCommand.Token.Replace(" ", "+");
-                await Mediator.Send(confirmEmailCommand);
+                await Mediator.Send(new ConfirmEmailCommand() { Id = id, Token = token});
 
                 RedirectClientToLocation(OriginUrl + "/confirm-email-success");
             }
-            catch
+            catch (Exception e)
             {
                 RedirectClientToLocation(OriginUrl + "/confirm-email-failure");
             }
@@ -87,7 +83,7 @@ namespace WebApi.Controllers
         [HttpGet("send-reset-password-email")]
         public async Task<IActionResult> SendResetPasswordEmail(string userEmail)
         {
-            await _userManagerService.SendResetPasswordEmail(userEmail);
+            await _userManagerService.SendResetPasswordEmail(userEmail, OriginUrl);
             return Ok();
         }
 

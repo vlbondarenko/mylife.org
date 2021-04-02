@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web;
+
 using Microsoft.AspNetCore.Identity;
+
 using Infrastructure.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Infrastructure.Identity.Exceptions;
 using Infrastructure.Identity.Interfaces;
 using Infrastructure.Identity.Data;
@@ -13,24 +15,22 @@ namespace Infrastructure.Identity.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IEmailService _emailService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         
-        public UserManagerService (UserManager<AppUser> userManager, IEmailService emailService, IHttpContextAccessor httpContextAccessor)
+        public UserManagerService (UserManager<AppUser> userManager, IEmailService emailService)
         {
             _userManager = userManager;
             _emailService = emailService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task SendConfirmationEmail (string userEmail)
+        public async Task SendConfirmationEmail (string userEmail, string originUrl)
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user is null)
                 throw new UserNotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = GetLink("confirm-email", user.Id, token);
-
+            token = EncodeTokenForUrl(token);
+            var confirmationLink = GetConfirmationLink(originUrl,"confirm-email", user.Id, token);
 
             //Just catch the exceptions that occurred when sending the message. 
             //The user will be notified on the client that the message may not have been sent, 
@@ -46,14 +46,14 @@ namespace Infrastructure.Identity.Services
         }
 
 
-        public async Task SendResetPasswordEmail(string userEmail)
+        public async Task SendResetPasswordEmail(string userEmail, string originUrl)
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user is null)
                 throw new UserNotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var resetPasswordLink = GetLink("verify-token", user.Id, token);
+            var resetPasswordLink = GetConfirmationLink(originUrl,"verify-token", user.Id, token);
 
             try
             {
@@ -79,9 +79,11 @@ namespace Infrastructure.Identity.Services
             return result ? result : throw new IdentityException("Reset password failure");
         }
 
-        private string GetLink(string method, string id, string token)
+        private string EncodeTokenForUrl(string token) => HttpUtility.UrlEncode(token);
+
+        private string GetConfirmationLink(string originUrl, string method, string id, string token)
         {
-            return $"<a href=\"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/account/{method}?id={id}&token={token}\">Click Here</a>";
+            return $"<a href=\"{originUrl}/api/user/{id}/{method}?token={token}\">Click Here</a>";
 
         }
     }

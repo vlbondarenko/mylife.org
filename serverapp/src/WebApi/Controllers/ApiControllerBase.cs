@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
 
 using MediatR;
 
@@ -15,10 +16,13 @@ namespace WebApi.Controllers
     [ApiController]
     public class ApiControllerBase : ControllerBase
     {
-        private IMediator _mediator;
-
-        protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+        protected IMediator Mediator => HttpContext.RequestServices.GetService<IMediator>();
 
         protected string OriginUrl => Request.Scheme + "://" + Request.Host;
+
+        protected IActionResult Created()
+        {
+            return new StatusCodeResult((int)HttpStatusCode.Created);
+        }
     }
 }

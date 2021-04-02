@@ -13,16 +13,6 @@ using Infrastructure.Identity.Data;
 
 namespace Infrastructure.Identity.Commands
 {
-    public class CreateAppUserCommandValidator : AbstractValidator<CreateAppUserCommand>
-    {
-        public CreateAppUserCommandValidator()
-        {
-
-            RuleFor(x => x.Email).NotEmpty().EmailAddress();
-            RuleFor(x => x.UserName).NotEmpty();
-            RuleFor(x => x.Password).NotEmpty().MinimumLength(8);
-        }
-    }
     public class CreateAppUserCommand:IRequest<string>
     {
         public string Email { get; set; }
@@ -59,11 +49,21 @@ namespace Infrastructure.Identity.Commands
                 if (!result.Succeeded)
                 {
                     var errors = result.Errors.Select(error => error.Description);
-                    throw new IdentityException(errors);
+                    throw new UserNotCreatedException(errors);
                 }
 
                 return user.Id;
             }
+        }
+    }
+    public class CreateAppUserCommandValidator : AbstractValidator<CreateAppUserCommand>
+    {
+        public CreateAppUserCommandValidator()
+        {
+
+            RuleFor(x => x.Email).NotEmpty().EmailAddress();
+            RuleFor(x => x.UserName).NotEmpty();
+            RuleFor(x => x.Password).NotEmpty().MinimumLength(8);
         }
     }
 }

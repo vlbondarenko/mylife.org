@@ -51,8 +51,6 @@ namespace Infrastructure.Identity.DependencyInjection
                      };
                  });
 
-            services.AddHttpContextAccessor();
-
             services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
             services.AddScoped<IUserManagerService, UserManagerService>();
 
