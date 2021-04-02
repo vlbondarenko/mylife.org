@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MediatR;
 using FluentValidation;
+using AutoMapper;
 
 using Infrastructure.Identity.Services;
 using Infrastructure.Identity.Interfaces;
@@ -55,6 +56,7 @@ namespace Infrastructure.Identity.DependencyInjection
             services.AddScoped<IUserManagerService, UserManagerService>();
 
             services.AddMediatR(typeof(DependencyInjection).Assembly);
+            services.AddAutoMapper(typeof(DependencyInjection).Assembly);
 
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 

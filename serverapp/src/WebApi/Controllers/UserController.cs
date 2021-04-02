@@ -42,9 +42,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<UserInfo> Login([FromBody] LoginQuery query)
+        public async Task<UserInfo> Login([FromBody] SignInQuery query)
         {
-            var appUser = await Mediator.Send(query);
+            var appUserInfo = await Mediator.Send(query);
 
             return new UserInfo()
             {

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading;
 
 using MediatR;
+using AutoMapper;
 
 using Infrastructure.Identity.Data;
 using Infrastructure.Identity.Exceptions;
@@ -14,47 +15,44 @@ using Infrastructure.Identity.Interfaces;
 
 namespace Infrastructure.Identity.Queries
 {
-    public class LoginQuery:IRequest<AppUserDTO>
+    public class SignInQuery:IRequest<AppUserDTO>
     {
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public class LoginQueryHandler : IRequestHandler<LoginQuery, AppUserDTO>
+        public class LoginQueryHandler : IRequestHandler<SignInQuery, AppUserDTO>
         {
             private readonly UserManager<AppUser> _userManager;
             private readonly SignInManager<AppUser> _signInManager;
             private readonly ITokenClaimsService _tokenClaimsService;
+            private readonly IMapper _mapper;
 
-            public LoginQueryHandler (UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenClaimsService tokenClaimsService) 
+            public LoginQueryHandler (UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenClaimsService tokenClaimsService,IMapper mapper) 
             {
                 _userManager = userManager;
                 _signInManager = signInManager;
                 _tokenClaimsService = tokenClaimsService;
+                _mapper = mapper;
             }
 
-            public async Task<AppUserDTO> Handle (LoginQuery query, CancellationToken cancellationToken)
+            public async Task<AppUserDTO> Handle (SignInQuery query, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(query.Email);
                 if (user is null)
-                    throw new UserNotFoundException($"User {query.Email} not found.");
+                    throw new UnauthorizedException("Invalid email or password");
 
                 var loginResult = await _signInManager.CheckPasswordSignInAsync(user, query.Password, false);
 
                 if (loginResult.Succeeded)
                 {
-                    return new AppUserDTO()
-                    {
-                        Id = user.Id,
-                        UserName = user.UserName,
-                        Email = user.Email,
-                        EmailConfirmed = user.EmailConfirmed,
-                        CreatedAt = user.CreatedAt,
-                        AccessToken = _tokenClaimsService.CreateToken(user.Id)
-                    };
+                    var appUserInfo = _mapper.Map<AppUserDTO>(user);
+                    appUserInfo.AccessToken = _tokenClaimsService.CreateToken(appUserInfo.Id);
+
+                    return appUserInfo;
                 }
                 else
                 {
-                    throw new UserNotFoundException("Invalid email or password");
+                    throw new UnauthorizedException("Invalid email or password");
                 }            
             }
         }
