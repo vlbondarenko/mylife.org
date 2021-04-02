@@ -76,6 +76,13 @@ namespace WebApi.Tests.Common
             
         }
 
+        public T GetService<T>()
+        {
+            var scopedServices = Services.CreateScope();
+            var service = scopedServices.ServiceProvider.GetRequiredService<T>();
+            return service;
+        }
+
         public HttpClient GetAnonymousClient()
         {
             return CreateClient();

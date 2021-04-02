@@ -9,7 +9,7 @@ using Infrastructure.Identity.Commands;
 
 namespace WebApi.Tests.FunctionalTests.UserControllerTests
 {
-    public class AuthorizeEndpointTest:UserControllerTestsBase
+    public class AuthorizeEndpointTest:UserEndpointsTestsBase
     {
         public AuthorizeEndpointTest(ApiTestsFixture factory) : base(factory) { }
 

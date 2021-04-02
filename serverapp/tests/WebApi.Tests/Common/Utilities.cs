@@ -16,10 +16,15 @@ namespace WebApi.Tests.Common
 
         public static void InitializeIdentityDbForTest(IdentityDbContext context)
         {
+            var email = "test@test.com";
+            var userName = "test";
+
             context.Users.Add(new AppUser()
             {
-                Email = "test@test.com",
-                UserName = "test"
+                Email = email,
+                UserName = userName,
+                NormalizedEmail = email.Normalize().ToUpperInvariant(),
+                NormalizedUserName = userName.Normalize().ToUpperInvariant()
             });
 
             context.SaveChanges();
