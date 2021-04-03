@@ -64,7 +64,7 @@ namespace WebApi.Tests.Common
 
                 try
                 {
-                    Utilities.InitializeIdentityDbForTest(identityContext);
+                    Utilities.InitializeDbForTest(identityContext, appContext);
                 }
                 catch (Exception ex)
                 {
