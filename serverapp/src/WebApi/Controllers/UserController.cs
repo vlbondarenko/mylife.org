@@ -7,11 +7,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
 
-using MediatR;
+using AutoMapper;
 using Infrastructure.Identity.Commands;
 using Infrastructure.Identity.Queries;
 using Infrastructure.Identity.Interfaces;
 using Application.UseCases.UserProfiles.Commands;
+using Application.UseCases.UserProfiles.Queries;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -22,10 +23,12 @@ namespace WebApi.Controllers
     {
 
         private readonly IUserManagerService _userManagerService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserManagerService userManagerService)
+        public UserController(IUserManagerService userManagerService, IMapper mapper)
         {
             _userManagerService = userManagerService;
+            _mapper = mapper;
         }
 
         [HttpPost("signup")]
@@ -41,20 +44,16 @@ namespace WebApi.Controllers
             return Created();
         }
 
-        [HttpPost("login")]
-        public async Task<UserInfo> Login([FromBody] SignInQuery query)
+        [HttpPost("signin")]
+        public async Task<IActionResult> SignIn([FromBody] SignInQuery query)
         {
-            var appUserInfo = await Mediator.Send(query);
+            var appUser = await Mediator.Send(query);
+            var userModel = _mapper.Map<UserModel>(appUser);
 
-            return new UserInfo()
-            {
-                Id = appUser.Id,
-                UserName = appUser.UserName,
-                Email = appUser.Email,
-                EmailConfirmed = appUser.EmailConfirmed,
-                CreatedAt = appUser.CreatedAt,
-                AccessToken = appUser.AccessToken
-            };
+            var userProfile = await Mediator.Send(new GetUserProfileQuery() { Id = appUser.Id });
+            userModel = _mapper.Map(userProfile, userModel);
+
+            return Ok(userModel);
         }
 
         [HttpGet("{email}/confirmationemail")]

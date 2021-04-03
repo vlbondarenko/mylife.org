@@ -50,10 +50,8 @@ namespace Infrastructure.Identity.Queries
 
                     return appUserInfo;
                 }
-                else
-                {
-                    throw new UnauthorizedException("Invalid email or password");
-                }            
+
+                throw new UnauthorizedException("Invalid email or password");                       
             }
         }
     }

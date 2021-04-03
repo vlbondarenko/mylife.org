@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using MediatR;
+using AutoMapper;
 
 using Infrastructure;
 using Infrastructure.Identity.DependencyInjection;
@@ -44,7 +45,9 @@ namespace WebApi
 
             services.AddCors();
 
-            services.AddControllers();     
+            services.AddControllers();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
