@@ -23,7 +23,7 @@ namespace Application.UseCases.UserProfiles.Commands
 
             public async Task<Unit> Handle (CreateUserProfileCommand request, CancellationToken cancellationToken)
             {
-                var userProfile = new UserProfile() 
+                var userProfile = new UserProfile               
                 { 
                     Id = request.Id 
                 };

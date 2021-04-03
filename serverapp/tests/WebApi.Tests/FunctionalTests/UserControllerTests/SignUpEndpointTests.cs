@@ -9,9 +9,9 @@ using Infrastructure.Identity.Commands;
 
 namespace WebApi.Tests.FunctionalTests.UserControllerTests
 {
-    public class AuthorizeEndpointTest:UserControllerEndpointTestsBase
+    public class SignUpEndpointTests:UserControllerEndpointTestsBase
     {
-        public AuthorizeEndpointTest(ApiTestsFixture factory) : base(factory) { }
+        public SignUpEndpointTests(ApiTestsFixture factory) : base(factory) { }
 
         [Fact]
         public async Task ReturnsSuccessStatusCode()
@@ -21,13 +21,13 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             var command = new CreateAppUserCommand()
             {
                 Email = "email@email.com",
-                UserName = "email",
+                UserName = "username",
                 Password = "testpassword"
             };
             var content = Utilities.GetRequestContent(command);
 
             //Act
-            var response = await client.PostAsync($"api/user/authorize", content);
+            var response = await client.PostAsync($"api/user/signup", content);
 
             //Assert
             response.EnsureSuccessStatusCode();
@@ -53,7 +53,7 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             };
             var content = Utilities.GetRequestContent(command);
 
-            var response = await client.PostAsync($"api/user/authorize", content);
+            var response = await client.PostAsync($"api/user/signup", content);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -74,7 +74,7 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             };
             var content = Utilities.GetRequestContent(command);
 
-            var response = await client.PostAsync($"api/user/authorize", content);
+            var response = await client.PostAsync($"api/user/signup", content);
 
             Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
         }

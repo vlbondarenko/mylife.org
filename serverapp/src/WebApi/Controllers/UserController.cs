@@ -28,8 +28,8 @@ namespace WebApi.Controllers
             _userManagerService = userManagerService;
         }
 
-        [HttpPost("authorize")]
-        public async Task<IActionResult> Authorize([FromBody] CreateAppUserCommand request)
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp([FromBody] CreateAppUserCommand request)
         {
 
             //The user is created in two iterations: creating identity data and creating a user profile with public data
