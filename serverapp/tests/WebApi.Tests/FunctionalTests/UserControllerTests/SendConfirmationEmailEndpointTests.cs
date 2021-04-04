@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Net;
 
 using Xunit;
 
@@ -19,6 +20,17 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             var response = await client.GetAsync($"api/user/{email}/confirmationemail");
 
             response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task ReturnsNotFoundStatusCode_WhenUserNotFound()
+        {
+            var client = _factory.GetAnonymousClient();
+            var email = "invalid@test.com";
+
+            var response = await client.GetAsync($"api/user/{email}/confirmationemail");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
     }
 }
