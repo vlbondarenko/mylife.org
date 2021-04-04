@@ -53,7 +53,8 @@ namespace Infrastructure.Identity.Services
                 throw new UserNotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var resetPasswordLink = GetConfirmationLink(originUrl,"verify-token", user.Id, token);
+            token = EncodeTokenForUrl(token);
+            var resetPasswordLink = GetConfirmationLink(originUrl,"verifytoken", user.Id, token);
 
             try
             {
@@ -84,7 +85,6 @@ namespace Infrastructure.Identity.Services
         private string GetConfirmationLink(string originUrl, string method, string id, string token)
         {
             return $"<a href=\"{originUrl}/api/user/{id}/{method}?token={token}\">Click Here</a>";
-
         }
     }
 }

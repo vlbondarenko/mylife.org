@@ -74,10 +74,11 @@ namespace WebApi.Controllers
             return LocalRedirect(localUrl);
         }
 
-        [HttpGet("send-reset-password-email")]
-        public async Task<IActionResult> SendResetPasswordEmail(string userEmail)
+        [HttpGet("{email}/resetpasswordemail")]
+        public async Task<IActionResult> SendResetPasswordEmail(string email)
         {
-            await _userManagerService.SendResetPasswordEmail(userEmail, OriginUrl);
+            await _userManagerService.SendResetPasswordEmail(email, OriginUrl);
+
             return Ok();
         }
 
