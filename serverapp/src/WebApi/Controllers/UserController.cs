@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using AutoMapper;
 
-using Infrastructure.Identity.Commands;
-using Infrastructure.Identity.Queries;
+using Infrastructure.Identity.UseCases.Commands;
+using Infrastructure.Identity.UseCases.Queries;
 using Infrastructure.Identity.Interfaces;
 using Application.UseCases.UserProfiles.Commands;
 using Application.UseCases.UserProfiles.Queries;

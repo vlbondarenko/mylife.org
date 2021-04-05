@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 using WebApi.Models;
-using Infrastructure.Identity.Queries;
+using Infrastructure.Identity.UseCases.Queries;
 using Application.UseCases.UserProfiles.Queries;
 
 namespace WebApi.Mapping

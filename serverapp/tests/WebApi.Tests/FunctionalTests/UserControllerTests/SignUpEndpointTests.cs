@@ -5,7 +5,7 @@ using System.Net;
 using Xunit;
 
 using WebApi.Tests.Common;
-using Infrastructure.Identity.Commands;
+using Infrastructure.Identity.UseCases.Commands;
 
 namespace WebApi.Tests.FunctionalTests.UserControllerTests
 {

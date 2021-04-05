@@ -10,7 +10,7 @@ using System.Threading;
 
 using Infrastructure.Identity.Tests.Common;
 using Infrastructure.Identity.Data;
-using Infrastructure.Identity.Commands;
+using Infrastructure.Identity.UseCases.Commands;
 using Infrastructure.Identity.Exceptions;
 
 namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests

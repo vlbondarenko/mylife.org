@@ -7,7 +7,7 @@ using System;
 using Xunit;
 
 using WebApi.Tests.Common;
-using Infrastructure.Identity.Queries;
+using Infrastructure.Identity.UseCases.Queries;
 using WebApi.Models;
 
 namespace WebApi.Tests.FunctionalTests.UserControllerTests

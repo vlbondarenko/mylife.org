@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Identity.Data;
-using Infrastructure.Identity.Queries;
+using Infrastructure.Identity.UseCases.Queries;
 
 using AutoMapper;
 

@@ -9,7 +9,7 @@ using Infrastructure.Identity.Data;
 using Infrastructure.Identity.Exceptions;
 
 
-namespace Infrastructure.Identity.Commands
+namespace Infrastructure.Identity.UseCases.Commands
 {
     public class ResetPasswordCommand:IRequest<bool>
     {

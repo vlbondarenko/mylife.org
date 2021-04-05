@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-using Infrastructure.Identity.Commands;
+using Infrastructure.Identity.UseCases.Commands;
 
 using Xunit;
 

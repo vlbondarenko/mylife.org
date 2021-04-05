@@ -8,7 +8,7 @@ using Xunit;
 using FluentValidation;
 using FluentValidation.TestHelper;
 
-using Infrastructure.Identity.Commands;
+using Infrastructure.Identity.UseCases.Commands;
 
 namespace Infrastructure.Identity.Tests.UnitTests.ConfirmEmailCommandTests
 {

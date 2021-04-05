@@ -11,7 +11,7 @@ using FluentValidation;
 using Infrastructure.Identity.Exceptions;
 using Infrastructure.Identity.Data;
 
-namespace Infrastructure.Identity.Commands
+namespace Infrastructure.Identity.UseCases.Commands
 {
     public class CreateAppUserCommand:IRequest<string>
     {

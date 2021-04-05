@@ -10,7 +10,7 @@ using Infrastructure.Identity.Data;
 using Infrastructure.Identity.Exceptions;
 using Infrastructure.Identity.Interfaces;
 
-namespace Infrastructure.Identity.Queries
+namespace Infrastructure.Identity.UseCases.Queries
 {
     public class SignInQuery:IRequest<AppUserDto>
     {

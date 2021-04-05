@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Infrastructure.Identity.Queries
+namespace Infrastructure.Identity.UseCases.Queries
 {
     public class AppUserDto
     {
