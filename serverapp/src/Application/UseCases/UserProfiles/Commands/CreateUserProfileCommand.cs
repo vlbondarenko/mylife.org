@@ -2,6 +2,7 @@
 using System.Threading;
 
 using MediatR;
+using FluentValidation;
 
 using Persistence.Interfaces;
 using Domain.Entities;
@@ -35,4 +36,13 @@ namespace Application.UseCases.UserProfiles.Commands
             }
         }
     }
+
+    public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserProfileCommand>
+    {
+        public CreateUserProfileCommandValidator()
+        {
+            RuleFor(x => x.Id).NotEmpty();
+        }
+    }
 }
+
