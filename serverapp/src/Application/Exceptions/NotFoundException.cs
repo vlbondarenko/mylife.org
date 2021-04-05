@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Application.Exceptions
 {
-    public class NotFoundException:Exception
+    public class NotFoundException:ApplicationException
     {
-        public NotFoundException(string error)
-        {
-            Errors = new string[] { error };
-        }
+        public NotFoundException(string error) : base(error) { }
 
-        public NotFoundException(IEnumerable<string> errors)
-        {
-            _ = (errors is null) ? Errors = new string[] { } : Errors = errors;
-        }
-
-        public IEnumerable<string> Errors { get; set; }
+        public NotFoundException(IEnumerable<string> errors) : base(errors) { }
     }
 }

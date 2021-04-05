@@ -57,7 +57,7 @@ namespace WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<ExceptionsHandlingMiddleware>();
+            app.UseExceptionsHandlingMiddleware();
 
             app.UseCors();
 
