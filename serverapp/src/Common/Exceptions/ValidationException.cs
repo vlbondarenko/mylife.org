@@ -14,6 +14,6 @@ namespace Common.Exceptions
             Errors = failures.Select(failure => failure.ErrorMessage);
         }
 
-        public IEnumerable<string> Errors;
+        public IEnumerable<string> Errors { get; }
     } 
 }
