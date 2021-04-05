@@ -24,5 +24,29 @@ namespace WebApi.Controllers
         {
             return new StatusCodeResult((int)HttpStatusCode.Created);
         }
+
+        protected void SetCookieValue(string key, string value)
+        {
+            var cookieoptions = new CookieOptions()
+            {
+                Expires = DateTime.UtcNow.AddHours(4)
+            };
+            Response.Cookies.Append(key, value, cookieoptions);
+        }
+
+
+        protected string ExtractCookieValue(string key)
+        {
+            var value = Request.Cookies[key];
+
+            var newCookieOptions = new CookieOptions()
+            {
+                Expires = DateTime.UtcNow.AddDays(-1)
+            };
+
+            Response.Cookies.Delete(key, newCookieOptions);
+
+            return value;
+        }
     }
 }

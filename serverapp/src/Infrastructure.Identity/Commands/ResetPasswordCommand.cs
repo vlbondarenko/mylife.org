@@ -14,13 +14,13 @@ using Infrastructure.Identity.Exceptions;
 
 namespace Infrastructure.Identity.Commands
 {
-    public class ResetPasswordCommand:IRequest
+    public class ResetPasswordCommand:IRequest<bool>
     {
         public string UserId { get; set; }
         public string Token { get; set; }
         public string NewPassword { get; set; }
 
-        public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand>
+        public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, bool>
         {
             private readonly UserManager<AppUser> _userManager;
 
@@ -29,7 +29,7 @@ namespace Infrastructure.Identity.Commands
                 _userManager = userManager;
             }
 
-            public async Task<Unit> Handle (ResetPasswordCommand request, CancellationToken cancellationToken)
+            public async Task<bool> Handle (ResetPasswordCommand request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByIdAsync(request.UserId);
 
@@ -38,12 +38,7 @@ namespace Infrastructure.Identity.Commands
 
                 var resultOfReset = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
 
-                if (resultOfReset.Succeeded)
-                {
-                    return Unit.Value;
-                }
-
-                throw new IdentityException("Reset password failure"); 
+                return resultOfReset.Succeeded;
             }
         }
     }

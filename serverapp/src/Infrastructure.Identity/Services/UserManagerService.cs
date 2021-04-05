@@ -77,7 +77,7 @@ namespace Infrastructure.Identity.Services
             var purpose = "ResetPassword";
             var result = await _userManager.VerifyUserTokenAsync(user, tokenProvider, purpose, token);
 
-            return result ? result : throw new IdentityException("Reset password failure");
+            return result;
         }
 
         private string EncodeTokenForUrl(string token) => HttpUtility.UrlEncode(token);

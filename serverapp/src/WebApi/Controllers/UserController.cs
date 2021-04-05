@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-
 using AutoMapper;
+
 using Infrastructure.Identity.Commands;
 using Infrastructure.Identity.Queries;
 using Infrastructure.Identity.Interfaces;
@@ -82,57 +80,41 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet("verify-token")]
-        public async Task VerifyRessetPasswordToken(string id, string token)
+        [HttpGet("{id}/verifytoken")]
+        public async Task<IActionResult> VerifyRessetPasswordToken(string id, string token)
         {
-            try
+            var verifyResult = await _userManagerService.VerifyResetPasswordTokenAsync(id, token);
+
+            string localUrl;
+
+            if (verifyResult)
             {
-                token = token.Replace(" ", "+");
-                var result = await _userManagerService.VerifyResetPasswordTokenAsync(id, token);
-                if (result)
-                {
-                    SetCookie("userId", id);
-                    SetCookie("resetToken", token);
-                    RedirectClientToLocation(OriginUrl + "/reset-password");
-                }
-                else
-                    throw new Exception();
+                SetCookieValue("userId", id);
+                SetCookieValue("resetToken", token);
+                localUrl = $"/user/{id}/resetpassword";
             }
-            catch
+            else
             {
-                RedirectClientToLocation(OriginUrl + "/reset-password-failure");
+                localUrl = $"/user/{id}/resetpasswordfailure";
             }
+
+            return LocalRedirect(localUrl);
         }
 
-        [HttpPost("reset-password")]
+        [HttpPost("resetpassword")]
         public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordCommand request)
         {
-            Request.Cookies.TryGetValue("userId", out string userId);
-            Request.Cookies.TryGetValue("resetToken", out string token);
+            var userId = ExtractCookieValue("userId");
+            var token = ExtractCookieValue("resetToken");
 
             request.UserId = userId;
             request.Token = token;
 
-            await Mediator.Send(request);
+            var result = await Mediator.Send(request);
 
-            return Ok();
-        }
+            var localUrl = $"/user/{userId}/resetpassword" + (result ? "success" : "failure");
 
-        private void RedirectClientToLocation(string location)
-        {
-            Response.StatusCode = (int)HttpStatusCode.Moved;
-            Response.Headers["location"] = location;
-        }
-
-
-        private void SetCookie(string key, string value)
-        {
-            var cookiesOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7)
-            };
-            Response.Cookies.Append(key, value, cookiesOptions);
+            return LocalRedirect(localUrl);
         }
     }
 }
