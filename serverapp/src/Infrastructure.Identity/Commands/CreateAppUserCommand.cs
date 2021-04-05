@@ -33,10 +33,10 @@ namespace Infrastructure.Identity.Commands
             public async Task<string> Handle(CreateAppUserCommand request, CancellationToken cancellationToken)
             {
                 if (await _identityDbContext.Users.Where(user => user.Email == request.Email).AnyAsync())
-                    throw new UserNotCreatedException($"Email {request.Email} already taken.");
+                    throw new NotCreatedException($"Email {request.Email} already taken.");
 
                 if (await _identityDbContext.Users.Where(user => user.UserName == request.UserName).AnyAsync())
-                    throw new UserNotCreatedException($"Username {request.UserName} already taken.");
+                    throw new NotCreatedException($"Username {request.UserName} already taken.");
 
                 var user = new AppUser()
                 {
@@ -49,7 +49,7 @@ namespace Infrastructure.Identity.Commands
                 if (!result.Succeeded)
                 {
                     var errors = result.Errors.Select(error => error.Description);
-                    throw new UserNotCreatedException(errors);
+                    throw new NotCreatedException(errors);
                 }
 
                 return user.Id;

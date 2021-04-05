@@ -32,7 +32,7 @@ namespace Infrastructure.Identity.Commands
             {
                 var user = await _userManager.FindByIdAsync(request.Id);
                 if (user is null)
-                    throw new UserNotFoundException($"User id{request.Id} not found.");
+                    throw new NotFoundException($"User id{request.Id} not found.");
 
                 var confirmResult = await _userManager.ConfirmEmailAsync(user, request.Token);
 

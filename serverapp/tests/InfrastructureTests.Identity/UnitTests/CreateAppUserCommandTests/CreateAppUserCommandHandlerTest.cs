@@ -27,7 +27,7 @@ namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests
             var command = new CreateAppUserCommand() { UserName = userName, Email = email };
             var handler = new CreateAppUserCommand.CreateAppUserCommandHandler(userManager, _identityContext);
 
-            Assert.ThrowsAsync<UserNotCreatedException>(() => handler.Handle(command, CancellationToken.None));
+            Assert.ThrowsAsync<NotCreatedException>(() => handler.Handle(command, CancellationToken.None));
        }
 
         [Theory]

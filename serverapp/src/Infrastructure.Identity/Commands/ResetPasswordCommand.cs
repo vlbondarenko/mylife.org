@@ -34,7 +34,7 @@ namespace Infrastructure.Identity.Commands
                 var user = await _userManager.FindByIdAsync(request.UserId);
 
                 if (user == null)
-                    throw new UserNotFoundException($"User id{request.UserId} not found");
+                    throw new NotFoundException($"User id{request.UserId} not found");
 
                 var resultOfReset = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
 

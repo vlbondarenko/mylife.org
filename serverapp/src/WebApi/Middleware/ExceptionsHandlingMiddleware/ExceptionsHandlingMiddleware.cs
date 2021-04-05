@@ -22,9 +22,6 @@ namespace WebApi.Middleware
         }
 
         public abstract Task InvokeAsync(HttpContext context);
-
-        protected void LogException(Exception e, string message)=>
-            _logger.LogError(e,message);
         
 
         protected async Task CreateErrorResponse (HttpContext context, object errors, HttpStatusCode statusCode)
@@ -42,5 +39,8 @@ namespace WebApi.Middleware
                 await context.Response.WriteAsync(result);
             }
         }
+
+        protected void LogException(Exception e) =>
+           _logger.LogError(e, "\n\tComponent: " + e.Source + "\n");
     }
 }

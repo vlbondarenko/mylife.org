@@ -33,17 +33,17 @@ namespace WebApi.Middleware
             switch (exception)
             {
                 case NotFoundException ex:
-                    LogException(ex, ex.Source);
+                    LogException(ex);
                     await CreateErrorResponse(context, ex.Errors, HttpStatusCode.NotFound);
                     break;
 
                 case ApplicationException ex:
-                    LogException(ex, ex.Source);
+                    LogException(ex);
                     await CreateErrorResponse(context, ex.Errors, HttpStatusCode.InternalServerError);
                     break;
 
                 case Exception ex:
-                    LogException(ex, ex.Source);
+                    LogException(ex);
                     await CreateErrorResponse(context, "The request cannot be processed", HttpStatusCode.InternalServerError);
                     break;
             }

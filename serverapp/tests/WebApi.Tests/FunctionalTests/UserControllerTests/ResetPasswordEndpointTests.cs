@@ -40,7 +40,8 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             var response = await client.SendAsync(request);
 
             //Assert
-            response.EnsureSuccessStatusCode();     
+            var localUrl = $"/user/{userId}/resetpasswordsuccess";
+            Assert.Equal(localUrl, response.RequestMessage.RequestUri.AbsolutePath);
         }
     }
 }

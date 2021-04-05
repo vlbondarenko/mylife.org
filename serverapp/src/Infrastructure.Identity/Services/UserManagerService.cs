@@ -26,7 +26,7 @@ namespace Infrastructure.Identity.Services
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user is null)
-                throw new UserNotFoundException($"User {userEmail} not found");
+                throw new NotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             token = EncodeTokenForUrl(token);
@@ -50,7 +50,7 @@ namespace Infrastructure.Identity.Services
         {
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user is null)
-                throw new UserNotFoundException($"User {userEmail} not found");
+                throw new NotFoundException($"User {userEmail} not found");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             token = EncodeTokenForUrl(token);
@@ -71,7 +71,7 @@ namespace Infrastructure.Identity.Services
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
-                throw new UserNotFoundException($"User id{userId} not found");
+                throw new NotFoundException($"User id{userId} not found");
 
             var tokenProvider = _userManager.Options.Tokens.PasswordResetTokenProvider;
             var purpose = "ResetPassword";
