@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Infrastructure.Identity.Data;
+﻿using Infrastructure.Identity.Data;
 using Infrastructure.Identity.Queries;
 
 using AutoMapper;

@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Net;
+
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
 
 using MediatR;
 

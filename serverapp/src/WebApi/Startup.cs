@@ -6,14 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-using AutoMapper;
-
+using Application;
+using Common;
 using Infrastructure;
 using Infrastructure.Identity.DependencyInjection;
 using Persistence;
 using WebApi.Middleware;
-using Application;
-using Common;
 
 namespace WebApi
 {

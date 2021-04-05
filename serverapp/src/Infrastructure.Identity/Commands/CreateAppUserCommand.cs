@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using MediatR;
 using FluentValidation;
+
 using Infrastructure.Identity.Exceptions;
 using Infrastructure.Identity.Data;
 

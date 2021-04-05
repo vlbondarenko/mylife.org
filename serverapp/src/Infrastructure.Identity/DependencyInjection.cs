@@ -1,13 +1,14 @@
 ﻿using System.Text;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+
 using MediatR;
 using FluentValidation;
-using AutoMapper;
 
 using Infrastructure.Identity.Services;
 using Infrastructure.Identity.Interfaces;
