@@ -1,14 +1,13 @@
 ﻿using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+
 using Xunit;
+
 using Application.UseCases.UserProfiles.Queries;
 
 using Application.Tests.Common;
 
-namespace Application.Tests.UnitTests.UserProfileUseCasesTests.GetUserProfileQueryTests
+namespace Application.Tests.UnitTests.UserProfileUseCasesTests
 {
     public class GetUserProfileQueryHandlerTests:ApplicationHandlerTestsBase
     {

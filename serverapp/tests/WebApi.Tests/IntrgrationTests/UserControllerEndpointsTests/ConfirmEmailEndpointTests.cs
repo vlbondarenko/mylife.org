@@ -8,7 +8,7 @@ using Xunit;
 
 using WebApi.Tests.Common;
 
-namespace WebApi.Tests.FunctionalTests.UserControllerTests
+namespace WebApi.Tests.IntegrationTests.UserControllEndpointsTests
 {
     public class ConfirmEmailEndpointTests : UserControllerEndpointTestsBase
     {
@@ -45,7 +45,7 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
         }
 
         [Fact]
-        public async Task ReturnsNotFoundStatusCodeWhenUserNotExis()
+        public async Task ReturnsNotFoundStatusCode_WhenUserNotExis()
         {
             var client = _factory.GetAnonymousClient();
             var userId = "invaliduserid";

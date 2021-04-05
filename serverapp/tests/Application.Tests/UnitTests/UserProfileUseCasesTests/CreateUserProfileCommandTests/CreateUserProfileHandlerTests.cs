@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading;
 
 using Xunit;
 
-using Persistence.Context;
 using Application.UseCases.UserProfiles.Commands;
 using Application.Tests.Common;
 
-namespace Application.Tests.UnitTests.UserProfileUseCasesTests.CreateProfileCommandTests
+namespace Application.Tests.UnitTests.UserProfileUseCasesTests
 {
     public class CreateUserProfileHandlerTests:ApplicationHandlerTestsBase
     {

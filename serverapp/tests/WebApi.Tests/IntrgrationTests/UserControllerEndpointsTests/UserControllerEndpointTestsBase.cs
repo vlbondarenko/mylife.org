@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 using Xunit;
 
@@ -7,7 +6,7 @@ using WebApi.Tests.Common;
 using Persistence.Context;
 using Infrastructure.Identity.Data;
 
-namespace WebApi.Tests.FunctionalTests.UserControllerTests
+namespace WebApi.Tests.IntegrationTests.UserControllEndpointsTests
 {
     public partial class UserControllerEndpointTestsBase:IClassFixture<ApiTestsFixture> 
     {

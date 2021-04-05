@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 
-using FluentValidation;
 using FluentValidation.TestHelper;
 
 using Infrastructure.Identity.UseCases.Commands;
 
-namespace Infrastructure.Identity.Tests.UnitTests.ConfirmEmailCommandTests
+namespace Infrastructure.Identity.Tests.UnitTests.UseCasesTests
 {
     public class ConfirmEmailCommandValidationTest
     {
@@ -24,7 +18,7 @@ namespace Infrastructure.Identity.Tests.UnitTests.ConfirmEmailCommandTests
         [Theory]
         [InlineData(null, null)]
         [InlineData("", "")]
-        public void ShoulBeErrorsWhenFieldsAreNullOrEmpty(string id, string token)
+        public void ShoulBeErrors_WhenFieldsAreNullOrEmpty(string id, string token)
         {
             var command = new ConfirmEmailCommand()
             {

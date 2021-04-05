@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Net;
-using System.Reflection;
-using System;
 
 using Xunit;
 
@@ -10,7 +7,7 @@ using WebApi.Tests.Common;
 using Infrastructure.Identity.UseCases.Queries;
 using WebApi.Models;
 
-namespace WebApi.Tests.FunctionalTests.UserControllerTests
+namespace WebApi.Tests.IntegrationTests.UserControllEndpointsTests
 {
     public class SignInEndpointTests:UserControllerEndpointTestsBase
     {

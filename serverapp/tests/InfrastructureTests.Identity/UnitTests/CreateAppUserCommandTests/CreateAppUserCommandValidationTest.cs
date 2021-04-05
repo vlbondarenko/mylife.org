@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+﻿using System.Linq;
 
+using Xunit;
 using FluentValidation;
 using FluentValidation.TestHelper;
 
 using Infrastructure.Identity.UseCases.Commands;
 
-namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests
+namespace Infrastructure.Identity.Tests.UnitTests.UseCasesTests
 {
     public class CreateAppUserCommandValidationTest
     {
@@ -24,7 +20,7 @@ namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests
         [Theory]
         [InlineData(null,null,null)]
         [InlineData("","","")]
-        public void ShoulBeErrorsWhenFieldsAreNullOrEmpty(string email, string userName, string password)
+        public void ShoulBeErrors_WhenFieldsAreNullOrEmpty(string email, string userName, string password)
         {
             var command = new CreateAppUserCommand()
             {
@@ -44,7 +40,7 @@ namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests
         [InlineData("test", true)]
         [InlineData("@test.com",true)]
         [InlineData("test@test.com", false)]
-        public void ShouldBeErrorsWhenEmailNotValid(string email, bool shouldHaveErrors)
+        public void ShouldBeErrors_WhenEmailNotValid(string email, bool shouldHaveErrors)
         {
             var command = new CreateAppUserCommand()
             {

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 
 using Persistence.Context;
-using Persistence.Interfaces;
 using Domain.Entities;
 
 namespace Application.Tests.Common

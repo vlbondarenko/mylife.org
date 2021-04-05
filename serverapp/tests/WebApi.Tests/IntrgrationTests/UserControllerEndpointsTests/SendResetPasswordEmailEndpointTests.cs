@@ -5,11 +5,11 @@ using Xunit;
 
 using WebApi.Tests.Common;
 
-namespace WebApi.Tests.FunctionalTests.UserControllerTests
+namespace WebApi.Tests.IntegrationTests.UserControllEndpointsTests
 {
-    public class SendConfirmationEmailEndpointTests:UserControllerEndpointTestsBase
+    public class SendResetPasswordEmailEndpointTests:UserControllerEndpointTestsBase
     {
-        public SendConfirmationEmailEndpointTests(ApiTestsFixture factory) : base(factory) { }
+        public SendResetPasswordEmailEndpointTests(ApiTestsFixture factory) : base(factory) { }
 
         [Fact]
         public async Task ReturnsSuccessStatusCode()
@@ -17,7 +17,7 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             var client = _factory.GetAnonymousClient();
             var email = "test@test.com";
 
-            var response = await client.GetAsync($"api/user/{email}/confirmationemail");
+            var response = await client.GetAsync($"api/user/{email}/resetpasswordemail");
 
             response.EnsureSuccessStatusCode();
         }
@@ -28,7 +28,7 @@ namespace WebApi.Tests.FunctionalTests.UserControllerTests
             var client = _factory.GetAnonymousClient();
             var email = "invalid@test.com";
 
-            var response = await client.GetAsync($"api/user/{email}/confirmationemail");
+            var response = await client.GetAsync($"api/user/{email}/resetpasswordemail");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }

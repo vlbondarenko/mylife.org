@@ -7,7 +7,7 @@ using Xunit;
 using WebApi.Tests.Common;
 using Infrastructure.Identity.UseCases.Commands;
 
-namespace WebApi.Tests.FunctionalTests.UserControllerTests
+namespace WebApi.Tests.IntegrationTests.UserControllEndpointsTests
 {
     public class SignUpEndpointTests:UserControllerEndpointTestsBase
     {

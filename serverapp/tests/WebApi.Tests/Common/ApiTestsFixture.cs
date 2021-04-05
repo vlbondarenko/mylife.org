@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net.Http;
 
 using Microsoft.AspNetCore.Mvc.Testing;

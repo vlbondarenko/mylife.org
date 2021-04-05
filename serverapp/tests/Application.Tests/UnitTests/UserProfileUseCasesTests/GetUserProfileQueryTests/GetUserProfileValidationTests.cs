@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xunit;
-using FluentValidation;
+﻿using Xunit;
 using FluentValidation.TestHelper;
+
 using Application.UseCases.UserProfiles.Queries;
 
-namespace Application.Tests.UnitTests.UserProfileUseCasesTests.GetUserProfileQueryTests
+namespace Application.Tests.UnitTests.UserProfileUseCasesTests
 {
     public class GetUserProfileQueryValidationTests
     {
@@ -23,7 +17,7 @@ namespace Application.Tests.UnitTests.UserProfileUseCasesTests.GetUserProfileQue
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public void ShoulBeErrorsWhenFieldsAreNullOrEmpty(string id)
+        public void ShoulBeErrors_WhenFieldsAreNullOrEmpty(string id)
         {
             var query = new GetUserProfileQuery()
             {

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+
 using Moq;
 using Xunit;
 using System.Threading;
@@ -13,7 +9,7 @@ using Infrastructure.Identity.Data;
 using Infrastructure.Identity.UseCases.Commands;
 using Infrastructure.Identity.Exceptions;
 
-namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests
+namespace Infrastructure.Identity.Tests.UnitTests.UseCasesTests
 {
     public class CreateAppUserCommandHandlerTest:CommandHandlerTestBase
     {
@@ -21,7 +17,7 @@ namespace Infrastructure.Identity.Tests.UnitTests.CreateAppUserCommandTests
        [Theory]
        [InlineData("first","unique@unique.com" )]
        [InlineData("unique","first@mail.com")]
-       public void ThrowExceptionWhenUserNameOrEmailAlreadyTaken(string userName, string email)
+       public void ThrowException_WhenUserNameOrEmailAlreadyTaken(string userName, string email)
        {
             var userManager = MockHelper.MockUserManager<AppUser>().Object;
             var command = new CreateAppUserCommand() { UserName = userName, Email = email };

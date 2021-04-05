@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 
 using Infrastructure.Identity.UseCases.Commands;
 
@@ -12,7 +9,7 @@ using Xunit;
 
 using WebApi.Tests.Common;
 
-namespace WebApi.Tests.FunctionalTests.UserControllerTests
+namespace WebApi.Tests.IntegrationTests.UserControllEndpointsTests
 {
     public class ResetPasswordEndpointTests : UserControllerEndpointTestsBase
     {

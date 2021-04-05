@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Persistence.Context;
+
 using AutoMapper;
+
+using Persistence.Context;
 using Application.Common.Mapping;
-using Xunit;
 
 namespace Application.Tests.Common
 {
