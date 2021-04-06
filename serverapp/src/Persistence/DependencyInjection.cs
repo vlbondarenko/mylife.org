@@ -13,7 +13,7 @@ namespace Persistence
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 //options.UseSqlServer(configuration.GetConnectionString("ApplicationDefaultDatabase")));
-                //options.UseInMemoryDatabase("ApplicationDatabase");
+                //options.UseInMemoryDatabase("ApplicationDatabase"));
                 options.UseNpgsql(configuration.GetConnectionString("ApplicationDatabase")));
 
 
