@@ -22,6 +22,8 @@ namespace Infrastructure.Identity.DependencyInjection
         {
             
             services.AddDbContext<IdentityDbContext>(options =>
+                //options.UseSqlServer(configuration.GetConnectionString("IdentityDefaultDatabase")));
+                //options.UseInMemoryDatabase("IdentityDatabase");
                 options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));
 
             services.AddIdentityCore<AppUser>(config =>

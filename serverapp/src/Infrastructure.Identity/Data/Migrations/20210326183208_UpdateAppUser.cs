@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Infrastructure.Identity.Migrations
+namespace Infrastructure.Identity.Data.Migrations
 {
     public partial class UpdateAppUser : Migration
     {

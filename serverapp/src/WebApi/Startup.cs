@@ -21,7 +21,8 @@ namespace WebApi
         {
             var builder = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
-                .AddJsonFile("appsettings.Infrastructure.json");
+                .AddJsonFile("appsettings.Infrastructure.json")
+                .AddJsonFile("appsettings.Persistence.json");
 
             Configuration = builder.Build();
         }

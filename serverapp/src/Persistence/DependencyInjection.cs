@@ -12,7 +12,10 @@ namespace Persistence
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
+                //options.UseSqlServer(configuration.GetConnectionString("ApplicationDefaultDatabase")));
+                //options.UseInMemoryDatabase("ApplicationDatabase");
                 options.UseNpgsql(configuration.GetConnectionString("ApplicationDatabase")));
+
 
             services.AddScoped<IUserProfileDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
