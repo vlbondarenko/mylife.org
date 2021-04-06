@@ -90,7 +90,7 @@ At the moment, the frontend is not adapted to the new version of the backend, I 
             // ... other code
      }
      ```
-- if you want to use the database in memory, **then you don't need to perform any more actions, the project is ready to run.** In the case of real databases - go to the next point
+- if you want to use the database in memory, **then you don't need to perform any more actions, go straight to point number 7.** In the case of real databases - go to the next point
 
 - if necessary, change the connection strings. The connection strings for SQL Server are already set by default, but you can change them in the `appsettings.Infrastructure.json` (string `ConnectionStrings.IdentityDefaultDatabase`) and `appsettings.Persistence.json` (string `ConnectionStrings.ApplicationDefaultDatabase`) files if necessary in the root folder of the WebAPI project.
 
@@ -102,7 +102,9 @@ At the moment, the frontend is not adapted to the new version of the backend, I 
        dotnet ef migrations add Init -c applicationdbcontext -p ../Persistence/Persistence.csproj -s WebApi.csproj
        dotnet ef database update -c applicationdbcontext -p ../Persistence/Persistence.csproj -s WebApi.csproj
        
-7. That's all, the server project is ready to launch!
+7. That's all, the server project is ready to launch! Open a command prompt in the `WebApi` folder and execute the following commands:
+
+       dotnet run
 
 ### To start the `clientapp`, you need to:
 
