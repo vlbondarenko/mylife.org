@@ -69,9 +69,9 @@ At the moment, the frontend is not adapted to the new version of the backend, I 
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
-            //options.UseSqlServer(configuration.GetConnectionString("ApplicationDefaultDatabase")));         // <- uncomment this line for SQL Server
-            //options.UseInMemoryDatabase("ApplicationDatabase");                                             // <- or this fof InMemory database
-            options.UseNpgsql(configuration.GetConnectionString("ApplicationDatabase")));                     // <- comment this line
+            //options.UseSqlServer(configuration.GetConnectionString("ApplicationDefaultDatabase")));  // <- uncomment this line for SQL Server
+            //options.UseInMemoryDatabase("ApplicationDatabase");                                      // <- or this fof InMemory database
+            options.UseNpgsql(configuration.GetConnectionString("ApplicationDatabase")));              // <- comment this line
             
             // ... other code
     }
@@ -83,9 +83,9 @@ At the moment, the frontend is not adapted to the new version of the backend, I 
     public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<IdentityDbContext>(options =>
-            //options.UseSqlServer(configuration.GetConnectionString("IdentityDefaultDatabase")));            // <- uncomment this line for SQL Server
-            //options.UseInMemoryDatabase("IdentityDatabase");                                                // <- or this fof InMemory database
-            options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));                        // <- comment this line
+            //options.UseSqlServer(configuration.GetConnectionString("IdentityDefaultDatabase")));      // <- uncomment this line for SQL Server
+            //options.UseInMemoryDatabase("IdentityDatabase");                                          // <- or this fof InMemory database
+            options.UseNpgsql(configuration.GetConnectionString("IdentityDatabase")));                  // <- comment this line
             
             // ... other code
      }
