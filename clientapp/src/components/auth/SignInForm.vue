@@ -2,25 +2,22 @@
   <div>
     <div class="f-column jc-ai-center" v-show="!message">
       <form @submit.prevent="handleSubmit">
-        <Input
-          v-model:modelValue="userEmail"
-          :inputType="'text'"
-          :inputLabel="'Email'"
-          :validator="v.userEmail"
-        />
-        <Input
-          v-model:modelValue="password"
-          :inputType="'password'"
-          :inputLabel="'Password'"
-          :validator="v.password"
-        />
-        <Button
-          :buttonType="'submit'"
-          :buttonText="'Sign In'"
-          :loading="loading"
-        />
+        <Input 
+          v-model:modelValue="userEmail" 
+          :inputType="'text'" 
+          :inputLabel="t('homePage.modalCommon.email')"
+          :validator="v.userEmail" />
+        <Input 
+          v-model:modelValue="password" 
+          :inputType="'password'" 
+          :inputLabel="t('homePage.modalCommon.password')"
+          :validator="v.password" />
+        <Button 
+          :buttonType="'submit'" 
+          :buttonText="t('homePage.menu.signIn')" 
+          :loading="loading" />
       </form>
-      <a @click="openForgotPasswordForm">Forgot Password?</a>
+      <a @click="openForgotPasswordForm">{{ t('homePage.signInModal.forgotPasswordQuestion') }}</a>
     </div>
 
     <Message v-show="message" @closeMessage="handleCloseMessage">
@@ -29,13 +26,14 @@
   </div>
 </template>
 
-<script lang = "ts">
+<script>
 import router from "@/router";
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
-import { required } from "@vuelidate/validators";
+import { required, helpers } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import useEmitter from "@/helpers/emitter";
+import useLocalizer from "@/helpers/localizer";
 import Message from "../common/Message.vue";
 import ForgotPasswordForm from "./ForgotPasswordForm.vue";
 import Input from "../common/Input.vue";
@@ -56,10 +54,16 @@ export default defineComponent({
     const password = ref("");
     const loading = ref(false);
 
+    const { t } = useLocalizer();
+
+    const requiredWithCustomErrorMessage = helpers.withMessage(
+      t('validation.required'),
+      required
+    );
     const v = useVuelidate(
       {
-        userEmail: { required },
-        password: { required },
+        userEmail: { required: requiredWithCustomErrorMessage },
+        password: { required: requiredWithCustomErrorMessage },
       },
       { userEmail, password }
     );
@@ -95,7 +99,7 @@ export default defineComponent({
     const openForgotPasswordForm = () => {
       emitter.emit("onOpenModal", {
         component: ForgotPasswordForm,
-        title: "Forgot Password",
+        title: t('homePage.forgotPasswordModal.title'),
       });
     };
 
@@ -110,6 +114,7 @@ export default defineComponent({
 
       handleSubmit,
       openForgotPasswordForm,
+      t
     };
   },
 });

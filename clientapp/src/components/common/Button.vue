@@ -2,7 +2,7 @@
   <div class="flex jc-ai-center">
     <button
       class="floating-button"
-        :class="optionalClass"
+      :class="optionalClass"
       :disabled="loading"
       :type="buttonType ?? buttonType"
       @click="$emit('onClick')"
@@ -42,10 +42,9 @@ export default defineComponent({
   font-size: 12px;
   border-radius: 50px;
   margin: 20px 20px;
-  font-family: "Poppins";
-  text-transform: uppercase;
   text-align: center;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
+  font-family: 'Caveat', cursive;
   font-weight: 500;
   color: #000000;
   background: rgb(255, 255, 255);

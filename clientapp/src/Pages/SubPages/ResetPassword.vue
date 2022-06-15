@@ -4,22 +4,23 @@
 
 <script>
 import useEmitter from "@/helpers/emitter";
-import { defineComponent, onMounted} from "vue";
+import { defineComponent, onMounted } from "vue";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm.vue";
 import ModalRoot from "@/components/common/ModalRoot.vue";
 export default defineComponent({
-    components:{
+    components: {
         ModalRoot
     },
-    setup(){    
+    setup() {
         const emitter = useEmitter()
 
         const openResetPasswordForm = () => {
-            emitter.emit('onOpenModal', { component:ResetPasswordForm, title: 'Reset Password', closeButton: false })
+            emitter.emit('onOpenModal', { component: ResetPasswordForm, title: 'Reset Password', closeButton: false })
         }
 
-        onMounted(()=>{
+        onMounted(() => {
             openResetPasswordForm()
         })
-    }})
+    }
+})
 </script>

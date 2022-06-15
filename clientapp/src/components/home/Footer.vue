@@ -1,14 +1,22 @@
 <template>
   <div class="flex jc-ai-center footer">
-    <a class="footer-link" href=""> About </a>
-    <a class="footer-link" href=""> Privacy Policy </a>
-    <a class="footer-link" href=""> Contacts </a>
+    <a class="footer-link" href="">{{ t('homePage.footer.about') }}</a>
+    <a class="footer-link" href=""> {{ t('homePage.footer.privacy') }}</a>
+    <a class="footer-link" href="">{{ t('homePage.footer.contacts') }} </a>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-export default defineComponent({});
+import useLocalizer from "@/helpers/localizer";
+
+export default defineComponent({
+  setup() {
+    const { t } = useLocalizer()
+
+    return { t }
+  }
+});
 </script>
 <style scoped>
 .footer {

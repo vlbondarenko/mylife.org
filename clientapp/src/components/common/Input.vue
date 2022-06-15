@@ -36,6 +36,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
 .error-enter-active,
 .error-leave-active {
   transition: opacity 0.5s;
@@ -60,6 +61,7 @@ export default defineComponent({
 
 label {
   color: rgb(131, 131, 131);
+  font-family: 'Caveat', cursive;
   font-size: 14px;
   line-height: 16px;
   padding: 5px 20px;
@@ -69,6 +71,7 @@ label {
   top: 7px;
   left: 20px;
 }
+
 p {
   margin-bottom: 0px;
 }
@@ -94,16 +97,16 @@ span {
   transition: all 0.5s;
 }
 
-input:focus + label,
-input:not(:placeholder-shown) + label {
+input:focus+label,
+input:not(:placeholder-shown)+label {
   top: -27px;
   left: 0px;
   font-size: 14px;
   color: rgb(0, 0, 0);
 }
 
-input:focus + span,
-input:not(:placeholder-shown) + span {
+input:focus+span,
+input:not(:placeholder-shown)+span {
   animation: light 0.6s;
 }
 
@@ -111,9 +114,11 @@ input:not(:placeholder-shown) + span {
   0% {
     color: rgba(0, 0, 0, 1);
   }
+
   50% {
     color: rgba(0, 0, 0, 0.5);
   }
+
   100% {
     color: rgba(0, 0, 0, 1);
   }

@@ -18,6 +18,7 @@
     "mitt": "^2.1.0",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
+    "vue-i18n": "^9.1.10",
     "vue-property-decorator": "^9.1.2",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0-rc.2"

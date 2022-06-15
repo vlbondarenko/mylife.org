@@ -22,7 +22,6 @@ export default defineComponent({
       router.push("/");
     };
 
-
     return {
       loading,
       goHome,

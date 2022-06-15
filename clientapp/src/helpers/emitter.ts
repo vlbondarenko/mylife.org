@@ -1,6 +1,6 @@
-import {getCurrentInstance} from 'vue'
+import { getCurrentInstance } from 'vue'
 
-function useEmitter () {
+function useEmitter() {
     const internalInstance = getCurrentInstance()
     return internalInstance?.appContext.config.globalProperties.emitter
 }
