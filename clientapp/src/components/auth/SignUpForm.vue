@@ -2,48 +2,38 @@
   <div>
     <div v-show="!message">
       <form @submit.prevent="handleSubmit">
-        <Input
-          v-model:modelValue="firstName"
-          :inputType="'text'"
-          :inputLabel="'First Name'"
-          :validator="v.firstName"
-        />
-        <Input
-          v-model:modelValue="lastName"
-          :inputType="'text'"
-          :inputLabel="'Last Name'"
-          :validator="v.lastName"
-        />
-        <Input
-          v-model:modelValue="userEmail"
-          :inputType="'text'"
-          :inputLabel="'Email'"
-          :validator="v.userEmail"
-        />
-        <Input
-          v-model:modelValue="password"
+        <Input 
+          v-model:modelValue="firstName" 
+          :inputType="'text'" 
+          :inputLabel="t('homePage.signUpModal.firstName')"
+          :validator="v.firstName" />
+        <Input 
+          v-model:modelValue="lastName" 
+          :inputType="'text'" 
+          :inputLabel="t('homePage.signUpModal.lastName')"
+          :validator="v.lastName" />
+        <Input 
+          v-model:modelValue="userEmail" 
+          :inputType="'text'" 
+          :inputLabel="t('homePage.modalCommon.email')"
+          :validator="v.userEmail" />
+        <Input 
+          v-model:modelValue="password" 
+          :inputType="'password'" 
+          :inputLabel="t('homePage.modalCommon.password')"
+          :validator="v.password" />
+        <Input 
+          v-model:modelValue="confirmPassword" 
           :inputType="'password'"
-          :inputLabel="'Password'"
-          :validator="v.password"
-        />
-         <Input
-          v-model:modelValue="confirmPassword"
-          :inputType="'password'"
-          :inputLabel="'Confirm Password'"
-          :validator="v.confirmPassword"
-        />
-        <Button
-          :buttonType="'submit'"
-          :buttonText="'Sign Up'"
-          :loading="loading"
-        />
+          :inputLabel="t('homePage.modalCommon.confirmPassword')" 
+          :validator="v.confirmPassword" />
+        <Button 
+          :buttonType="'submit'" 
+          :buttonText="t('homePage.menu.signUp')" 
+          :loading="loading" />
       </form>
     </div>
-    <Message
-      v-show="message"
-      :showBackButton="showBackButton"
-      @closeMessage="handleCloseMessage"
-    >
+    <Message v-show="message" :showBackButton="showBackButton" @closeMessage="handleCloseMessage">
       {{ message }}
     </Message>
   </div>
@@ -63,6 +53,7 @@ import Message from "../common/Message.vue";
 import authService from '@/services/authService'
 import Input from '../common/Input.vue'
 import Button from '../common/Button.vue'
+import useLocalizer from "@/helpers/localizer";
 
 export default defineComponent({
   name: "SignUpForm",
@@ -79,20 +70,22 @@ export default defineComponent({
     const password = ref("");
     const confirmPassword = ref("");
 
+    const { t } = useLocalizer()
+
     const requiredWithCustomErrorMessage = helpers.withMessage(
-      "This field is required",
+      t('validation.required'),
       required
     );
     const emailWithCustomErrorMessage = helpers.withMessage(
-      "The email must be valid",
+      t('validation.email'),
       email
     );
     const minLenthWithCustomErrorMessage = helpers.withMessage(
-      "The password must contain at least eight characters",
+      t('validation.password', { count: 8 }),
       minLength(8)
     );
     const sameAsWithCustomErrorMessage = helpers.withMessage(
-      "Passwords don't match",
+      t('validation.confirmedPassword'),
       sameAs(password)
     );
 
@@ -165,6 +158,7 @@ export default defineComponent({
       handleCloseMessage,
 
       handleSubmit,
+      t
     };
   },
 });

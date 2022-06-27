@@ -2,36 +2,26 @@
   <div>
     <div v-show="!message">
       <form @submit.prevent="handleSubmit">
-         <Input
-          v-model:modelValue="password"
+        <Input 
+          v-model:modelValue="password" 
           :inputType="'password'"
-          :inputLabel="'New Password'"
-          :validator="v.password"
-        />
-         <Input
-          v-model:modelValue="confirmPassword"
+          :inputLabel="t('homePage.forgotPasswordModal.newPassword')" 
+          :validator="v.password" />
+        <Input 
+          v-model:modelValue="confirmPassword" 
           :inputType="'password'"
-          :inputLabel="'Confirm Password'"
-          :validator="v.confirmPassword"
-        />
-        <Button
-          :buttonType="'submit'"
-          :buttonText="'Reset Password'"
+          :inputLabel="t('homePage.modalCommon.confirmPassword')" 
+          :validator="v.confirmPassword" />
+        <Button 
+          :buttonType="'submit'" 
+          :buttonText="t('homePage.forgotPasswordModal.title')" 
           :loading="loading"
-          :optionalClass="'reset-password-btn'"
-        />
+          :optionalClass="'reset-password-btn'" />
       </form>
     </div>
-    <message
-    :showBackButton="false"
-      v-show="message"
-    >
+    <message :showBackButton="false" v-show="message">
       {{ message }}
-       <Button
-          :buttonText="'Home'"
-          @onClick="goHome"
-          :optionalClass="'go-home-btn'"
-        />
+      <Button :buttonText="'Home'" @onClick="goHome" :optionalClass="'go-home-btn'" />
     </message>
   </div>
 </template>
@@ -40,6 +30,7 @@
 import { defineComponent, ref } from "vue";
 import { required, minLength, sameAs, helpers } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import useLocalizer from "@/helpers/localizer";
 import Message from "../common/Message.vue";
 import authService from "@/services/authService";
 import Input from '../common/Input.vue'
@@ -57,16 +48,20 @@ export default defineComponent({
     const password = ref("");
     const confirmPassword = ref("");
 
+    const { t } = useLocalizer()
+
     const requiredWithCustomErrorMessage = helpers.withMessage(
-      "This field is required",
+      t('validation.required'),
       required
     );
+
     const minLenthWithCustomErrorMessage = helpers.withMessage(
-      "The password must contain at least eight characters",
+      t('validation.password', { count: 8 }),
       minLength(8)
     );
+
     const sameAsWithCustomErrorMessage = helpers.withMessage(
-      "Passwords don't match",
+      t('validation.confirmedPassword'),
       sameAs(password)
     );
 
@@ -105,7 +100,7 @@ export default defineComponent({
       );
     }
 
-    const goHome = () =>{
+    const goHome = () => {
       router.push('/')
     }
 
@@ -118,16 +113,19 @@ export default defineComponent({
       loading,
       goHome,
 
-      handleSubmit
+      handleSubmit,
+      t
     };
   },
 });
 </script>
+
 <style>
-.reset-password-btn{
+.reset-password-btn {
   width: 200px;
 }
-.go-home-btn{
+
+.go-home-btn {
   position: absolute;
   left: -5px;
   margin-bottom: 0px;

@@ -1,0 +1,41 @@
+{
+    "slides": [
+        "Первый слайд",
+        "Второй слайд",
+        "Третий слайд"
+    ],
+    "homePage": {
+        "menu": {
+            "signUp": "Регистрация",
+            "signIn": "Вход",
+            "title": "Добро пожаловать! Войдите под существующим аккаунтом или создайте новый"
+        },
+        "footer": {
+            "about": "О сайте",
+            "privacy": "Политика конфиденциальности",
+            "contacts": "Контакты"
+        },
+        "modalCommon": {
+            "email": "Электронная почта",
+            "password": "Пароль",
+            "confirmPassword": "Подтвердить пароль"
+        },
+        "signUpModal": {
+            "firstName": "Имя",
+            "lastName": "Фамилия"
+        },
+        "signInModal": {
+            "forgotPasswordQuestion": "Забыли пароль?"
+        },
+        "forgotPasswordModal": {
+            "newPassword": "Новый пароль",
+            "title": "Сброс пароля"
+        }
+    },
+    "validation": {
+        "email": "Введите корректный адрес электронной почты",
+        "required": "Поле обязательно для заполнения",
+        "password": "Пароль должен содержать не менее {count} символов",
+        "confirmedPassword": "Пароли должны совпадать"
+    }
+}

@@ -28,16 +28,17 @@ class AuthService {
 
     signUp(userData: SignUpData) {
         return axios.post(API_URL + 'account/sign-up', userData).
-        then(response=>{
-            const message = 'Registration was successful! A message was sent to you with a link to confirm your email address. Follow the link and log in to start using the service!'
-            return Promise.resolve(message)
-        },
-        error=>{
-            const message = (error.response&&error.response.data&&error.response.data.error.Message)||
-            error.message||
-            error.toString()
-            return Promise.reject(message);
-        })
+            then(
+            response => {
+                const message = 'Registration was successful! A message was sent to you with a link to confirm your email address. Follow the link and log in to start using the service!'
+                return Promise.resolve(message)
+            },
+            error => {
+                const message = (error.response && error.response.data && error.response.data.error.Message) ||
+                    error.message ||
+                    error.toString()
+                return Promise.reject(message);
+            })
     }
 
     forgotPassword(userEmail: String) {
@@ -48,7 +49,7 @@ class AuthService {
                     message = response.data.message
                 }
                 return Promise.resolve(message)
-            }, (error) => {
+            }, error => {
                 const message = (error.response && error.response.data && error.response.data.error.Message) ||
                     error.message ||
                     error.toString()

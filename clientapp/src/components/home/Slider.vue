@@ -14,23 +14,19 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
+import { getLocaleMessagesForKey}  from "@/helpers/localizer";
 
 export default defineComponent({
   setup() {
-    const slides = [
-      "First slide First slide First slide First slide First slide First slide First slide First slide First slide First slide",
-      "Second Slide Second Slide Second Slide Second Slide Second Slide Second Slide Second Slide Second Slide Second Slide Second Slide",
-      "Third slide Third slide Third slide Third slide Third slide Third slide Third slide Third slide Third slide Third slide Third slide",
-    ];
-
     const index = ref(2);
     const showSlide = ref(false);
+
+    var slides = getLocaleMessagesForKey('slides') as Array<string>
 
     const nextSlide = () => {
       showSlide.value = true;
       if (index.value == slides.length - 1) index.value = 0;
       else index.value++;
-      //setTimeout(()=>{closeSlide()}, 5000)
     };
 
     const closeSlide = () => {
@@ -57,6 +53,7 @@ export default defineComponent({
   },
 });
 </script>
+
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {

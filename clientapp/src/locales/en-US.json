@@ -1,0 +1,41 @@
+{
+    "slides": [
+        "First slide",
+        "Second Slide",
+        "Third slide"
+    ],
+    "homePage": {
+        "menu": {
+            "signUp": "Sign Up",
+            "signIn": "Sign In",
+            "title": "Welcome! Sign Up for existing account or create new by Sign Up"
+        },
+        "footer": {
+            "about": "About",
+            "privacy": "Privacy Policy",
+            "contacts": "Contacts"
+        },
+        "modalCommon": {
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm password"
+        },
+        "signUpModal": {
+            "firstName": "First Name",
+            "lastName": "Last Name"
+        },
+        "signInModal": {
+            "forgotPasswordQuestion": "Forgot password?"
+        },
+        "forgotPasswordModal": {
+            "newPassword": "New password",
+            "title": "Reset password"
+        }
+    },
+    "validation": {
+        "email": "The email must be valid",
+        "required": "This field is required",
+        "password": "The password must contain at least {count} characters",
+        "confirmedPassword": "Passwords don't match"
+    }
+}

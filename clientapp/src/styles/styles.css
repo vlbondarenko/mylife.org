@@ -1,5 +1,5 @@
 body {
-    font-family: "Poppins";
+    font-family: 'Caveat', cursive;
 }
 
 .flex {
@@ -103,10 +103,10 @@ input {
     width: 80%;
     padding: 10px;
     outline: none;
-    font-family: 'Poppins';
+    font-family: 'Caveat', cursive;
 }
 
 @font-face {
-    font-family: 'Poppins';
-    src: url('../styles/fonts/Poppins-Light.ttf');
+    font-family: 'Caveat', cursive;
+    src: url('https://fonts.googleapis.com/css2?family=Caveat&family=Open+Sans:wght@300&display=swap');
 }
