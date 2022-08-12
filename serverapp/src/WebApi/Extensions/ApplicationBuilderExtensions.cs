@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using WebApi.Common;
 
 namespace WebApi.Extensions
 {
@@ -20,7 +21,7 @@ namespace WebApi.Extensions
                 DefaultRequestCulture = new RequestCulture(supportedCultures.First()),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures,
-                RequestCultureProviders = new[] { new CookieRequestCultureProvider() }
+                RequestCultureProviders = new[] { new CustomCookieRequestCultureProvider() }
             });
 
             return app;

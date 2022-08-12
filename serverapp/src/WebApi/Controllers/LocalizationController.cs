@@ -12,9 +12,7 @@ namespace WebApi.Controllers
         [HttpPut("locale")]
         public async Task<IActionResult> ChangeLanguageKey([FromBody] string locale)
         {
-            var cookieValue = $"c={locale}|uic={locale}";
-
-            SetCookieValue(".AspNetCore.Culture", cookieValue, new CookieOptions()
+            SetCookieValue("locale", locale, new CookieOptions()
             {
                 Expires = DateTime.UtcNow.AddHours(4),
                 Secure = true,

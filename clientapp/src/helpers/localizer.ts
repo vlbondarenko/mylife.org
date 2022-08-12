@@ -4,7 +4,7 @@ import { useCookies } from "vue3-cookies";
 
 const API_URL = 'https://localhost:5001/api/';
 
-const localizeKey = '.AspNetCore.Culture'
+const localizeKey = 'locale'
 
 const { cookies } = useCookies()
 
@@ -24,11 +24,7 @@ function getAvailableLocales() {
 }
 
 function getLocale() {
-  let regexp = new RegExp('(?<=c=)[a-zA-Z,-]+')
-  let locale = cookies.get(localizeKey) ?? ""
-  let result = regexp.exec(locale) || []
-
-  return result[0]
+  return cookies.get(localizeKey) ?? ""
 }
 
 function setLocale(locale: string) {
