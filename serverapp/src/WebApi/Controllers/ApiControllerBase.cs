@@ -26,8 +26,11 @@ namespace WebApi.Controllers
         {
             var cookieoptions = new CookieOptions()
             {
-                Expires = DateTime.UtcNow.AddHours(4)
+                Expires = DateTime.UtcNow.AddHours(4),
+                Secure = true,
+                SameSite = SameSiteMode.None
             };
+
             Response.Cookies.Append(key, value, cookieoptions);
         }
 

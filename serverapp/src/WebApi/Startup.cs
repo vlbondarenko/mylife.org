@@ -1,15 +1,16 @@
+using System.Globalization;
 using System.Reflection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
 using Application;
 using Common;
 using Infrastructure;
 using Infrastructure.Identity.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Persistence;
 using WebApi.Middleware;
 
@@ -31,6 +32,7 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen();
 
             services.AddIdentity(Configuration);
 
@@ -44,9 +46,11 @@ namespace WebApi
 
             services.AddCors();
 
-            services.AddControllers();
-
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,15 +58,31 @@ namespace WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
+
+            var supportedCultures = new CultureInfo[]
+            {
+                new CultureInfo("en"),
+                new CultureInfo("ru")
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(new CultureInfo("ru")),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures,
+                RequestCultureProviders = new[] { new CookieRequestCultureProvider() }
+            });
 
             app.UseExceptionsHandlingMiddleware();
 
             app.UseCors();
 
             app.UseHttpsRedirection();
-            
-            app.UseRouting(); 
+
+            app.UseRouting();
 
             app.UseAuthentication();
 

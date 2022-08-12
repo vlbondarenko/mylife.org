@@ -21,8 +21,7 @@ export default defineComponent({
     const router = useRouter()
 
     const onLocaleUpdated = (locale: string) => {
-      setLocale(locale);
-      router.go(0)
+      setLocale(locale).then( () => { router.go(0) });
     }
 
     let availableLocales: Array<any> = new Array<any>();
