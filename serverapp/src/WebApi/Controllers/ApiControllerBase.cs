@@ -22,17 +22,8 @@ namespace WebApi.Controllers
             return new StatusCodeResult((int)HttpStatusCode.Created);
         }
 
-        protected void SetCookieValue(string key, string value)
-        {
-            var cookieoptions = new CookieOptions()
-            {
-                Expires = DateTime.UtcNow.AddHours(4),
-                Secure = true,
-                SameSite = SameSiteMode.None
-            };
-
-            Response.Cookies.Append(key, value, cookieoptions);
-        }
+        protected void SetCookieValue(string key, string value, CookieOptions options) =>
+            Response.Cookies.Append(key, value, options);
 
 
         protected string ExtractCookieValue(string key)

@@ -10,6 +10,8 @@ using Infrastructure.Identity.Interfaces;
 using Application.UseCases.UserProfiles.Commands;
 using Application.UseCases.UserProfiles.Queries;
 using WebApi.Models;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace WebApi.Controllers
 {
@@ -87,8 +89,14 @@ namespace WebApi.Controllers
 
             if (verifyResult)
             {
-                SetCookieValue("userId", id);
-                SetCookieValue("resetToken", token);
+                SetCookieValue("userId", id, new CookieOptions()
+                {
+                    Expires = DateTime.UtcNow.AddHours(4)
+                });
+                SetCookieValue("resetToken", token, new CookieOptions()
+                {
+                    Expires = DateTime.UtcNow.AddHours(4)
+                });
                 localUrl = $"/user/{id}/resetpassword";
             }
             else

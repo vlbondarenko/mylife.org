@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -12,7 +14,12 @@ namespace WebApi.Controllers
         {
             var cookieValue = $"c={locale}|uic={locale}";
 
-            SetCookieValue(".AspNetCore.Culture", cookieValue);
+            SetCookieValue(".AspNetCore.Culture", cookieValue, new CookieOptions()
+            {
+                Expires = DateTime.UtcNow.AddHours(4),
+                Secure = true,
+                SameSite = SameSiteMode.None
+            });
 
             return Ok();
         }

@@ -34,10 +34,8 @@ namespace Application.UseCases.UserProfiles.Queries
         {
             var userProfile = await _userProfileDbContext.UserProfiles.FindAsync(query.Id);
 
-            var localizedError = _localizer["userNotFound", query.Id];
-
             if (userProfile is null)
-                throw new NotFoundException(localizedError);
+                throw new NotFoundException(_localizer["userNotFound", query.Id]);
 
             return _mapper.Map<UserProfileDto>(userProfile);
         }

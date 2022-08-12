@@ -1,15 +1,11 @@
-using System.IO;
 using System;
-using System.Threading;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Persistence.Context;
 using Serilog;
-using Infrastructure.Identity.Data;
+using WebApi.Extensions;
 
 namespace WebApi
 {
@@ -21,11 +17,9 @@ namespace WebApi
 
             Log.Logger = CreateSerilogLogger(configuration);
 
-            var host =  CreateHostBuilder(args).Build();
+            var host = CreateHostBuilder(args).Build();
 
-            using IServiceScope serviceScope = host.Services.CreateScope();
-            await serviceScope.ServiceProvider.GetService<ApplicationDbContext>()!.Database.MigrateAsync();
-            await serviceScope.ServiceProvider.GetService<IdentityDbContext>()!.Database.MigrateAsync();
+            await host.MigrateDatabases();
 
             host.Run();
 

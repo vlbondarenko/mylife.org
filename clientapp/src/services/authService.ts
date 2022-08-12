@@ -42,7 +42,7 @@ class AuthService {
     }
 
     forgotPassword(userEmail: String) {
-        return axios.post(API_URL + 'User/forgotpassword', { email: userEmail })
+        return axios.post(API_URL + 'User/forgotpassword', { email: userEmail }, { withCredentials: true })
             .then(response => {
                 let message = "A message was sent to your email address with the order of further actions"
                 if (response.data.message) {

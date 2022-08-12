@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Reflection;
 using Application;
 using Common;
@@ -6,12 +5,12 @@ using Infrastructure;
 using Infrastructure.Identity.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Persistence;
+using WebApi.Extensions;
 using WebApi.Middleware;
 
 namespace WebApi
@@ -44,7 +43,16 @@ namespace WebApi
 
             services.AddCommonServices();
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:8080", "http://localhost:8081")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
+            });
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -60,25 +68,12 @@ namespace WebApi
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors();
             }
 
-            var supportedCultures = new CultureInfo[]
-            {
-                new CultureInfo("en"),
-                new CultureInfo("ru")
-            };
-
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture(new CultureInfo("ru")),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures,
-                RequestCultureProviders = new[] { new CookieRequestCultureProvider() }
-            });
+            app.UseLocalization();
 
             app.UseExceptionsHandlingMiddleware();
-
-            app.UseCors();
 
             app.UseHttpsRedirection();
 
