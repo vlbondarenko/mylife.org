@@ -7,9 +7,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useRouter } from "vue-router";
 import Select from "../common/Select.vue";
-import { getLocale, setLocale, getAvailableLocales } from "@/helpers/localizer"
+import { getCurrentLocale, setLocale, getAvailableLocales, useLocalizer } from "@/helpers/localizer"
 
 export default defineComponent({
   name: "Header",
@@ -17,17 +16,16 @@ export default defineComponent({
     Select
   },
   setup() {
-
-    const router = useRouter()
-
-    const onLocaleUpdated = (locale: string) => {
-      setLocale(locale).then( () => { router.go(0) });
+    const { locale } = useLocalizer()
+    
+    const onLocaleUpdated = (localeKey: string) => {
+      setLocale(localeKey).then(() => locale.value = getCurrentLocale());
     }
 
     let availableLocales: Array<any> = new Array<any>();
     getAvailableLocales().forEach(locale => availableLocales.push({ text: locale, value: locale }))
 
-    const selectedLanguage = getLocale()
+    const selectedLanguage = getCurrentLocale()
 
     return {
       availableLocales,
@@ -51,8 +49,8 @@ export default defineComponent({
   font-weight: 500;
 }
 
-.select{
-   margin-right: 60px;
+.select {
+  margin-right: 60px;
   border: none;
   position: absolute;
   top: 5px;
