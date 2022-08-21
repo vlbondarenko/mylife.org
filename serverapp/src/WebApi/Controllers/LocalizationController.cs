@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +6,12 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LocalizationController : ApiControllerBase
+    public class LocalizationController : ControllerBase
     {
         [HttpPut("locale")]
-        public async Task<IActionResult> ChangeLanguageKey([FromBody] string locale)
+        public IActionResult ChangeLanguageKey([FromBody] string locale)
         {
-            SetCookieValue("locale", locale, new CookieOptions()
+            Response.Cookies.Append("locale", locale, new CookieOptions()
             {
                 Expires = DateTime.UtcNow.AddHours(4),
                 Secure = true,
