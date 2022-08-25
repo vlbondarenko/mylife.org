@@ -13,7 +13,6 @@ namespace WebApi.Controllers
         {
             Response.Cookies.Append("locale", locale, new CookieOptions()
             {
-                Expires = DateTime.UtcNow.AddHours(4),
                 Secure = true,
                 SameSite = SameSiteMode.None
             });

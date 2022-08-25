@@ -118,15 +118,12 @@ namespace WebApi.Controllers
         [HttpPost("resetpassword")]
         public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordCommand request)
         {
-            var userId = Request.Cookies["userId"];
-            var resetToken = Request.Cookies["resetToken"];
-
-            request.UserId = userId;
-            request.Token = resetToken;
+            request.UserId = Request.Cookies["userId"];
+            request.Token = Request.Cookies["resetToken"];
 
             var result = await _mediator.Send(request);
 
-            var localUrl = $"/user/{userId}/resetpassword" + (result ? "success" : "failure");
+            var localUrl = $"/user/{request.UserId}/resetpassword" + (result ? "success" : "failure");
 
             return LocalRedirect(localUrl);
         }
