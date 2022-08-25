@@ -28,7 +28,7 @@ function getCurrentLocale() {
 }
 
 function setLocale(localeKey: string) {
-  return axios.put(API_URL + "Localization/locale", JSON.stringify(localeKey), 
+  return axios.put(API_URL + "Localization", JSON.stringify(localeKey), 
   {
     headers: {
       'Content-Type': 'application/json'

@@ -8,7 +8,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class LocalizationController : ControllerBase
     {
-        [HttpPut("locale")]
+        [HttpPut]
         public IActionResult ChangeLanguageKey([FromBody] string locale)
         {
             Response.Cookies.Append("locale", locale, new CookieOptions()
