@@ -11,11 +11,11 @@ import ruRU from './locales/ru-RU.json'
 
 const i18n = createI18n({
     legacy: false,
-    locale: 'rus',
-    fallbackLocale: 'en',
+    locale: 'en',
+    fallbackLocale: 'ru',
     messages:{
         'en': enUS,
-        'rus': ruRU
+        'ru': ruRU
     }
 })
 

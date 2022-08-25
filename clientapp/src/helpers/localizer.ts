@@ -1,9 +1,15 @@
-import { useI18n, LocaleMessageDictionary, VueMessageType, LocaleMessageValue } from 'vue-i18n';
+import { useI18n, LocaleMessageDictionary, VueMessageType, LocaleMessageValue, VueI18n } from 'vue-i18n';
+import axios from 'axios'
+import { useCookies } from "vue3-cookies";
 
-const localizeKey = 'localizeKey'
+const API_URL = 'https://localhost:5001/api/';
+
+const localizeKey = 'locale'
+
+const { cookies } = useCookies()
 
 function useLocalizer() {
-  let currentLocale = localStorage.getItem(localizeKey)
+  let currentLocale = getCurrentLocale()
 
   const { t, locale, availableLocales } = useI18n({ useScope: 'global' })
 
@@ -12,23 +18,29 @@ function useLocalizer() {
   return { t, locale, availableLocales }
 }
 
-function getAvailableLocales(){
+function getAvailableLocales() {
   const { availableLocales } = useI18n({ useScope: 'global' })
   return availableLocales
 }
 
-function getLocale() {
-  return localStorage.getItem(localizeKey) ?? ""
+function getCurrentLocale() {
+  return cookies.get(localizeKey) ?? ""
 }
 
-function setLocale(locale: string) {
-  return localStorage.setItem(localizeKey, locale)
+function setLocale(localeKey: string) {
+  return axios.put(API_URL + "Localization", JSON.stringify(localeKey), 
+  {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true
+  });
 }
 
-function getLocaleMessagesForKey(messageKey: string){
+function getLocaleMessagesForKey(messageKey: string) {
   const { getLocaleMessage } = useI18n({ useScope: 'global' })
-  return getLocaleMessage(getLocale())[messageKey]
+  return getLocaleMessage(getCurrentLocale())[messageKey]
 }
 
 export default useLocalizer
-export { getLocale, setLocale, useLocalizer, getAvailableLocales, getLocaleMessagesForKey }
+export { getCurrentLocale, setLocale, useLocalizer, getAvailableLocales, getLocaleMessagesForKey }

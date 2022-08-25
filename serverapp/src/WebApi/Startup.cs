@@ -1,16 +1,16 @@
 using System.Reflection;
+using Application;
+using Common;
+using Infrastructure;
+using Infrastructure.Identity.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-
-using Application;
-using Common;
-using Infrastructure;
-using Infrastructure.Identity.DependencyInjection;
 using Persistence;
+using WebApi.Extensions;
 using WebApi.Middleware;
 
 namespace WebApi
@@ -31,6 +31,7 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen();
 
             services.AddIdentity(Configuration);
 
@@ -42,11 +43,22 @@ namespace WebApi
 
             services.AddCommonServices();
 
-            services.AddCors();
-
-            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:8080", "http://localhost:8081")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                });
+            });
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,15 +66,18 @@ namespace WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+                app.UseCors();
             }
+
+            app.UseLocalization();
 
             app.UseExceptionsHandlingMiddleware();
 
-            app.UseCors();
-
             app.UseHttpsRedirection();
-            
-            app.UseRouting(); 
+
+            app.UseRouting();
 
             app.UseAuthentication();
 

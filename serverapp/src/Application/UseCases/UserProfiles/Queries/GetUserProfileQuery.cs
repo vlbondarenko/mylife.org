@@ -1,39 +1,43 @@
-﻿using System.Threading.Tasks;
-using System.Threading;
-
-using AutoMapper;
-using MediatR;
-using FluentValidation;
-
-using Persistence.Interfaces;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Application.Exceptions;
+using AutoMapper;
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.Localization;
+using Persistence.Interfaces;
 
 namespace Application.UseCases.UserProfiles.Queries
 {
-    public class GetUserProfileQuery:IRequest<UserProfileDto>
+    public class GetUserProfileQuery : IRequest<UserProfileDto>
     {
         public string Id { get; set; }
+    }
 
-        public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserProfileDto>
+    public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, UserProfileDto>
+    {
+        private readonly IUserProfileDbContext _userProfileDbContext;
+        private readonly IMapper _mapper;
+        private readonly IStringLocalizer<GetUserProfileQueryHandler> _localizer;
+
+        public GetUserProfileQueryHandler(
+            IUserProfileDbContext userProfileDbContext,
+            IMapper mapper,
+            IStringLocalizer<GetUserProfileQueryHandler> localizer)
         {
-            private readonly IUserProfileDbContext _userProfileDbContext;
-            private readonly IMapper _mapper;
+            _userProfileDbContext = userProfileDbContext;
+            _mapper = mapper;
+            _localizer = localizer;
+        }
 
-            public GetUserProfileQueryHandler(IUserProfileDbContext userProfileDbContext, IMapper mapper)
-            {
-                _userProfileDbContext = userProfileDbContext;
-                _mapper = mapper;
-            }
+        public async Task<UserProfileDto> Handle(GetUserProfileQuery query, CancellationToken cancellationToken)
+        {
+            var userProfile = await _userProfileDbContext.UserProfiles.FindAsync(query.Id);
 
-            public async Task<UserProfileDto> Handle(GetUserProfileQuery query, CancellationToken cancellationToken)
-            {
-                var userProfile =await _userProfileDbContext.UserProfiles.FindAsync(query.Id);
+            if (userProfile is null)
+                throw new NotFoundException(_localizer["userNotFound", query.Id]);
 
-                if (userProfile is null)
-                    throw new NotFoundException($"User profile {query.Id} not found.");
-
-                return _mapper.Map<UserProfileDto>(userProfile);
-            }
+            return _mapper.Map<UserProfileDto>(userProfile);
         }
     }
 

@@ -23,26 +23,26 @@ interface SignInResponseData {
 
 class AuthService {
     signIn(authData: SignInData) {
-        return axios.post<SignInResponseData>(API_URL + 'account/sign-in', authData)
+        return axios.post<SignInResponseData>(API_URL + 'User/signin', authData, { withCredentials: true })
     }
 
     signUp(userData: SignUpData) {
-        return axios.post(API_URL + 'account/sign-up', userData).
+        return axios.post(API_URL + 'User/signup', userData, { withCredentials: true }).
             then(
-            response => {
-                const message = 'Registration was successful! A message was sent to you with a link to confirm your email address. Follow the link and log in to start using the service!'
-                return Promise.resolve(message)
-            },
-            error => {
-                const message = (error.response && error.response.data && error.response.data.error.Message) ||
-                    error.message ||
-                    error.toString()
-                return Promise.reject(message);
-            })
+                response => {
+                    const message = 'Registration was successful! A message was sent to you with a link to confirm your email address. Follow the link and log in to start using the service!'
+                    return Promise.resolve(message)
+                },
+                error => {
+                    const message = (error.response && error.response.data && error.response.data.error.Message) ||
+                        error.message ||
+                        error.toString()
+                    return Promise.reject(message);
+                })
     }
 
     forgotPassword(userEmail: String) {
-        return axios.post(API_URL + 'account/forgot-password', { email: userEmail })
+        return axios.post(API_URL + 'User/forgotpassword', { email: userEmail }, { withCredentials: true })
             .then(response => {
                 let message = "A message was sent to your email address with the order of further actions"
                 if (response.data.message) {
@@ -58,7 +58,7 @@ class AuthService {
     }
 
     resetPassword(newPassword: string) {
-        return axios.post(API_URL + 'account/reset-password/', { newPassword: newPassword }, { withCredentials: true })
+        return axios.post(API_URL + 'User/resetpassword/', { newPassword: newPassword }, { withCredentials: true })
             .then(response => {
                 const message = "Password changed successfully"
                 return Promise.resolve(message)

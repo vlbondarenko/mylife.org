@@ -15,7 +15,7 @@ namespace Application.Tests.UnitTests.UserProfileUseCasesTests
         public async Task ReturnsValueIsNotNull()
         {
             var query = new GetUserProfileQuery() { Id = "00000000-0000-0000-0000-000000000000" };
-            var handler = new GetUserProfileQuery.GetUserProfileQueryHandler(_applicationDbContext,_mapper);
+            var handler = new GetUserProfileQuery.GetUserProfileQueryHandler(_applicationDbContext,_mapper, _localizer);
 
             var result = await handler.Handle(query, CancellationToken.None);
 
